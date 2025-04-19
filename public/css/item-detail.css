@@ -1,0 +1,47 @@
+body{
+    color: #ffffff;
+}
+
+.gold-item-wrapper {
+    background-color: #fdf7e3;
+    border: 2px solid gold;
+    padding: 2rem;
+    border-radius: 1rem;
+    color: #000;
+}
+
+.gold-title {
+    color: #c9a200;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.gold-price {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+.standard-item-wrapper {
+    background-color: #222;
+    padding: 2rem;
+    border-radius: 1rem;
+    color: #fff;
+}
+
+.price {
+    font-size: 1.2rem;
+    color: #0f0;
+    margin: 1rem 0;
+}
+.seller-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #b02a2a;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+}
