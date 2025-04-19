@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\FacebookController;
 use App\Models\Item;
 use App\Models\Category;
 use App\Models\Game;
+use App\Http\Controllers\NowPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,9 +57,11 @@ Route::middleware('verified')->group(function () {
     Route::get('/item/{item}', [CatalogController::class, 'itemDetail'])->name('item.detail');
 });
 
+// Google authenticaiton routes
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle']);
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
+// Facbook authenticaiton routes
 Route::get('auth/facebook', [FacebookController::class, 'redirectToFacebook']);
 Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback']);
 
@@ -66,8 +69,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Paypal authenticaiton routes
 Route::get('/paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
 Route::get('/paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
+
+// NowPayment routes
+Route::get('/pay/now', [NowPaymentController::class, 'create'])->name('nowpayments.create');
+Route::post('/payment/now/callback', [NowPaymentController::class, 'callback'])->name('nowpayments.callback');
+Route::get('/payment/success', [NowPaymentController::class, 'success'])->name('nowpayments.success');
+Route::get('/payment/cancel', [NowPaymentController::class, 'cancel'])->name('nowpayments.cancel');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

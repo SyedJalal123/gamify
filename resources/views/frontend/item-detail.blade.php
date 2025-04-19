@@ -51,7 +51,8 @@
                             <p class="text-muted mb-1">Price per unit</p>
                             <h3>${{ number_format($item->price, 3) }}</h3>
 
-                            <form method="POST" action="#">
+                            <form method="get" action="{{url('pay/now')}}">
+                                @csrf
                                 <div class="d-flex justify-content-center align-items-center my-3">
                                     <button type="button" class="btn btn-outline-secondary btn-sm" onclick="adjustQty(-1)">-</button>
                                     <input type="number" id="goldQty" name="quantity" value="1000" min="1" class="form-control mx-2 text-center" style="max-width: 80px;">
