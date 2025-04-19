@@ -69,7 +69,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Paypal authenticaiton routes
+// Paypal authenticaiton routes 
 Route::get('/paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
 Route::get('/paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
 
