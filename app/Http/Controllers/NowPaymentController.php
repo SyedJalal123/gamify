@@ -10,12 +10,19 @@ class NowPaymentController extends Controller
     /**
      * Create a new NOWPayments invoice and redirect to payment page
      */
-    public function create()
+    public function create(Request $request)
     {
+        $validatedData = $request->validate([
+            'total_price' => 'required|numeric|min:0.01',
+            // 'price_currency' => 'required|string',
+            // 'order_description' => 'required|string',
+            // 'order_id' => 'required|string|unique:orders,order_id',
+        ]);
+
         $response = Http::withHeaders([
             'x-api-key' => env('NOWPAYMENTS_API_KEY')
         ])->post('https://api.nowpayments.io/v1/invoice', [
-            'price_amount' => 49.99,
+            'price_amount' => $validatedData['total_price'],
             'price_currency' => 'usd',
             'order_id' => uniqid(),
             'order_description' => 'Test Laravel Order',

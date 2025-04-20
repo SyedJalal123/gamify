@@ -23,10 +23,9 @@
 
                         <div class="seller-box p-3 rounded text-black bg-white mb-4">
                             <div class="d-flex align-items-center mb-3">
-                                <div class="seller-avatar mr-2">
+                                <div class="seller-avatar mr-2 d-flex align-items-center justify-content-center rounded-circle text-white" style="width: 40px; height: 40px; background-color: #c0392b;">
                                     {{ strtoupper(substr($item->seller->name ?? 'S', 0, 1)) }}
                                 </div>
-                                {{-- <img src="{{ asset('images/seller-icon.png') }}" alt="Seller" class="rounded-circle mr-2" width="40"> --}}
                                 <div>
                                     <strong>{{ $item->seller->name ?? 'Top Seller' }}</strong><br>
                                     <small class="text-muted">{{ $item->seller->rating ?? '99%' }} • <a href="#">Reviews</a></small>
@@ -51,13 +50,14 @@
                             <p class="text-muted mb-1">Price per unit</p>
                             <h3>${{ number_format($item->price, 3) }}</h3>
 
-                            <form method="get" action="{{url('pay/now')}}">
+                            <form method="GET" action="{{ route('checkout') }}">
                                 @csrf
+                                <input type="hidden" name="item_id" value="{{ $item->id }}">
+                                <input type="hidden" name="price" value="{{ $item->price }}">
                                 <div class="d-flex justify-content-center align-items-center my-3">
                                     <button type="button" class="btn btn-outline-secondary btn-sm" onclick="adjustQty(-1)">-</button>
                                     <input type="number" id="goldQty" name="quantity" value="1000" min="1" class="form-control mx-2 text-center" style="max-width: 80px;">
                                     <button type="button" class="btn btn-outline-secondary btn-sm" onclick="adjustQty(1)">+</button>
-                                    {{-- <span class="ml-2">K</span> --}}
                                 </div>
 
                                 <small class="d-block mb-2 text-muted">Min Qty: {{ $item->min_quantity ?? '1000' }} • In Stock: {{ $item->stock ?? 'N/A' }} K</small>
@@ -102,7 +102,13 @@
 
                         <div class="price-box text-black bg-white p-4 rounded text-center">
                             <h3>${{ number_format($item->price, 2) }}</h3>
-                            <button class="btn btn-dark w-100 mb-2">Buy now</button>
+                            <form method="GET" action="{{ route('checkout') }}">
+                                @csrf
+                                <input type="hidden" name="item_id" value="{{ $item->id }}">
+                                <input type="hidden" name="price" value="{{ $item->price }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-dark w-100 mb-2">Buy now</button>
+                            </form>
                             <small class="text-muted d-block">100% Secure Payments by <strong>TradeShield</strong></small>
                         </div>
                     </div>
@@ -114,13 +120,13 @@
 </section>
 
 <script>
-function adjustQty(change) {
-    const input = document.getElementById('goldQty');
-    const pricePerK = {{ $item->price }};
-    let qty = parseInt(input.value) + change;
-    if (qty < 1) qty = 1;
-    input.value = qty;
-    document.getElementById('totalPrice').innerText = (pricePerK * qty).toFixed(2);
-}
+    function adjustQty(change) {
+        const input = document.getElementById('goldQty');
+        const pricePerK = {{ $item->price }};
+        let qty = parseInt(input.value) + change;
+        if (qty < 1) qty = 1;
+        input.value = qty;
+        document.getElementById('totalPrice').innerText = (pricePerK * qty).toFixed(2);
+    }
 </script>
 @endsection

@@ -13,6 +13,7 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Game;
 use App\Http\Controllers\NowPaymentController;
+use App\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,8 @@ Route::middleware('verified')->group(function () {
     Route::get('/live-search', [GameController::class, 'liveSearch'])->name('live.search');
 
     Route::get('/item/{item}', [CatalogController::class, 'itemDetail'])->name('item.detail');
+
+    Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
 });
 
 // Google authenticaiton routes
