@@ -58,7 +58,7 @@ class NowPaymentController extends Controller
      */
     public function success()
     {
-        return "✅ Payment was successful! Thank you.";
+        return redirect()->back()->with('success','Payment was successful! Thank you.');
     }
 
     /**
@@ -66,6 +66,7 @@ class NowPaymentController extends Controller
      */
     public function cancel()
     {
-        return "❌ Payment was canceled.";
+        return redirect()->back()->with('error','Something went wrong! payment was unsuccessful.');
+
     }
 }

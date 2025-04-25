@@ -14,6 +14,8 @@ use App\Models\Category;
 use App\Models\Game;
 use App\Http\Controllers\NowPaymentController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\StripeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -81,6 +83,16 @@ Route::get('/pay/now', [NowPaymentController::class, 'create'])->name('nowpaymen
 Route::post('/payment/now/callback', [NowPaymentController::class, 'callback'])->name('nowpayments.callback');
 Route::get('/payment/success', [NowPaymentController::class, 'success'])->name('nowpayments.success');
 Route::get('/payment/cancel', [NowPaymentController::class, 'cancel'])->name('nowpayments.cancel');
+
+// Stripe Checkout Routes
+Route::prefix('payment/stripe')->group(function () {
+
+    Route::post('/create-session', [StripeController::class, 'createCheckoutSession'])->name('stripe.session');
+
+    Route::get('/success', [StripeController::class, 'success'])->name('stripe.success');
+    Route::get('/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
+});
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -38,9 +38,11 @@
             margin-bottom: 1rem;
         }
     </style>
+    <script src="https://js.stripe.com/v3/"></script>
     @endsection
 
     @section('content')
+    
     @php
         $isGold = strtolower($item->category->name) === 'gold';
         $quantity = request()->get('quantity', 1);
@@ -53,8 +55,14 @@
 
     <section class="section section--bg section--first">
         <div class="container">
+            @if (session('success'))
+                <p style="color: green;">{{ session('success') }}</p>
+            @endif
+            @if (session('error'))
+                <p style="color: red;">{{ session('error') }}</p>
+            @endif
             <a href="{{ url()->previous() }}" class="text-muted mb-4 d-inline-block">&larr; Back</a>
-            <h3 class="mb-4">Checkout</h3>
+            <h3 class="mb-4 color-white">Checkout</h3>
 
             <div class="checkout-wrapper">
                 <!-- LEFT: Game Info + Payment -->
@@ -166,8 +174,9 @@
                     </div>
                 </div>
 
-                <form action="{{ url('/') }}" method="get" class="checkout-right">
+                <form action="{{ route('stripe.session') }}" method="post" class="checkout-right">
                     @csrf
+                    <input type="hidden" name="product_name" value="{{$item->title}}">
                     <input type="hidden" name="total_price" value="{{$grandTotal}}">
                     <h5 class="mb-4">Order Summary</h5>
                     <ul class="list-unstyled mb-3">
@@ -188,7 +197,8 @@
                             <strong class="h5">${{ number_format($grandTotal, 4) }}</strong>
                         </li>
                     </ul>
-                
+                    <button class="mb-5" id="stripe-checkout-button">Stripe Checkout</button>
+                    <br><br>
                     <button type="submit" class="btn btn-dark w-100">Continue to payment &rarr;</button>
                 
                     <div class="mt-4 small text-muted">
@@ -212,13 +222,31 @@
                     form.action = "{{ url('pay/now') }}";
                     form.method = "GET";
                 } else if (box.classList.contains('credit_card')) {
-                    form.action = "{{ url('/') }}";
-                    form.method = "get";
+                    form.action = "{{ route('stripe.session') }}";
+                    form.method = "post";
                 }
 
                 const radio = box.querySelector('input[type="radio"]');
                 if (radio) radio.checked = true;
             });
+        });
+    </script>
+    <script>
+        const stripe = Stripe('{{ config('services.stripe.key') }}');
+
+        document.getElementById('stripe-checkout-button').addEventListener('click', function () {
+            fetch('/payment/stripe/create-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+            })
+            .then(response => response.json())
+            .then(session => {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .catch(error => console.error('Error:', error));
         });
     </script>
     @endsection
