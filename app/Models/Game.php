@@ -23,6 +23,11 @@ class Game extends Model
     public function attributes() {
         return $this->belongsToMany(Attribute::class, 'attribute_game');
     }
+    
+    public function categoryGames()
+    {
+        return $this->hasMany(CategoryGame::class);
+    }
 
     public function items()
     {

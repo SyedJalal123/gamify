@@ -10,14 +10,13 @@
         <div class="row">
             <div class="col-12">
                 <a href="{{ url()->previous() }}" class="text-muted mb-3 d-inline-block">&larr; Back to all offers</a>
-
-                @if ($isGold)
-                {{-- GOLD ITEM LAYOUT --}}
+                @if ($isCurrency)
+                {{-- CURRENCY ITEM LAYOUT --}}
                 <div class="row gold-layout">
                     <div class="col-lg-7">
-                        <h4 class="mb-3">{{ $item->game->name ?? $item->title }}</h4>
+                        <h4 class="mb-3">{{ $item->categoryGame->game->name ?? $item->title }}</h4>
                         <div class="gold-badge mb-2 d-inline-flex align-items-center">
-                            <img src="{{ asset($item->game->image) }}" alt="Gold Icon" width="24" class="mr-1">
+                            <img src="{{ asset($item->categoryGame->game->image) }}" width="24" class="mr-1">
                             <strong>Gold</strong>
                         </div>
 

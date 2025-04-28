@@ -1,19 +1,11 @@
 @extends('frontend.app')
 
-
 @section('css')
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{asset('css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('css/items_create.css')}}">
 @endsection
-
-{{-- 
-- Modify the attributes a little. Because every category with game has different attributes like 
-- "gold with wow" has diffrent attributes and "accounts with wow" has different attributes
-- and no column should be null in database not game_id and not category_id but instead add multiple game_ids and multiple category_ids 
-- so change it like when the user cliks on game then it fetches all the attributes based on category and game both
-- and there are no game and category attributes it should be priorties column "1 for first" form "2 for secound" and "3 for final form" --}}
 
 @section('content')
     <!-- home -->
@@ -26,7 +18,17 @@
                         @csrf
                         <div class="container__top text-center">
                             <div class="title">
-                                <h1>Start selling</h1>
+                                <h2>Start selling</h2>
+                                @if(session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+                                @if(session('error'))
+                                    <div class="alert alert-danger">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
                                         <ul>
@@ -36,10 +38,11 @@
                                         </ul>
                                     </div>
                                 @endif
+
                             </div>
                             
                         </div>
-
+                        
                         <!-- One "tab" for each step in the form: -->
                         <div class="tab">
                             <div class="container">
@@ -108,7 +111,7 @@
                         <div class="tab tab_2">
                             <div class="container">
                                 <div id="games-container" style="display: none;">
-                                    <h3>Select a Game</h3>
+                                    <h4>Select a Game</h4>
                                     <select id="games-dropdown" name="game_id" required>
                                         <option value="">Select a Game</option>
                                     </select>
@@ -128,9 +131,9 @@
                                 <div class="container">
                                     <div class="attributes-container" style="display: none;">
     
-                                        <h3>Game Attributes</h3>
+                                        <h4>Game Attributes</h4>
                                         <div id="game-attributes-list"></div>
-                                    
+
                                     </div>
                                 </div>
     
@@ -145,53 +148,235 @@
                         
                         <div class="tab">
                             <input type="hidden" name="category_id" id="selectedCategory">
+                            <input type="hidden" name="category_game_id" id="category_game_id">
                             <div class="container">
-                                <div class="mb-3 title_container">
-                                    <label>Title:</label>
-                                    <input type="text" name="title" class="form-control" required>
-                                </div>
-                        
-                                <div class="mb-3">
-                                    <label>Description:</label>
-                                    <textarea name="description" class="form-control" required></textarea>
-                                </div>
-                        
-                                <div class="mb-3">
-                                    <label>Price:</label>
-                                    <input type="number" name="price" class="form-control" required>
-                                </div>
-                        
-                                <div class="attributes-container mb-5" style="display: none;">
-
+                                <div class="attributes-container" style="display: none;">
                                     <div id="category-attributes-list"></div>
-                                
                                 </div>
-                    
-                                <div class="mb-3">
-                                    <label>Upload Images:</label>
-                                    <!-- Button for triggering file input -->
-                                    <button type="button" class="btn-sm btn-dark" id="uploadBtn">+ Add Images</button>
-                                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                            </div>
+                            <div class="custom-container">
+                                <div class="main-card">
+                                
+                                    <!-- Item Section -->
+                                    <div class="card-section currency_class topup_class">
+                                        <label class="form-label">Your item</label>
+                                        <div class="d-flex align-items-center">
+                                        <img src="{{ asset('uploads/games/riot-points.webp') }}" id="feature_image" alt="Game Image" style="width: 90px; height: auto; border-radius: 8px;" class="feature_image">
+                                        <div class="ml-3">
+                                            <div class="fw-bold small feature_details">
+                                                <span>EU</span>
+                                                <span>- Aegwynn</span>
+                                                <span>- Horde</span>
+                                            </div>
+                                            <div class="text-muted small currency_class topup_class feature_currency">Gold</div>
+                                            <div class="text-muted small fw-normal badge bg-info-light mt-2 w-fit topup_class feature_topup">80 Gems</div>
+                                        </div>
+                                        </div>
+                                    </div>
 
-                                    <div class="preview-container" id="preview"></div>
+                                    <!-- Offer Title -->
+                                    <div class="card-section accounts_class items_class">
+                                        <label class="form-label">Offer Title</label>
+                                        <textarea class="form-control accounts_r items_r" id="title" name="title" required rows="2" placeholder="Type here..."></textarea>
+                                        <small class="form-text">Give your item a descriptive title. What would buyers search for to find your item? Add the most searchable words at the front of your title. Titles have a 160 character limit.</small>
+                                    </div>
 
-                                    <!-- Hidden input to store selected images -->
-                                    <div id="imageInputsContainer"></div>
+                                    <!-- offer photo(s) -->
+                                    <div class="card-section images_section accounts_class items_class">
+                                        <label class="form-label">Upload offer photo(s)</label>
+                                        <div class="mb-3 images_main">
+                                            <!-- Button for triggering file input -->
+                                            <button type="button" class="btn-sm btn-dark mb-2" id="uploadBtn">+ Add Images</button>
+                                            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        
+                                            <div class="preview-container" id="preview"></div>
+        
+                                            <!-- Hidden input to store selected images -->
+                                            <div id="imageInputsContainer"></div>
+                                            
+                                            <input type="hidden" class="accounts_r items_r" name="feature_image" id="featuredImageInput" required>
+                                            <small class="form-text">Must be JPEG, PNG or HEIC and cannot exceed 10MB.</small>
+                                        </div>
+                                    </div>
                                     
-                                    <input type="hidden" name="feature_image" id="featuredImageInput" required>
-                                </div>
-                                
+                                    
+                                    <!-- Description -->
+                                    <div class="card-section">
+                                        <label class="form-label currency_class accounts_class items_class">Description (Optional)</label>
+                                        <label class="form-label topup_class">Delivery instructions</label>
+                                        <textarea class="form-control topup_r" id="description" name="description" rows="4" required placeholder="Type here..."></textarea>
+                                        <small class="form-text">The listing title and description must be accurate and informative. Misleading description violates Seller Rules.</small>
+                                    </div>
 
+                                    <!-- Delivery Method -->
+                                    <div class="card-section">
+                                        <div class="currency topup mb-3 currency_class topup_class items_class">
+                                            <label class="form-label">Guaranteed Delivery Time</label>
+                                            <select class="form-select currency_r topup_r items_r" id="delivery_time" name="delivery_time" required>
+                                                <option disabled selected value="">Choose Delivery Time</option>
+                                                <option>20 min</option>
+                                                <option>1 h</option>
+                                                <option>5 h</option>
+                                                <option>12 h</option>
+                                                <option>1 day</option>
+                                                <option>2 days</option>
+                                                <option>3 days</option>
+                                                <option>7 days</option>
+                                                <option>14 days</option>
+                                                <option>28 days</option>
+                                            </select>
+                                        </div>
+                                        <div class="items mb-3 items_class">
+                                            <label class="form-label">Delivery method</label>
+                                            <input type="text" class="form-control items_r" required value="In-game delivery" disabled>
+                                        </div>
+                                        <div class="accounts accounts_class">
+                                            <label class="form-label">Delivery method</label>
+                                            <div>
+                                                <input type="radio" name="deliver_method" class="w-auto" checked id="automatic_method">
+                                                <label for="automatic_method">Automatic</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" name="deliver_method" class="w-auto" id="manual_method">
+                                                <label for="manual_method">Manual</label>
+                                            </div>
+                                            <small class="form-text">When the buyer purchases your account, Gamify will instantly deliver the account details so you don't even have to be online!</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Account Information -->
+                                    <div class="card-section accounts_class">
+
+                                        <label class="form-label">Account Information Shared With Buyer</label>
+                                        <small class="form-text">
+                                            You should provide all the details related to the account that might be relevant to have full ownership.
+                                            <br>- Character name
+                                            <br>- Login name
+                                            <br>- Password
+                                            <br>- Security questions and answers
+                                            <br>- Any extra passwords/PIN/codes if applicable
+                                            <br>- Any other relevant info
+                                        </small>
+                                      
+                                        <!-- Default Account 1 -->
+                                        <div class="account-field mt-4">
+                                            <label class="form-label">Account 1</label>
+                                            <textarea class="form-control accounts_r" id="account_info" name="account_info[]" rows="2" required placeholder="Type here..."></textarea>
+                                        </div>
+                                      
+                                        <!-- Container for dynamic accounts -->
+                                        <div id="additionalAccounts"></div>
+                                      
+                                        <button type="button" id="addAccountBtn" class="btn btn-outline-secondary btn-sm mt-3">+ Add Additional Account</button>
+                                      
+                                    </div>
+
+                                    <!-- Quantity Section -->
+                                    <div class="card-section currency_class topup_class items_class">
+                                        <label class="form-label">Quantity</label>
+                                        <div class="row g-2">
+                                            <div class="col-md-6">
+                                                <span class="small">Total Quantity Available</span>
+                                                <div class="input-group">
+                                                    <button class="btn btn-minus" type="button">-</button>
+                                                    <input type="number" class="form-control text-center input-group-text-input currency_r topup_r items_r" id="quantity_available" required name="quantity_available" value="0" min="0">
+                                                    <span class="input-group-text feature_currency_type">M</span>
+                                                    <button class="btn btn-plus" type="button">+</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <span class="small">Minimum Offer Quantity</span>
+                                                <div class="input-group">
+                                                    <button class="btn btn-minus" type="button">-</button>
+                                                    <input type="number" class="form-control text-center input-group-text-input currency_r topup_r items_r" id="minimum_quantity" required name="minimum_quantity" value="1" min="1">
+                                                    <span class="input-group-text feature_currency_type">M</span>
+                                                    <button class="btn btn-plus" type="button">+</button>
+                                                </div>
+                                            </div>
+                                            <div class="small text-danger d-none quanity_must_error">Quantity must be above or equal to Minimum Offer quantity</div>
+                                        </div>
+                                    </div>
+                                
+                                    <!-- Price Section -->
+                                    <div class="card-section">
+                                        <label class="form-label">Price per 1<span class="feature_currency_type">M</span></label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control input-group-text-input" id="price" required name="price" placeholder="Price" step="any">
+                                            <span class="input-group-text">$ USD</span>
+                                        </div>
+                                    </div>
+                                
+                                    <!-- Volume Discount -->
+                                    <div class="card-section currency_class items_class">
+                                        <label class="form-label">Volume Discount</label>
+                                        <div id="discount-container">
+                                            <div class="row g-2 align-items-center mb-2 discount-row" id="discount_row_0">
+                                                <div class="col-md-5">
+                                                    <span class="small">If user buys X or more</span>
+                                                    <div class="input-group">
+                                                        <button class="btn btn-minus" type="button">-</button>
+                                                        <input type="number" class="form-control input-group-text-input text-center" id="discount_amont_0" name="discount_amont[]" value="0" min="0">
+                                                        <span class="input-group-text feature_currency_type">M</span>
+                                                        <button class="btn btn-plus" type="button">+</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <span class="small">Discount applied</span>
+                                                    <div class="input-group">
+                                                        <button class="btn btn-minus" type="button">-</button>
+                                                        <input type="number" class="form-control input-group-text-input text-center" id="discount_applied_0" name="discount_applied[]" value="0" min="0" max="100">
+                                                        <span class="input-group-text">%</span>
+                                                        <button class="btn btn-plus" type="button">+</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 text-center">
+                                                    <button type="button" class="btn btn-delete delete-row"><i class="bi bi-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="addRow">+ Add row</button>
+                                        <div class="small text-danger d-none dis_percentage_error_0">Discount percentage must be more than 0</div>
+                                        <div class="small text-danger d-none dis_quantity_max_error_0">Volume Discount quantity cannot be greater than Total Quantity available</div>
+                                        <div class="small text-danger d-none dis_quantity_min_error_0">Volume Discount quantity must be greater than Minimum Offer quantity</div>
+                                    </div>
+                                
+                                    <!-- Fee Structure -->
+                                    <div class="card-section">
+                                        <label class="form-label">Fee Structure</label>
+                                        <div class="p-3 bg-light rounded">
+                                        <div class="small">Flat fee (per purchase): <strong>$0.00 USD</strong></div>
+                                        <div class="small">Percentage fee (per purchase): <strong>5% of Price</strong></div>
+                                        </div>
+                                    </div>
+                              
+                                    <!-- Terms and Place Offer -->
+                                    <div class="card-section">
+                                        <div class="form-check mb-2">
+                                            <input class="w-auto form-check-input" type="checkbox" id="termsService" name="termsService" required>
+                                            <label class="form-check-label" for="termsService">
+                                                I have read and agree to the <a href="#">Terms of Service</a>.
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input class="w-auto form-check-input" type="checkbox" id="sellerRules" name="sellerRules" required>
+                                            <label class="form-check-label" for="sellerRules">
+                                                I have read and agree to the <a href="#">Seller Rules</a>.
+                                            </label>
+                                        </div>
+                                        <div class="text-danger small rules_error d-none">You must agree with the seller policy and Terms of Service</div>
+
+                                        <button id="nextBtn" type="button" class="btn btn-dark w-100 mt-3" onclick="nextPrev(1)">Place Offer</button>
+                                    </div>
+                              
+                                </div>
                             </div>
 
                             <div style="overflow:auto;" class="d-flex justify-content-center buttons mt-5">
                                 <div style="float:right;">
                                     <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                                    <button type="button" id="nextBtn" onclick="nextPrev(1)">Submit</button>
                                 </div>
                             </div>
-                        </div>
-                        
+                        </div> 
                         
                         <!-- Circles which indicates the steps of the form: -->
                         <div class="steps-container" style="text-align:center;margin-top:40px;">
@@ -215,392 +400,10 @@
 
 @section('js')
 
-
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-	<script>
-        setTimeout(function() {
-            $('#nationality_select').select2();
-        }, 1000); // Wait 1 second before initializing
-        setTimeout(function() {
-            $('#country_select').select2();
-        }, 1000); // Wait 1 second before initializing
-
-        var currentTab = 0; // Current tab is set to be the first tab (0)
-        showTab(currentTab); // Display the current tab
-
-        function showTab(n) {
-            
-            // This function will display the specified tab of the form ...
-            var x = document.getElementsByClassName("tab");
-
-            if(x.length == 3){
-                addLastStepVisibility();
-            }else{
-                removeLastStepVisibility();
-            }
-            x[n].style.display = "block";
-            // ... and fix the Previous/Next buttons:
-            if (n == 0) {
-                document.getElementById("prevBtn").style.display = "none";
-            } else {
-                document.getElementById("prevBtn").style.display = "inline";
-            }
-            
-            if (n == (x.length - 1)) {
-                document.getElementById("nextBtn").innerHTML = "Submit";
-            } else {
-                document.getElementById("nextBtn").innerHTML = "Next";
-            }
-            // ... and run a function that displays the correct step indicator:
-            fixStepIndicator(n)
-        }
-
-        function nextPrev(n) {
-            // This function will figure out which tab to display
-            var x = document.getElementsByClassName("tab");
-            // Exit the function if any field in the current tab is invalid:
-            if (n == 1 && !validateForm()) return false;
-            // Hide the current tab:
-            x[currentTab].style.display = "none";
-            // Increase or decrease the current tab by 1:
-            currentTab = currentTab + n;
-            // if you have reached the end of the form... :
-            if (currentTab >= x.length) {
-                //...the form gets submitted:
-                document.getElementById("loadingScreen").style.display = "flex";
-                document.getElementById("regForm").submit();
-                return false;
-            }
-            // Otherwise, display the correct tab:
-            showTab(currentTab);
-        }
-
-        function validateForm() {
-            // This function deals with validation of the form fields
-            var x, y, i, valid = true;
-            x = document.getElementsByClassName("tab");
-            y = x[currentTab].getElementsByTagName("input");
-            z = x[currentTab].getElementsByTagName("select");
-            // A loop that checks every input field in the current tab:
-            for (i = 0; i < y.length; i++) {
-
-                // If a field is empty...
-                if (y[i].value == "" && $(y[i]).attr('required')) {
-                    // add an "invalid" class to the field:
-                    y[i].className += " invalid";
-                    // and set the current valid status to false:
-                    valid = false;
-                }
-            }
-            
-            for (i = 0; i < z.length; i++) {
-                // If a field is empty...
-                if (z[i].value == "" && $(z[i]).attr('required')) {
-                    // add an "invalid" class to the field:
-                    z[i].className += " invalid";
-                    // and set the current valid status to false:
-                    valid = false;
-                }
-            }
-            // If the valid status is true, mark the step as finished and valid:
-            if (valid) {
-                document.getElementsByClassName("step")[currentTab].className += " finish";
-            }
-            return valid; // return the valid status
-        }
-
-        function fixStepIndicator(n) {
-            // This function removes the "active" class of all steps...
-            var i, x = document.getElementsByClassName("step");
-            for (i = 0; i < x.length; i++) {
-                x[i].className = x[i].className.replace(" active", "");
-            }
-            //... and adds the "active" class to the current step:
-            x[n].className += " active";
-        }
-
-        function addLastStepVisibility() {
-            
-            let steps = document.querySelectorAll('.step'); // Select all step elements
-
-            if (steps.length > 0) {
-                steps[steps.length - 1].classList.add('d-none', steps.length === 1);
-            }
-        }
-        function removeLastStepVisibility() {
-            
-            let steps = document.querySelectorAll('.step'); // Select all step elements
-
-            if (steps.length > 0) {
-                steps[steps.length - 1].classList.remove('d-none', steps.length === 1);
-            }
-        }
-    </script>
-
-    <script>
-    // $(document).ready(function() {
-    //     // When a category is clicked
-    //     $('.category-item').click(function() {
-    //         let categoryId = $(this).data('category-id');
-
-    //         // Reset everything when category is changed
-    //         $('#games-dropdown').html('<option value="">Select a Game</option>'); // Reset games dropdown
-    //         $('#games-container').hide(); // Hide games dropdown until populated
-    //         $('#game-attributes-list').empty(); // Remove game attributes
-
-    //         // Fetch and display category attributes
-    //         $.get('/get-attributes', { category_id: categoryId }, function(data) {
-    //             // console.log(data);
-    //             $('#category-attributes-list').empty();
-    //             renderAttributes(data.attributes, 'category-attributes-list');
-    //         });
-
-    //         // Fetch games for the selected category
-    //         $.get('/get-games', { category_id: categoryId }, function(data) {
-    //             if (data.games.length > 0) {
-    //                 $('#games-dropdown').append(data.games.map(game => 
-    //                     `<option value="${game.id}">${game.name}</option>`
-    //                 ));
-    //                 $('#games-container').show(); // Show dropdown if games are available
-    //             }
-    //         });
-
-    //         $('.attributes-container').show(); // Show attributes section
-    //     });
-
-    //     // When a game is selected
-    //     $('#games-dropdown').change(function() {
-    //         let gameId = $(this).val();
-
-    //         if (gameId) {
-    //             $.get('/get-attributes', { game_id: gameId }, function(data) {
-    //                 $('#game-attributes-list').empty(); // Remove old game attributes
-    //                 renderAttributes(data.attributes, 'game-attributes-list');
-    //             });
-    //         } else {
-    //             $('#game-attributes-list').empty(); // If no game is selected, clear attributes
-    //         }
-    //     });
-
-    //     // Function to render attributes dynamically
-    //     function renderAttributes(attributes, targetId) {
-    //         let tab3 = document.querySelector('.tab_3');
-    //         let firstChildTab = tab3.firstElementChild; // Selects the first child of .tab_3
-
-    //         // Ensure the first child exists before modifying
-    //         if (firstChildTab) {
-    //             if (attributes.length > 0) {
-    //                 firstChildTab.classList.add('tab');  // Add "tab" class if attributes exist
-    //                 tab3.style.display = 'block'; // Show tab
-    //             } else {
-    //                 firstChildTab.classList.remove('tab'); // Remove "tab" class if no attributes
-    //                 tab3.style.display = 'none'; // Hide tab
-    //             }
-    //         }
-            
-    //         attributes.forEach(attr => {
-    //             let inputField = '';
-
-    //             if (attr.type === 'text') {
-    //                 inputField = `<input type="text" name="attribute_${attr.id}" placeholder="${attr.name}" class="form-control" />`;
-    //             } else if (attr.type === 'select') {
-    //                 let options = attr.options.map(option => 
-    //                     `<option value="${option}">${option}</option>`).join('');
-    //                 inputField = `<select name="attribute_${attr.id}" class="form-control">${options}</select>`;
-    //             }
-
-    //             $(`#${targetId}`).append(`
-    //                 <div class="attribute-item">
-    //                     <label>${attr.name}:</label>
-    //                     ${inputField}
-    //                 </div>
-    //             `);
-    //         });
-            
-    //     }
-    // });
-
-    function selectCategory(categoryId) {
-        // Set the selected category ID in the hidden input field
-        $('#selectedCategory').val(categoryId);
-
-        // Get the title input field
-        let titleInput = $('input[name="title"]');
-
-        // Show/hide .title_container and update title input value
-        if (categoryId == 1) {
-            $('.title_container').hide();  // Hide if category is "Gold"
-            titleInput.val('Gold');        // Set title to "Gold"
-        } else {
-            $('.title_container').show();  // Show for other categories
-            titleInput.val('');            // Clear title input
-        }
-    }
-    
-    $(document).ready(function () {
-        $('.category-item').click(function () {
-            let categoryId = $(this).data('category-id');
-            $('#selectedCategory').val(categoryId);
-
-            $('#games-dropdown').html('<option value="">Select a Game</option>');
-            $('#games-container').hide();
-            $('#category-attributes-list').empty();
-
-            // Populate games
-            $.get('/get-games', { category_id: categoryId }, function (data) {
-                if (data.games.length > 0) {
-                    data.games.forEach(game => {
-                        $('#games-dropdown').append(`<option value="${game.id}">${game.name}</option>`);
-                    });
-                    $('#games-container').show();
-                }
-            });
-
-            // Game change listener
-            $('#games-dropdown').off('change').on('change', function () {
-                let gameId = $(this).val();
-
-                $.get('/get-attributes', {
-                    category_id: categoryId,
-                    game_id: gameId
-                }, function (data) {
-                    $('#game-attributes-list').empty();
-                    $('#category-attributes-list').empty();
-
-                    renderAttributes(data.gameAttributes, 'game-attributes-list');
-                    renderAttributes(data.categoryAttributes, 'category-attributes-list');
-                });
-
-            });
-
-            $('.attributes-container').show();
-        });
-    });
-
-    function renderAttributes(attributes, targetId) {
-        let tab3 = document.querySelector('.tab_3');
-        let firstChildTab = tab3.firstElementChild;
-
-        if (firstChildTab) {
-            firstChildTab.classList.toggle('tab', attributes.length > 0);
-            tab3.style.display = attributes.length > 0 ? 'block' : 'none';
-        }
-
-        attributes.forEach(attr => {
-            let inputField = '';
-
-            if (attr.type === 'text') {
-                inputField = `<input type="text" name="attribute_${attr.id}" placeholder="${attr.name}" class="form-control" />`;
-            } else if (attr.type === 'select') {
-                let options = attr.options.map(option => `<option value="${option}">${option}</option>`).join('');
-                inputField = `<select name="attribute_${attr.id}" class="form-control">${options}</select>`;
-            }
-
-            $(`#${targetId}`).append(`
-                <div class="attribute-item">
-                    <label>${attr.name}:</label>
-                    ${inputField}
-                </div>
-            `);
-        });
-    }
-    </script>
-
-    {{-- Images Script --}}
-    <script>
-        let selectedFiles = [];
-
-        document.getElementById('uploadBtn').addEventListener('click', function() {
-            document.getElementById('imageInput').click();
-        });
-
-        document.getElementById('imageInput').addEventListener('change', function(event) {
-            let preview = document.getElementById('preview');
-            let imageInputsContainer = document.getElementById('imageInputsContainer');
-            let featuredImageInput = document.getElementById('featuredImageInput');
-
-            if (event.target.files.length > 0) {
-                let file = event.target.files[0];
-
-                if (!selectedFiles.some(f => f.name === file.name)) { // Prevent duplicate uploads
-                    let reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        let imageWrapper = document.createElement('div');
-                        imageWrapper.classList.add('image-wrapper');
-
-                        let img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.dataset.filename = file.name;
-
-                        // Remove Button
-                        let removeBtn = document.createElement('button');
-                        removeBtn.innerText = 'X';
-                        removeBtn.classList.add('remove-btn');
-                        removeBtn.onclick = function() {
-                            preview.removeChild(imageWrapper);
-                            selectedFiles = selectedFiles.filter(f => f.name !== file.name);
-                            document.getElementById(file.name).remove();
-
-                            // Update featured image if removed
-                            if (featuredImageInput.value === file.name) {
-                                if (selectedFiles.length > 0) {
-                                    featuredImageInput.value = selectedFiles[0].name;
-                                    updateFeaturedImage(selectedFiles[0].name);
-                                } else {
-                                    featuredImageInput.value = '';
-                                }
-                            }
-                        };
-
-                        // Click to Set Featured Image
-                        img.onclick = function() {
-                            updateFeaturedImage(file.name);
-                        };
-
-                        imageWrapper.appendChild(img);
-                        imageWrapper.appendChild(removeBtn);
-                        preview.appendChild(imageWrapper);
-
-                        selectedFiles.push(file);
-
-                        // Create hidden input field for each image
-                        let input = document.createElement('input');
-                        input.type = 'file';
-                        input.name = 'images[]';
-                        input.id = file.name;
-                        input.files = event.target.files;
-                        input.style.display = 'none';
-                        imageInputsContainer.appendChild(input);
-
-                        // Auto-set first image as featured
-                        if (selectedFiles.length === 1) {
-                            updateFeaturedImage(file.name);
-                        }
-                    };
-
-                    reader.readAsDataURL(file);
-                }
-            }
-        });
-
-        function updateFeaturedImage(filename) {
-            document.querySelectorAll('.image-wrapper img').forEach(i => i.classList.remove('featured'));
-            document.querySelectorAll('.featured-tag').forEach(tag => tag.remove());
-
-            let featuredImg = document.querySelector(`.image-wrapper img[data-filename="${filename}"]`);
-            if (featuredImg) {
-                featuredImg.classList.add('featured');
-                document.getElementById('featuredImageInput').value = filename;
-
-                let tag = document.createElement('div');
-                tag.classList.add('featured-tag');
-                tag.innerText = 'FEATURED';
-                featuredImg.parentElement.appendChild(tag);
-            }
-        }
-    </script>
+    {{-- Step form script --}}
+    <script src="{{asset('js/items_create.js')}}"></script>       
 @endsection
 
 

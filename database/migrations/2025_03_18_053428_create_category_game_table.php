@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->foreignId('game_id')->constrained()->onDelete('cascade');
+            $table->string('title')->nullable();
+            $table->string('feature_image')->nullable();
+            $table->string('currency_type')->nullable();
+            $table->enum('delivery_type', ['Character name', 'Username']);
             $table->timestamps();
         });
     }

@@ -19,6 +19,10 @@ class Category extends Model
     // {
     //     return $this->hasMany(Attribute::class);
     // }
+    public function categoryGames()
+    {
+        return $this->hasMany(CategoryGame::class);
+    }
 
     public function attributes() {
         return $this->belongsToMany(Attribute::class, 'attribute_category');

@@ -111,3 +111,16 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.bg-info-light {
+    background-color: #f4f4f4;;
+}
+.fw-light {
+    font-weight: 300 !important;
+}
+.fw-normal {
+    font-weight: 500 !important;
+}
+.w-fit {
+    width: fit-content;
+}

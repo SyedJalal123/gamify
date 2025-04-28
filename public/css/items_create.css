@@ -4,8 +4,7 @@
 #regForm {
     color: white;
     font-family: 'Montserrat';
-    width: 70%;
-    min-width: 300px;
+    min-width: 70%;
 }
 
 input, select {
@@ -27,12 +26,21 @@ input.invalid {
 /* Hide all steps by default: */
 .tab {
     display: none;
-    
     padding: 20px;
     margin: 40px 0px;
     border-radius: 18px;
-    text-align: center;
+    /* text-align: center; */
 }
+
+@media (max-width: 576px) {
+    #regForm {
+        width: 100%;
+    }
+    .tab {
+        padding: 0px;
+    }
+}
+
 #regForm .tab_title {
     font-weight: 700;
     font-size: 18px;
@@ -115,3 +123,127 @@ input.invalid {
     padding: 3px 5px; font-size: 12px; font-weight: bold; border-radius: 3px;
 }
 
+
+
+
+
+
+
+.card-section {
+    color: black;
+}
+.custom-container {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+  .main-card {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .card-section {
+    background: #ffffff;
+    border: 1px solid #e2e2e2;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    padding: 25px;
+    margin-bottom: 20px;
+  }
+  .form-label {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  small, .form-text {
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 400;
+  }
+  .input-group-text {
+    /* min-width: 50px; */
+    justify-content: center;
+    background-color: #ffffff;
+    border-left: 0px;
+    font-weight: 600;
+    border-radius: 0px;
+  }
+  .input-group-text-input{
+    border-right: 0px;
+    height: auto;
+  }
+  .btn-minus, .btn-plus {
+    width: 36px;
+    background-color: #f1f1f1;
+    border: none;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 8px;
+  }
+  .btn-minus:hover, .btn-plus:hover {
+    background-color: #d6d6d6;
+  }
+  .btn-delete {
+    background-color: #dc3545;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  .btn-delete:hover {
+    background-color: #ffffff;
+    border: 1px solid #dc3545;
+  }
+  .btn-delete:hover i {
+    color: #dc3545;
+  }
+  .btn-delete i {
+    font-size: 18px;
+    color: #fff;
+    transition: color 0.3s ease;
+  }
+  button, input, select, textarea {
+    font-size: 14px;
+  }
+  @media (max-width: 576px) {
+    .row.g-2 > div {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-dropdown {
+    position: absolute !important;
+    top: 100% !important; /* Ensures dropdown appears below the select box */
+    z-index: 10000 !important; /* Ensures dropdown appears on top of other elements */
+}
+
+.select2-container--default .select2-selection--single {
+  height: 38px; /* Adjust height as needed */
+  padding-top: 5px;  /* Adjust to fine-tune vertical centering */
+  padding-bottom: 5px;  /* Adjust to fine-tune vertical centering */
+  display: flex;
+  align-items: center;  /* Vertically center the text */
+  font-size: 16px; /* Adjust font size if needed */
+}
+
+/* Adjust the dropdown item text to be vertically centered */
+.select2-container .select2-selection__rendered {
+  line-height: normal; /* Ensures the text is aligned properly */
+  padding-left: 10px; /* Adjust padding if needed */
+}
+
+/* Adjust the dropdown items' text if needed */
+.select2-results__option {
+  line-height: 30px;  /* Adjust for better alignment of items in the dropdown */
+}
+
+.invalid {
+  border: 1px solid red;
+}

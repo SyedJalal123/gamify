@@ -54,12 +54,22 @@ Route::middleware('verified')->group(function () {
     Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
     Route::post('/items/store', [ItemController::class, 'store'])->name('items.store');
 
-    Route::get('catalog/{category_id}/{game_id}', [GameController::class, 'index'])->name('catalog.index');
+    Route::get('catalog/{category_id}', [GameController::class, 'index'])->name('catalog.index');
     Route::get('/live-search', [GameController::class, 'liveSearch'])->name('live.search');
 
     Route::get('/item/{item}', [CatalogController::class, 'itemDetail'])->name('item.detail');
 
     Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // Google authenticaiton routes
@@ -69,10 +79,6 @@ Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallba
 // Facbook authenticaiton routes
 Route::get('auth/facebook', [FacebookController::class, 'redirectToFacebook']);
 Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback']);
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 // Paypal authenticaiton routes 
 Route::get('/paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
@@ -91,13 +97,6 @@ Route::prefix('payment/stripe')->group(function () {
 
     Route::get('/success', [StripeController::class, 'success'])->name('stripe.success');
     Route::get('/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');
-});
-
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

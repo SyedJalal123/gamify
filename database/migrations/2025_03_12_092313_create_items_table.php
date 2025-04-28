@@ -14,14 +14,18 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('game_id')->constrained()->onDelete('cascade');
-            $table->string('title');
+            $table->foreignId('category_game_id')->constrained('category_game')->onDelete('cascade');
+            $table->text('title')->nullable();
+            $table->json('images')->nullable();
+            $table->string('feature_image')->nullable();
             $table->text('description');
+            $table->string('delivery_time')->nullable();;
+            $table->enum('delivery_method', ['automatic', 'manual'])->nullable();
+            $table->json('account_info')->nullable();
+            $table->integer('quantity_available')->nullable();;
+            $table->integer('minimum_quantity')->nullable();;
             $table->float('price');
-            $table->enum('delivery_type', ['instant', 'manual']);
-            $table->json('images');
-            $table->string('feature_image');
+            $table->json('discount')->nullable();
             $table->timestamps();
         });
     }

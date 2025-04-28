@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory;
-    protected $fillable = ['seller_id','category_id', 'game_id', 'title', 'description', 'price', 'delivery_type', 'images', 'feature_image'];
+    protected $fillable = ['seller_id', 'category_game_id', 'title', 'images', 'feature_image', 'description', 'delivery_time', 'delivery_method', 'account_info', 'quantity_available', 'minimum_quantity', 'price', 'discount'];
 
     protected $casts = [
         'images' => 'array',
+        'discount' => 'array',
+        'account_info' => 'array'
     ];
 
     public function seller()
@@ -27,6 +29,11 @@ class Item extends Model
     public function game()
     {
         return $this->belongsTo(Game::class);
+    }
+
+    public function categoryGame()
+    {
+        return $this->belongsTo(CategoryGame::class, 'category_game_id');
     }
 
     public function user()

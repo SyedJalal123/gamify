@@ -31,14 +31,14 @@
                     </select>
                 </div>
             @endforeach
-            <a href="{{ route('catalog.index', [$category->id, $game->id]) }}" class="btn btn-outline-light w-100">Clear Filters</a>
+            <a href="{{ route('catalog.index', [$categoryGame->id]) }}" class="btn btn-outline-light w-100">Clear Filters</a>
         </form>
     </div>
 
     <div class="container mb-5">
         <div class="row">
             <div class="col-12">
-                <h4 class="mb-4">{{ $game->name }} - {{ $category->name }}</h4>
+                <h4 class="mb-4">{{$categoryGame->game->name}} {{ $categoryGame->title }}</h4>
 
                 <div class="d-block d-md-none mb-3">
                     <button type="button" class="btn btn-dark w-100" onclick="toggleFilters()">Filters</button>
@@ -59,7 +59,7 @@
                                     </select>
                                 </div>
                             @endforeach
-                            <a href="{{ route('catalog.index', [$category->id, $game->id]) }}" class="btn btn-outline-light btn-sm">
+                            <a href="{{ route('catalog.index', [$categoryGame->id]) }}" class="btn btn-outline-light btn-sm">
                                 Clear Filters
                             </a>
                         </div>

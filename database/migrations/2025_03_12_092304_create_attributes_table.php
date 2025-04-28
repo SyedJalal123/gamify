@@ -17,6 +17,8 @@ return new class extends Migration
             $table->enum('type', ['text', 'number', 'select', 'checkbox']);
             $table->json('options')->nullable(); // Example: ["NA", "EU", "ASIA"]
             $table->enum('applies_to', ['1', '2']);
+            $table->boolean('required')->default('0');
+            $table->boolean('topup')->default('0');
             // $table->foreignId('game_id')->nullable()->constrained()->onDelete('cascade');
             // $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();

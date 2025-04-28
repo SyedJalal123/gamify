@@ -3,7 +3,7 @@ use App\Models\Category;
 use App\Models\Seller;
 
 function categories(){
-    $categories = Category::with('games')->get();
+    $categories = Category::with('categoryGames.game')->get();
     return $categories;
 }
 

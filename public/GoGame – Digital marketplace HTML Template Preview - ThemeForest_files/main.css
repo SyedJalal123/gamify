@@ -298,7 +298,7 @@ body::-webkit-scrollbar-thumb {
   border-radius: 0 0 6px 6px;
   border: 1px solid rgba(167,130,233,0.06);
   padding: 20px;
-  width: 250px;
+  width: 307px;
   transition: 0.5s ease;
   transform: translate3d(0px, 21px, 0px);
   margin-top: 10px;

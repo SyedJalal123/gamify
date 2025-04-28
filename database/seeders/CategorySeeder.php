@@ -12,8 +12,9 @@ class CategorySeeder extends Seeder
         $categories = [
             ['name' => 'Gold'],
             ['name' => 'Accounts'],
-            ['name' => 'Boosting'],
+            ['name' => 'Top Up'],
             ['name' => 'Items'],
+            ['name' => 'Boosting'],
         ];
 
         foreach ($categories as $category) {

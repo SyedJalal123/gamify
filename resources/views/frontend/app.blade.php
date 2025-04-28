@@ -6,8 +6,10 @@
 
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
         <!-- CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
         <link rel="stylesheet" href="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/bootstrap-reboot.min.css')}}">
         <link rel="stylesheet" href="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/bootstrap-grid.min.css')}}">
         <link rel="stylesheet" href="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/owl.carousel.min.css')}}">
@@ -61,11 +63,14 @@
                                             <a class="header__nav-link" href="#" role="button" id="dropdownMenu0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$category->name}} <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 184l144 144 144-144"></path></svg></a>
             
                                             <ul class="dropdown-menu header__nav-menu" aria-labelledby="dropdownMenu0">
-                                                @foreach ($category->games as $game)
+                                                @foreach ($category->categoryGames as $item)
                                                     <li>
                                                         <div class="d-flex">
-                                                            <img src="{{asset($game->image)}}" alt="">
-                                                            <a href="{{url('catalog')}}/{{$category->id}}/{{$game->id}}">{{$game->name}}</a>
+                                                            <img src="{{asset($item->game->image)}}" alt="" width="28px">
+                                                            <a href="{{url('catalog')}}/{{$item->id}}">
+                                                                {{$item->game->name}} 
+                                                                @if(in_array($item->category_id, [1,3])){{ $item->title }}@endif
+                                                            </a>
                                                         </div>
                                                     </li>
                                                 @endforeach
@@ -405,7 +410,7 @@
         <script src="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/jquery.mousewheel.min.js.download')}}"></script>
         <script src="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/jquery.mCustomScrollbar.min.js.download')}}"></script>
         <script src="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/main.js.download')}}"></script>        
-
+        <script> var publicPath = "{{ asset('/') }}"; </script>
         @yield('js')
         <script>
             
@@ -485,7 +490,7 @@
                             }
         
                             const title = query ? 'SEARCH RESULTS' : 'POPULAR CATEGORIES';
-        
+                            console.log(data);
                             customDropdown.innerHTML = `
                                 <h4>${title}</h4>
                                 ${data.map(item => `
