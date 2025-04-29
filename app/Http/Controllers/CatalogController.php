@@ -12,64 +12,104 @@ class CatalogController extends Controller
 {
     public function index(Request $request, $category_game_id)
     {
-        $categoryGame = CategoryGame::where('id',$category_game_id)->with('category','game')->first();
-        // Get all relevant attributes for this game-category pair
-        $attributes = Attribute::whereHas('categoryGames', fn($q) => $q->where('category_game_id', $category_game_id))->get();
+        $categoryGame = CategoryGame::with('category', 'game')->find($category_game_id);
     
-        // Build base query
+        $attributes = Attribute::whereHas('categoryGames', fn($q) => $q->where('category_game_id', $category_game_id))->get();
         $itemsQuery = Item::where('category_game_id', $category_game_id);
     
-        // Attribute filtering
+        // Apply attribute filters
         foreach ($request->query() as $key => $value) {
-            if (str_starts_with($key, 'attr_') && !is_null($value) && $value !== '') {
+            if (str_starts_with($key, 'attr_') && !empty($value)) {
                 $attributeId = str_replace('attr_', '', $key);
-                $itemsQuery->whereHas('attributes', function ($q) use ($attributeId, $value) {
-                    $q->where('attribute_id', $attributeId)
-                        ->where('value', $value);
-                });
+                $itemsQuery->whereHas('attributes', fn($q) => 
+                    $q->where('attribute_id', $attributeId)->where('value', $value)
+                );
             }
         }
     
-        // Text search
-        if ($request->filled('search')) {
-            $searchTerm = $request->input('search');
-            $itemsQuery->where(function ($query) use ($searchTerm) {
-                $query->where('title', 'like', "%$searchTerm%")
-                    ->orWhereHas('attributes', function ($q) use ($searchTerm) {
-                        $q->where('value', 'like', "%$searchTerm%");
-                    })
-                    ->orWhere('price', 'like', "%$searchTerm%");
-            });
+        // Apply search filter
+        if ($searchTerm = $request->input('search')) {
+            $itemsQuery->where(fn($query) => $query->where('title', 'like', "%$searchTerm%")
+                ->orWhereHas('attributes', fn($q) => $q->where('value', 'like', "%$searchTerm%"))
+                ->orWhere('price', 'like', "%$searchTerm%"));
         }
     
-        // Price sorting
+        // Apply sorting
         if ($request->sort === 'price_asc') {
             $itemsQuery->orderBy('price', 'asc');
         } elseif ($request->sort === 'price_desc') {
             $itemsQuery->orderBy('price', 'desc');
         } else {
-            $itemsQuery->latest(); // default: newest first
+            $itemsQuery->latest();
         }
-
-        // Get items with their attributes
-        $items = $itemsQuery->with('attributes','categoryGame.game')->paginate(12)->withQueryString();
-
-        // Handle AJAX partial load
+    
+        if ($categoryGame->category->id == 3) {
+            $items = $itemsQuery->with('attributes', 'categoryGame.game', 'seller')->get();
+    
+            $grouped = collect();
+    
+            foreach ($items as $item) {
+                $keyAttribute = $item->attributes->first(fn($attr) => $attr->topup == 1);
+                if (!$keyAttribute) continue;
+    
+                $value = $keyAttribute->pivot->value;
+    
+                if (!isset($grouped[$value])) {
+                    $grouped[$value] = $item;
+                } else {
+                    $existing = $grouped[$value];
+                    if ($item->price < $existing->price || 
+                        ($item->price == $existing->price && $item->created_at < $existing->created_at)) {
+                        $grouped[$value] = $item;
+                    }
+                }
+            }
+    
+            $sortedItems = $grouped->sortBy(fn($item) => $item->attributes->first(fn($attr) => $attr->topup == 1)->pivot->value ?? PHP_INT_MAX);
+    
+            // Handle AJAX for category 3
+            if ($request->ajax()) {
+                return view('frontend.catalog.topup-items', compact('sortedItems'))->render();
+            }
+    
+            return view('frontend.catalog.topupCatalog', compact('categoryGame', 'attributes', 'sortedItems', 'items'));
+        }
+    
+        // Default category view
+        $items = $itemsQuery->with('attributes', 'categoryGame.game', 'seller')->paginate(12)->withQueryString();
+    
         if ($request->ajax()) {
+            // Optional: render differently if needed
             return view('frontend._items', compact('items'))->render();
         }
-        
-        if($categoryGame->category->id == 3){
-            $sortedItems = $itemsQuery->get()->sortBy(function ($item) {
-                return $item->attributes
-                    ->min(fn($attr) => $attr->pivot->value) ?? PHP_INT_MAX;
-            });
-            return view('frontend.catalog.topupCatalog', compact('categoryGame', 'items', 'attributes','sortedItems'));
-        }else{
-            return view('frontend.catalog.catalog', compact('categoryGame', 'items', 'attributes'));
-        }
+    
+        return view('frontend.catalog.catalog', compact('categoryGame', 'items', 'attributes'));
     }
+    public function getItemDetails($id)
+    {
+        $item = Item::with('categoryGame.game', 'seller', 'attributes')->find($id);
 
+        if (!$item) {
+            return response()->json(['success' => false]);
+        }
+
+        // Find topup attribute value
+        $topup = $item->attributes->firstWhere('topup', 1)?->pivot->value ?? 1;
+        
+        return response()->json([
+            'success' => true,
+            'item' => [
+                'id' => $item->id,
+                'title' => ($topup . ' ' . ($item->title ?? $item->categoryGame->title)),
+                'price' => number_format($item->price * $topup, 2),
+                'image' => asset($item->feature_image ?? $item->categoryGame->feature_image),
+                'delivery_time' => $item->delivery_time,
+                'description' => $item->description,
+                'seller' => $item->seller->seller->first_name ?? 'Seller',
+                'attributes' => $item->attributes,
+            ]
+        ]);
+    }   
     public function liveSearch(Request $request)
     {
         $query = $request->get('q');

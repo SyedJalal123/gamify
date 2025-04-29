@@ -54,13 +54,14 @@ input.invalid {
 }
 
 #regForm .buttons button {
-    background-color: #04AA6D;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 17px;
-    font-family: Raleway;
-    cursor: pointer;
+  background-color: #343a40;
+  border-radius: 5px;
+  color: #ffffff;
+  border: none;
+  padding: 7px 17px;
+  font-size: 17px;
+  font-family: Raleway;
+  cursor: pointer;
 }
 
 #regForm .buttons button:hover {

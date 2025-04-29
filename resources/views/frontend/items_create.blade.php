@@ -117,7 +117,7 @@
 
                             <div style="overflow:auto;" class="d-flex justify-content-center buttons mt-5">
                                 <div style="float:right;">
-                                    <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                                    <button type="button" id="prevBtn" onclick="nextPrev(-1)">Back</button>
                                     <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
                                 </div>
                             </div>
@@ -136,7 +136,7 @@
     
                                 <div style="overflow:auto;" class="d-flex justify-content-center buttons mt-5">
                                     <div style="float:right;">
-                                        <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                                        <button type="button" id="prevBtn" onclick="nextPrev(-1)">Back</button>
                                         <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
                                     </div>
                                 </div>
@@ -347,7 +347,7 @@
                                     </div>
                               
                                     <!-- Terms and Place Offer -->
-                                    <div class="card-section">
+                                    <div class="py-2 fs-14">
                                         <div class="form-check mb-2">
                                             <input class="w-auto form-check-input" type="checkbox" id="termsService" name="termsService" required>
                                             <label class="form-check-label" for="termsService">
@@ -370,7 +370,7 @@
 
                             <div style="overflow:auto;" class="d-flex justify-content-center buttons mt-5">
                                 <div style="float:right;">
-                                    <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                                    <button type="button" id="prevBtn" onclick="nextPrev(-1)">Back</button>
                                 </div>
                             </div>
                         </div> 
