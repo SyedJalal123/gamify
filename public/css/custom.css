@@ -1,4 +1,3 @@
-
 .btn__1{
     padding: 5px 17px;
     border-radius: 10px;
@@ -40,6 +39,30 @@
 .h-38 {
     height: 38px;
 }
+.lh-1_2{
+    line-height: 1.2;
+    max-height: 2.4em;
+}
+.br-10{
+    border-radius: 10px;
+}
+.br-9{
+    border-radius: 9px;
+}
+.br-8{
+    border-radius: 8px;
+}
+.br-7{
+    border-radius: 7px;
+}
+.br-6{
+    border-radius: 6px;
+}
+.br-5{
+    border-radius: 5px;
+}
+
+
 .circle-li li {
     list-style-type: circle;
     text-align: start;
@@ -49,6 +72,9 @@
 }
 .text-medium {
     font-size: medium;
+}
+.text-white-light {
+    color: #c9c6c6
 }
 @media (max-width: 576px) { /* Phones */
     .text-small-phone {
@@ -64,8 +90,9 @@
 }
 .drop-box {
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3); /* X, Y, Blur, Spread, Color */
-    border-radius: 10px;
-    padding: 20px;
+    /* border-radius: 10px; */
+    padding: 13px;
+    font-size: 15px;
 }
 .category-select {
     background: white;
@@ -123,4 +150,108 @@
 }
 .w-fit {
     width: fit-content;
+}
+
+.select2-container {
+    width: -webkit-fill-available !important;
+}
+
+.select2-dropdown {
+    position: absolute !important;
+    top: 100% !important; /* Ensures dropdown appears below the select box */
+    z-index: 10000 !important; /* Ensures dropdown appears on top of other elements */
+}
+
+.select2-container--default .select2-selection--single {
+  height: 38px; /* Adjust height as needed */
+  padding-top: 5px;  /* Adjust to fine-tune vertical centering */
+  padding-bottom: 5px;  /* Adjust to fine-tune vertical centering */
+  display: flex;
+  align-items: center;  /* Vertically center the text */
+  font-size: 16px; /* Adjust font size if needed */
+}
+
+/* Adjust the dropdown item text to be vertically centered */
+.select2-container .select2-selection__rendered {
+  line-height: normal; /* Ensures the text is aligned properly */
+  padding-left: 10px; /* Adjust padding if needed */
+}
+
+/* Adjust the dropdown items' text if needed */
+.select2-results__option {
+  line-height: 30px;  /* Adjust for better alignment of items in the dropdown */
+}
+
+.select-2-dark .select2-container--default .select2-selection--single {
+    background-color: #313e54 !important;
+    border: none !important;
+    
+}
+.select-2-dark .select2-container .select2-selection__rendered {
+    color: #dddddd !important;
+    
+}
+
+.dark {
+    background: #313e54;
+    color: white;
+}
+
+.two-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+
+.row-3-2-1 {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+@media (max-width: 1280px) {
+    .row-3-2-1 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 960px) {
+    .row-3-2-1 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 10px;
+    }
+}
+
+
+.row-3-2-1 {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+@media (max-width: 1280px) {
+    .row-3-2-1 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 960px) {
+    .row-3-2-1 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 10px;
+    }
+}
+.row-5-1 {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+}
+
+@media (max-width: 960px) {
+    .row-5-1 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 10px;
+    }
 }

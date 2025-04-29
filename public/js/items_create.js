@@ -330,6 +330,7 @@ $(document).ready(function () {
                     $('.feature_currency').text(data.categoryGame.title);
 
                     // Set currency type based on categoryId
+                    $('.feature_currency__default_amount').toggleClass('hidden', categoryId !== 1);
                     $('.feature_currency_type').text((categoryId == 1) ? data.categoryGame.currency_type : 'unit');
                 //
             });
@@ -616,5 +617,5 @@ $('#addAccountBtn').click(function() {
 });
 
 $(document).on('click', '.btn-remove-account', function() {
-$(this).closest('.account-field').remove();
+    $(this).closest('.account-field').remove();
 });

@@ -18,6 +18,8 @@
         <link rel="stylesheet" href="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/jquery.mCustomScrollbar.min.css')}}">
         <link rel="stylesheet" href="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/paymentfont.min.css')}}">
         <link rel="stylesheet" href="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/main.css')}}">
+        <!-- Select2 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="{{asset('css/custom.css')}}">
 
         <!-- Favicons -->
@@ -179,19 +181,20 @@
                                             </span>
                                         </a> --}}
                                         <li class="header__nav-item">
-                                            <a class="header__nav-link header__nav-link--more" style="background: brown; padding: 19px 15px; border-radius: 71px;" href="#" role="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            {{-- <a class="header__nav-link header__nav-link--more" style="background: brown; padding: 19px 15px; border-radius: 71px;" href="#" role="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <span>{{substr(auth()->user()->name,0,1)}}</span>
-                                                {{-- <img src="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/img/user.png')}}" alt="" style="width: 100%; height: 100%; filter:contrast(0);"> --}}
-                                                {{-- <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><circle cx="256" cy="256" r="32" style="fill:none; stroke-miterlimit:10;stroke-width:32px"></circle><circle cx="416" cy="256" r="32" style="fill:none;stroke-miterlimit:10;stroke-width:32px"></circle><circle cx="96" cy="256" r="32" style="fill:none;stroke-miterlimit:10;stroke-width:32px"></circle></svg> --}}
+                                            </a> --}}
+                                            <a  href="#" role="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="header__nav-link header__nav-link--more seller-avatar mr-2 d-flex align-items-center justify-content-center rounded-circle text-white" style="width: 37px; height: 37px; background-color: #c0392b;">
+                                                {{ strtoupper(substr(auth()->user()->name,0,1)) }}
                                             </a>
-        
                                             <ul class="dropdown-menu header__nav-menu  mCustomScrollbar _mCS_1" aria-labelledby="dropdownMenu3" style="overflow: visible;min-width: 279px;">
                                                 <li style="border-bottom:1px solid grey;">
                                                     <div class="d-flex align-items-center justify-content-between mb-2 color-white">
                                                         <div class="d-flex align-items-center">
-                                                            <div style="background: brown; padding: 8px 15px; border-radius: 71px;">
-                                                                <span>{{substr(auth()->user()->name,0,1)}}</span>
+                                                            <div class="seller-avatar mr-2 d-flex align-items-center justify-content-center rounded-circle text-white" style="width: 40px; height: 40px; background-color: #c0392b;">
+                                                                {{ strtoupper(substr(auth()->user()->name,0,1)) }}
                                                             </div>
+                                                            
                                                             <div class="pl-1 d-flex flex-column">
                                                                 <span class="fs-14">{{auth()->user()->name}}</span>
                                                                 <span class="fs-13">$0.00</span>
@@ -410,101 +413,105 @@
         <script src="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/jquery.mousewheel.min.js.download')}}"></script>
         <script src="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/jquery.mCustomScrollbar.min.js.download')}}"></script>
         <script src="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/main.js.download')}}"></script>        
-        <script> var publicPath = "{{ asset('/') }}"; </script>
+        <!-- Select2 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script><script> var publicPath = "{{ asset('/') }}"; </script>
         @yield('js')
         <script>
-            
             $('#myModal').on('shown.bs.modal', function () {
                 $('#myInput').trigger('focus');
             });
-        </script>
-        
-        <!-- Custom Search Bar Js -->
-        <script>
-            const customSearchInput = document.getElementById('customSearchInput');
-            const customDropdown = document.getElementById('customSearchDropdown');
-            const customOverlay = document.getElementById('customSearchOverlay');
-        
-            customSearchInput.addEventListener('focus', () => {
-                customDropdown.classList.add('show');
-                customOverlay.classList.add('show');
-            });
-        
-            customOverlay.addEventListener('click', () => {
-                customDropdown.classList.remove('show');
-                customOverlay.classList.remove('show');
-                customSearchInput.blur();
-            });
-        </script>
-        <!-- Live AJAX Search -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
+
+            // Custom Search Bar Js
+
                 const customSearchInput = document.getElementById('customSearchInput');
                 const customDropdown = document.getElementById('customSearchDropdown');
                 const customOverlay = document.getElementById('customSearchOverlay');
-                const customContainer = document.querySelector('.custom-search-container');
-                let timeout = null;
-        
-                if (!customSearchInput || !customDropdown || !customOverlay || !customContainer) return;
-        
-                // Show dropdown and overlay when input is focused
+            
                 customSearchInput.addEventListener('focus', () => {
                     customDropdown.classList.add('show');
                     customOverlay.classList.add('show');
-                    customContainer.classList.add('active');
-        
-                    // Trigger default fetch if input is empty
-                    if (!customSearchInput.value.trim()) {
-                        fetchResults('');
-                    }
                 });
-        
-                // Hide dropdown and overlay on overlay click
+            
                 customOverlay.addEventListener('click', () => {
                     customDropdown.classList.remove('show');
                     customOverlay.classList.remove('show');
                     customSearchInput.blur();
-                    customContainer.classList.remove('active');
                 });
-        
-                // Keyup live search
-                customSearchInput.addEventListener('keyup', () => {
-                    clearTimeout(timeout);
-                    const query = customSearchInput.value.trim();
-        
-                    // Show loading
-                    customDropdown.innerHTML = `<div style="padding: 20px; color: #ccc;">Loading...</div>`;
-        
-                    timeout = setTimeout(() => {
-                        fetchResults(query);
-                    }, 200);
+            //
+
+            // Live AJAX Search
+                document.addEventListener('DOMContentLoaded', function () {
+                    const customSearchInput = document.getElementById('customSearchInput');
+                    const customDropdown = document.getElementById('customSearchDropdown');
+                    const customOverlay = document.getElementById('customSearchOverlay');
+                    const customContainer = document.querySelector('.custom-search-container');
+                    let timeout = null;
+            
+                    if (!customSearchInput || !customDropdown || !customOverlay || !customContainer) return;
+            
+                    // Show dropdown and overlay when input is focused
+                    customSearchInput.addEventListener('focus', () => {
+                        customDropdown.classList.add('show');
+                        customOverlay.classList.add('show');
+                        customContainer.classList.add('active');
+            
+                        // Trigger default fetch if input is empty
+                        if (!customSearchInput.value.trim()) {
+                            fetchResults('');
+                        }
+                    });
+            
+                    // Hide dropdown and overlay on overlay click
+                    customOverlay.addEventListener('click', () => {
+                        customDropdown.classList.remove('show');
+                        customOverlay.classList.remove('show');
+                        customSearchInput.blur();
+                        customContainer.classList.remove('active');
+                    });
+            
+                    // Keyup live search
+                    customSearchInput.addEventListener('keyup', () => {
+                        clearTimeout(timeout);
+                        const query = customSearchInput.value.trim();
+            
+                        // Show loading
+                        customDropdown.innerHTML = `<div style="padding: 20px; color: #ccc;">Loading...</div>`;
+            
+                        timeout = setTimeout(() => {
+                            fetchResults(query);
+                        }, 200);
+                    });
+            
+                    function fetchResults(query = '') {
+                        fetch(`/live-search?q=${encodeURIComponent(query)}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                if (!data.length) {
+                                    customDropdown.innerHTML = '<div style="padding: 20px; color: #ccc;">No results found.</div>';
+                                    return;
+                                }
+            
+                                const title = query ? 'SEARCH RESULTS' : 'POPULAR CATEGORIES';
+                                console.log(data);
+                                customDropdown.innerHTML = `
+                                    <h4>${title}</h4>
+                                    ${data.map(item => `
+                                        <a href="${item.link}" class="custom-search-category" style="text-decoration: none;">
+                                            <img src="${item.image}" alt="${item.name}" />
+                                            ${item.name}
+                                        </a>
+                                    `).join('')}
+                                `;
+                            })
+                            .catch(() => {
+                                customDropdown.innerHTML = '<div style="padding: 20px; color: #ccc;">Something went wrong.</div>';
+                            });
+                    }
                 });
-        
-                function fetchResults(query = '') {
-                    fetch(`/live-search?q=${encodeURIComponent(query)}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (!data.length) {
-                                customDropdown.innerHTML = '<div style="padding: 20px; color: #ccc;">No results found.</div>';
-                                return;
-                            }
-        
-                            const title = query ? 'SEARCH RESULTS' : 'POPULAR CATEGORIES';
-                            console.log(data);
-                            customDropdown.innerHTML = `
-                                <h4>${title}</h4>
-                                ${data.map(item => `
-                                    <a href="${item.link}" class="custom-search-category" style="text-decoration: none;">
-                                        <img src="${item.image}" alt="${item.name}" />
-                                        ${item.name}
-                                    </a>
-                                `).join('')}
-                            `;
-                        })
-                        .catch(() => {
-                            customDropdown.innerHTML = '<div style="padding: 20px; color: #ccc;">Something went wrong.</div>';
-                        });
-                }
+            //
+
+            $('input[type="number"]').on('wheel', function(e) {
+                $(this).blur();
             });
         </script>
         

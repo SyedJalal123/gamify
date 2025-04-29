@@ -1,9 +1,6 @@
 @extends('frontend.app')
 
 @section('css')
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{asset('css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('css/items_create.css')}}">
 @endsection
 
@@ -110,7 +107,7 @@
                         
                         <div class="tab tab_2">
                             <div class="container">
-                                <div id="games-container" style="display: none;">
+                                <div id="games-container" class="select-2-dark" style="display: none;">
                                     <h4>Select a Game</h4>
                                     <select id="games-dropdown" name="game_id" required>
                                         <option value="">Select a Game</option>
@@ -132,7 +129,7 @@
                                     <div class="attributes-container" style="display: none;">
     
                                         <h4>Game Attributes</h4>
-                                        <div id="game-attributes-list"></div>
+                                        <div class="select-2-dark" id="game-attributes-list"></div>
 
                                     </div>
                                 </div>
@@ -284,7 +281,7 @@
                                                     <button class="btn btn-plus" type="button">+</button>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-6 currency_class items_class">
                                                 <span class="small">Minimum Offer Quantity</span>
                                                 <div class="input-group">
                                                     <button class="btn btn-minus" type="button">-</button>
@@ -299,7 +296,7 @@
                                 
                                     <!-- Price Section -->
                                     <div class="card-section">
-                                        <label class="form-label">Price per 1<span class="feature_currency_type">M</span></label>
+                                        <label class="form-label">Price per <span class="feature_currency__default_amount">1</span><span class="feature_currency_type">M</span></label>
                                         <div class="input-group">
                                             <input type="number" class="form-control input-group-text-input" id="price" required name="price" placeholder="Price" step="any">
                                             <span class="input-group-text">$ USD</span>
@@ -399,9 +396,6 @@
 
 
 @section('js')
-
-    <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     {{-- Step form script --}}
     <script src="{{asset('js/items_create.js')}}"></script>       
 @endsection

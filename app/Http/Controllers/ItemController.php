@@ -64,7 +64,6 @@ class ItemController extends Controller
             // Validate the input
             $request->validate([
                 'category_id' => 'required|exists:categories,id',
-                'game_id' => 'nullable|exists:games,id',
                 'title' => 'nullable|string|max:255',
                 'description' => 'nullable|string',
                 'price' => 'required|numeric|min:0',

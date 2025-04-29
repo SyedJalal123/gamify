@@ -11,7 +11,6 @@
             <div class="col-12">
                 <a href="{{ url()->previous() }}" class="text-muted mb-3 d-inline-block">&larr; Back to all offers</a>
                 @if ($isCurrency)
-                {{-- CURRENCY ITEM LAYOUT --}}
                 <div class="row gold-layout">
                     <div class="col-lg-7">
                         <h4 class="mb-3">{{ $item->categoryGame->game->name ?? $item->title }}</h4>
@@ -69,9 +68,7 @@
                         </div>
                     </div>
                 </div>
-
                 @else
-                {{-- NON-GOLD ITEM LAYOUT --}}
                 <div class="row">
                     <div class="col-lg-8">
                         <h4 class="mb-3">{{ $item->title }}</h4>

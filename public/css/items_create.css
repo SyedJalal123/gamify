@@ -1,6 +1,3 @@
-.body {
-    color: white;
-}
 #regForm {
     color: white;
     font-family: 'Montserrat';
@@ -213,36 +210,6 @@ input.invalid {
     }
   }
 
-
-.select2-container {
-    width: 100% !important;
-}
-
-.select2-dropdown {
-    position: absolute !important;
-    top: 100% !important; /* Ensures dropdown appears below the select box */
-    z-index: 10000 !important; /* Ensures dropdown appears on top of other elements */
-}
-
-.select2-container--default .select2-selection--single {
-  height: 38px; /* Adjust height as needed */
-  padding-top: 5px;  /* Adjust to fine-tune vertical centering */
-  padding-bottom: 5px;  /* Adjust to fine-tune vertical centering */
-  display: flex;
-  align-items: center;  /* Vertically center the text */
-  font-size: 16px; /* Adjust font size if needed */
-}
-
-/* Adjust the dropdown item text to be vertically centered */
-.select2-container .select2-selection__rendered {
-  line-height: normal; /* Ensures the text is aligned properly */
-  padding-left: 10px; /* Adjust padding if needed */
-}
-
-/* Adjust the dropdown items' text if needed */
-.select2-results__option {
-  line-height: 30px;  /* Adjust for better alignment of items in the dropdown */
-}
 
 .invalid {
   border: 1px solid red;

@@ -1,17 +1,19 @@
-body { color: #fff; }
-    
+
 .search-sort-wrapper {
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 1rem;
 }
 
 .search-input-wrapper {
-    display: flex; align-items: center;
-    background-color: #fff;
+    display: flex; 
+    align-items: center;
+    background-color: #313e54;
     border-radius: 5px;
     padding: 0.4rem 0.8rem;
     width: 100%;
     max-width: 300px;
+    height: 34px;
+    font-size: 13px;
 }
 
 .search-input-wrapper input {
@@ -23,9 +25,11 @@ body { color: #fff; }
 }
 
 .sort-dropdown select {
-    border-radius: 5px; border: 1px solid #ccc;
+    border-radius: 5px;
+    border: 1px solid #313e54;
     padding: 0.4rem 0.8rem;
-    background-color: #fff; color: #000;
+    background-color: #313e54;
+    color: #c1c1c1;
 }
 
 #itemsOverlay {
@@ -54,4 +58,9 @@ body { color: #fff; }
     .sort-dropdown {
         align-self: flex-end;
     }
+}
+
+.select2-container--default .select2-selection--single {
+    height: 33px !important;
+    font-size: 14px;
 }

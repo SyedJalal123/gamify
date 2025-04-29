@@ -1,5 +1,15 @@
 @extends('frontend.app')
 
+@section('css')
+    <style>
+        @media (min-width: 1200px) {
+            .section--first {
+                padding-top: 230px;
+            }
+        }
+    </style>
+@endsection
+
 @section('content')
     <!-- home -->
     <section class="section section--bg section--first" data-bg="GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/img/bg.jpg" style="background: url(&quot;GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/img/bg.jpg&quot;) center top 140px / auto 500px no-repeat;">

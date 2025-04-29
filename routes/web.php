@@ -4,7 +4,6 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\GameController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Auth\GoogleController;
@@ -54,11 +53,12 @@ Route::middleware('verified')->group(function () {
     Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
     Route::post('/items/store', [ItemController::class, 'store'])->name('items.store');
 
-    Route::get('catalog/{category_id}', [GameController::class, 'index'])->name('catalog.index');
-    Route::get('/live-search', [GameController::class, 'liveSearch'])->name('live.search');
-
+    // Catalog Routes
+    Route::get('catalog/{category_id}', [CatalogController::class, 'index'])->name('catalog.index');
+    Route::get('/live-search', [CatalogController::class, 'liveSearch'])->name('live.search');
     Route::get('/item/{item}', [CatalogController::class, 'itemDetail'])->name('item.detail');
 
+    // Checkout Routes
     Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
 });
 

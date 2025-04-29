@@ -13,15 +13,15 @@
             <button type="button" class="btn btn-danger btn-sm" onclick="toggleFilters()">X</button>
         </div>
         <form method="GET" id="mobileFilterForm" class="mb-4 px-3">
-            <input type="text" name="search" class="form-control mb-3" placeholder="Search..." value="{{ request('search') }}">
-            <select name="sort" class="form-control mb-3">
+            <input type="text" name="search" class="form-control mb-3 dark" placeholder="Search..." value="{{ request('search') }}">
+            <select name="sort" class="form-control mb-3 dark">
                 <option value="">Recommended</option>
                 <option value="price_asc" {{ request('sort') === 'price_asc' ? 'selected' : '' }}>Price (Low to High)</option>
                 <option value="price_desc" {{ request('sort') === 'price_desc' ? 'selected' : '' }}>Price (High to Low)</option>
             </select>
             @foreach ($attributes as $attribute)
-                <div class="mb-3">
-                    <select class="form-control filter-select" name="attr_{{ $attribute->id }}">
+                <div class="mb-3 select-2-dark">
+                    <select class="form-control filter-select select2" name="attr_{{ $attribute->id }}">
                         <option value="">{{ $attribute->name }}</option>
                         @foreach ($attribute->options as $option)
                             <option value="{{ $option }}" {{ request("attr_{$attribute->id}") == $option ? 'selected' : '' }}>
@@ -31,25 +31,27 @@
                     </select>
                 </div>
             @endforeach
-            <a href="{{ route('catalog.index', [$categoryGame->id]) }}" class="btn btn-outline-light w-100">Clear Filters</a>
+            <a href="{{ route('catalog.index', [$categoryGame->id]) }}" class="btn btn-dark w-100">Clear Filters</a>
         </form>
     </div>
-
-    <div class="container mb-5">
+    <!-- END MOBILE FILTER DRAWER -->
+    <div class="container mb-5" style="max-width: 1118px;">
         <div class="row">
             <div class="col-12">
-                <h4 class="mb-4">{{$categoryGame->game->name}} {{ $categoryGame->title }}</h4>
-
+                <div class="row col-12">
+                    <img src="{{asset($categoryGame->game->image)}}" style="width: 23px;height: max-content;">
+                    <h5 class="mb-4 ml-2 text-white">{{$categoryGame->game->name}} {{ $categoryGame->title }}</h5>
+                </div>
+                <!-- PC FILTER DRAWER -->
                 <div class="d-block d-md-none mb-3">
                     <button type="button" class="btn btn-dark w-100" onclick="toggleFilters()">Filters</button>
                 </div>
-
                 <div class="d-none d-md-block mb-4">
                     <form method="GET" id="desktopFilterForm">
                         <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
                             @foreach ($attributes as $attribute)
-                                <div class="mr-3" style="min-width: 200px;">
-                                    <select class="form-control filter-select" name="attr_{{ $attribute->id }}">
+                                <div class="mr-3 select-2-dark" style="min-width: 200px;">
+                                    <select class="form-control filter-select select2" name="attr_{{ $attribute->id }}">
                                         <option value="">{{ $attribute->name }}</option>
                                         @foreach ($attribute->options as $option)
                                             <option value="{{ $option }}" {{ request("attr_{$attribute->id}") == $option ? 'selected' : '' }}>
@@ -59,33 +61,33 @@
                                     </select>
                                 </div>
                             @endforeach
-                            <a href="{{ route('catalog.index', [$categoryGame->id]) }}" class="btn btn-outline-light btn-sm">
+                            <a href="{{ route('catalog.index', [$categoryGame->id]) }}" class="btn btn-dark btn-sm">
                                 Clear Filters
                             </a>
                         </div>
-
+                        {{-- @if($categoryGame->category->id !== 1) --}}
                         <div class="search-sort-wrapper">
                             <div class="search-input-wrapper">
-                                <input type="text" name="search" placeholder="Search" value="{{ request('search') }}" />
+                                <input type="text" name="search" class="dark" placeholder="Search" value="{{ request('search') }}" />
                                 <i class="ml-2 fas fa-search"></i>
                             </div>
 
                             <div class="sort-dropdown">
-                                <select name="sort" class="form-control">
+                                <select name="sort" class="form-control fs-14 dark">
                                     <option value="">Recommended</option>
                                     <option value="price_asc" {{ request('sort') === 'price_asc' ? 'selected' : '' }}>Price (Low to High)</option>
                                     <option value="price_desc" {{ request('sort') === 'price_desc' ? 'selected' : '' }}>Price (High to Low)</option>
                                 </select>
                             </div>
                         </div>
+                        {{-- @endif --}}
                     </form>
                 </div>
-
-                <div class="col-12 mb-3" id="itemCount">
-                    <p><strong>{{ $items->count() }}</strong> items found</p>
+                <!-- END PC FILTER DRAWER -->
+                <div class="col-12 mb-1 p-0 text-white" id="itemCount">
+                    <p class="m-0 text-white-light fs-14">{{ $items->count() }} items found</p>
                 </div>
-
-                <div class="col-12" id="itemsContainerWrapper">
+                <div id="itemsContainerWrapper">
                     <div id="itemsOverlay">
                         <div class="spinner-border text-light" role="status"></div>
                     </div>
@@ -100,45 +102,52 @@
 @section('js')
 
 <script>
+    $(document).ready(function() {
+        // Apply Select2 to all select elements
+        $('.select2').select2({
+            dropdownPosition: 'below',
+        });
+        // Focus on the search input inside the Select2 dropdown
+        $('select').on('select2:open', function() {
+            const searchBox = $('.select2-container--open .select2-search__field');
+            if (searchBox.length) {
+                // Check if the search box is visible and interactable
+                if (!searchBox.is(':focus')) {
+                    searchBox[0].focus(); // Use [0] to directly access the DOM element
+                }
+            }
+        });
+    });
+
     function toggleFilters() {
         document.getElementById('filterDrawer').classList.toggle('show');
     }
 
-    function applyAjaxFilters(formId) {
-        const form = document.getElementById(formId);
-        const url = form.getAttribute('action') || window.location.href;
-        const params = new URLSearchParams(new FormData(form)).toString();
-        const overlay = document.getElementById('itemsOverlay');
-        overlay.style.display = 'flex';
+    // AJAX filter function
+    function applyAjaxFilters(id) {
+    const f = document.getElementById(id);
+    const url = f.action || location.href;
+    const params = new URLSearchParams(new FormData(f)).toString();
+    const overlay = document.getElementById('itemsOverlay');
+    overlay.style.display = 'flex';
 
-        fetch(`${url}?${params}`, {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(response => response.text())
+    fetch(`${url}?${params}`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(res => res.text())
         .then(html => {
-            const doc = new DOMParser().parseFromString(html, 'text/html');
-            document.getElementById('itemsContainer').innerHTML = doc.getElementById('itemsContainer').innerHTML;
-            document.getElementById('itemCount').innerHTML = doc.getElementById('itemCount').innerHTML;
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        ['itemsContainer', 'itemCount'].forEach(id =>
+            document.getElementById(id).innerHTML = doc.getElementById(id).innerHTML
+        );
         })
-        .finally(() => {
-            overlay.style.display = 'none';
-        });
+        .finally(() => overlay.style.display = 'none');
     }
 
-    document.querySelectorAll('#desktopFilterForm select, #desktopFilterForm input[name="search"]').forEach(el => {
-        if (el.name === 'search') {
-            el.addEventListener('keyup', () => applyAjaxFilters('desktopFilterForm')); // Keyup not Enter
-        } else {
-            el.addEventListener('change', () => applyAjaxFilters('desktopFilterForm'));
-        }
-    });
-
-    document.querySelectorAll('#mobileFilterForm select, #mobileFilterForm input[name="search"]').forEach(el => {
-        if (el.name === 'search') {
-            el.addEventListener('keyup', () => applyAjaxFilters('mobileFilterForm'));
-        } else {
-            el.addEventListener('change', () => applyAjaxFilters('mobileFilterForm'));
-        }
+    // Apply to both desktop and phone filters
+    ['desktopFilterForm', 'phoneFilterForm'].forEach(id => {
+        // Search input
+        document.querySelector(`#${id} input[name="search"]`)?.addEventListener('keyup', () => applyAjaxFilters(id));
+        // Select2-compatible select change
+        $(`#${id} select`).on('change select2:select select2:unselect', () => applyAjaxFilters(id));
     });
 </script>
 
