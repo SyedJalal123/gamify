@@ -513,6 +513,34 @@
             $('input[type="number"]').on('wheel', function(e) {
                 $(this).blur();
             });
+
+            function animateDetachedOverlay(element) {
+                const rect = element.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+                const overlay = document.createElement('div');
+                overlay.classList.add('price-overlay');
+
+                // Set absolute position based on document scroll
+                overlay.style.position = 'absolute';
+                overlay.style.top = `${rect.top + scrollTop}px`;
+                overlay.style.left = `${rect.left + scrollLeft}px`;
+                overlay.style.width = `${rect.width}px`;
+                overlay.style.height = `${rect.height}px`;
+                overlay.style.pointerEvents = 'none';
+                overlay.style.transition = 'opacity 0.3s ease';
+                overlay.style.zIndex = 9999;
+                overlay.style.opacity = '1';
+
+                document.body.appendChild(overlay);
+
+                // Animate out and remove
+                setTimeout(() => {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => overlay.remove(), 300);
+                }, 1000);
+            }
         </script>
         
             

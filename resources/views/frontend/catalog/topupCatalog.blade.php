@@ -10,6 +10,14 @@
             height: 39px !important;
             font-size: 14px;
         }
+        .d-none {
+            display: none !important;
+        }
+        @media (min-width: 768px) {
+            .d-md-block {
+                display: block !important;
+            }
+        }
     </style>
 @endsection
 
@@ -51,7 +59,7 @@
                         @if($sortedItems->first() !== null) <span>Select Amount</span> @endif
                     </div>
                     <div id="itemsContainerWrapper">
-                        <div id="itemsContainer" class="row-5-1">
+                        <div id="itemsContainer">
                             @include('frontend.catalog.topup-items', ['sortedItems' => $sortedItems])
                         </div>
                     </div>
@@ -106,11 +114,14 @@
                         <div class="price-box price-box-2 text-black bg-white br-9 mt-2">
                             <div class="border-bottom d-flex flex-column p-3 px-3">
                                 <div class="fw-bold">Delivery instructions</div>
-                                <div id="deliveryInstructions" class="text-black-70 fs-13 mt-2 lh-1_3">
-                                    Log in Top up  (epic email account and password required) Users 
-                                    who play games with PS and Xbox need to prepare a new epic account 
-                                    for me(Not connected to any Xbox or PS),PC players do not need to 
-                                    prepare a new account
+                                <div id="deliveryInstructionsContainer">
+                                    <div id="deliveryInstructions" class="text-black-70 fs-13 mt-2 lh-1_3 clamp-text">
+                                        Log in Top up  (epic email account and password required) Users 
+                                        who play games with PS and Xbox need to prepare a new epic account 
+                                        for me(Not connected to any Xbox or PS),PC players do not need to 
+                                        prepare a new account
+                                    </div>
+                                    <button id="toggleInstructions" type="button" class="btn btn-link p-0 mt-1" style="display: none;">View more</button>
                                 </div>
                             </div>
                             <div class="d-flex flex-column px-3 pb-3 pt-2">
@@ -124,7 +135,7 @@
                                         <div class="d-flex align-items-center">
                                             <i class="text-success bi bi-star-fill"></i>
                                             <span class="text-black-70 mx-1 fs-13">99.3%</span>
-                                            <a href="#">27,066 reviews</span>
+                                            <a href="#">27,066 reviews</a>
                                         </div>
                                     </div>
                                 </div>
@@ -133,25 +144,52 @@
                     </form>
                 </div>
             </div>
+            <div class="col-12 mt-2 pt-5 px-0 secondaryItemsContainer">
+                {{--  --}}
+            </div>
         </div>
     </section>
 @endsection
 
 @section('js')
     <script>
+        function setupClampToggle() {
+            const content = document.getElementById('deliveryInstructions');
+            const toggleBtn = document.getElementById('toggleInstructions');
+
+            // Reset
+            content.classList.remove('expanded');
+            toggleBtn.textContent = 'View more';
+
+            // Clone to measure
+            const clone = content.cloneNode(true);
+            clone.style.cssText = 'position: absolute; visibility: hidden; height: auto; -webkit-line-clamp: unset;';
+            document.body.appendChild(clone);
+
+            const fullHeight = clone.offsetHeight;
+            document.body.removeChild(clone);
+
+            const lineHeight = parseFloat(getComputedStyle(content).lineHeight);
+            const maxHeight = lineHeight * 5;
+
+            if (fullHeight > maxHeight) {
+                toggleBtn.style.display = 'inline';
+            } else {
+                toggleBtn.style.display = 'none';
+            }
+
+            toggleBtn.onclick = function () {
+                const isExpanded = content.classList.toggle('expanded');
+                toggleBtn.textContent = isExpanded ? 'View less' : 'View more';
+            };
+        }
+
         $(document).ready(function () {
             $('#attributeFilterForm').on('change', '.attribute-filter', function () {
                 
-                // Animate the price box
-                const priceBoxForm = document.querySelector('#itemsContainerWrapper');
-                const overlay = document.createElement('div');
-                overlay.classList.add('price-overlay');
-                priceBoxForm.appendChild(overlay);
-                overlay.style.opacity = '1';
-                setTimeout(() => {
-                    overlay.style.opacity = '0';
-                    setTimeout(() => overlay.remove(), 300);
-                }, 1000);
+                [...document.querySelectorAll('.animate-class')]
+                .slice(0, 24)
+                .forEach(el => animateDetachedOverlay(el));
 
                 let url = new URL(window.location.href);
 
@@ -170,13 +208,14 @@
                     url: url.toString(),
                     method: 'GET',
                     success: function (response) {
-                        $('#itemsContainer').html(response); // Replace item list
+                        $('#itemsContainer').html(response.main); // Replace item list
 
                         if ($('.no-data').length > 0) {
                             $('.price-box-2').removeClass('d-none');
                             $('.delivery_time_section').addClass('d-none');
                             $('.price_section').addClass('d-none');
                             $('#buyNowPrice').addClass('d-none');
+                            $('.secondaryItemsContainer').text('');
                         } else {
                             change_price_box_values();
                             $('.topup_active').click();
@@ -212,7 +251,8 @@
                 $('.price-box-form').submit();
             }
         }
-        function change_price_box_values() {      
+
+        function change_price_box_values() {
             document.querySelectorAll('.item-select').forEach(function (item) {
                 item.addEventListener('click', function () {
                     const id = this.dataset.id;
@@ -252,8 +292,12 @@
                                 document.querySelector('#buyNowPrice').textContent = item.price;
                                 document.querySelector('#deliveryInstructions').textContent = item.description;
                                 document.querySelector('#sellerName').textContent = item.seller;
-
+                                setupClampToggle();
+                                
                                 if ($('.attributes').children().length === 0 || ($('.attributes').children().length !== 0 && ($('.select2').first().val() !== null))) {
+                                    $('.secondaryItemsContainer').fadeOut(200, function() {
+                                        $(this).html(data.secondary).fadeIn(300);
+                                    });
                                     $('.price-box-2').removeClass('d-none');
                                     $('.delivery_time_section').removeClass('d-none');
                                     $('.price_section').removeClass('d-none');
@@ -320,15 +364,6 @@
                 })
                 .finally(() => overlay.style.display = 'none');
         }
-
-        // Apply to both desktop and phone filters
-        ['desktopFilterForm', 'phoneFilterForm'].forEach(id => {
-            // Search input
-            document.querySelector(`#${id} input[name="search"]`)?.addEventListener('keyup', () => applyAjaxFilters(
-                id));
-            // Select2-compatible select change
-            $(`#${id} select`).on('change select2:select select2:unselect', () => applyAjaxFilters(id));
-        });
     </script>
 
     <script>

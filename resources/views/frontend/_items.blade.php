@@ -1,30 +1,35 @@
 
-<div id="itemsContainer" class="row-3-2-1">
+<div class="col-12 mb-1 p-0 text-white" id="itemCount">
+    <p class="m-0 text-white-light fs-14">{{ $items->count() }} items found</p>
+</div>
+<div id="itemsContainer">
     @if ($items->count() > 0)
+    <div class="row-3-2-1">
         @foreach ($items as $item)
-            <div>
-                <a href="{{ route('item.detail', $item->id) }}" class="text-dark text-decoration-none">
-                    <div class="drop-box bg-white text-dark">
-                        <p>
-                            @foreach ($item->attributes as $key => $attribute)
-                                @if ($attribute->applies_to == 1)
-                                    <strong>@if ($key !== 0).@endif {{ $attribute->pivot->value }}</strong>
-                                @endif
-                            @endforeach
-                        </p>
-                        <div class="d-flex justify-content-between mb-4 fs-14 text-muted">
-                            <p class="two-line-ellipsis lh-1_2">{{ $item->title!=null ? $item->title : $item->categoryGame->title }}</p>
-                            <div class="mb-2 d-flex flex-column align-items-end">
-                                <img src="{{ asset($item->feature_image!==null ? $item->feature_image : $item->categoryGame->feature_image) }}" alt="" width="50px">
-                            </div>
+        <div class="position-relative">
+            <a href="{{ route('item.detail', $item->id) }}" class="text-dark text-decoration-none animate-class">
+                <div class="drop-box bg-white text-dark">
+                    <p class="text-black">
+                        @foreach ($item->attributes as $key => $attribute)
+                        @if ($attribute->applies_to == 1)
+                        <strong>@if ($key !== 0).@endif {{ $attribute->pivot->value }}</strong>
+                        @endif
+                        @endforeach
+                    </p>
+                    <div class="d-flex justify-content-between mb-4 fs-14 text-muted">
+                        <p class="two-line-ellipsis lh-1_2">{{ $item->title!=null ? $item->title : $item->categoryGame->title }}</p>
+                        <div class="mb-2 d-flex flex-column align-items-end">
+                            <img src="{{ asset($item->feature_image!==null ? $item->feature_image : $item->categoryGame->feature_image) }}" alt="" width="50px">
                         </div>
-                        <p class="m-0">
-                            <strong>${{ $item->price }}</strong>
-                        </p>
                     </div>
-                </a>
-            </div>
+                    <p class="m-0 text-black ">
+                        <strong class="fs-20">${{ $item->price }}</strong>
+                    </p>
+                </div>
+            </a>
+        </div>
         @endforeach
+    </div>
     @else
         <div class="col-12 text-center text-muted py-5">
             <h5>No results found.</h5>

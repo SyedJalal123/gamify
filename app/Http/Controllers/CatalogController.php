@@ -45,31 +45,42 @@ class CatalogController extends Controller
     
         if ($categoryGame->category->id == 3) {
             $items = $itemsQuery->with('attributes', 'categoryGame.game', 'seller')->get();
-    
-            $grouped = collect();
-    
+            $grouped = collect();  // Holds the lowest price items
+            
             foreach ($items as $item) {
                 $keyAttribute = $item->attributes->first(fn($attr) => $attr->topup == 1);
                 if (!$keyAttribute) continue;
-    
+            
                 $value = $keyAttribute->pivot->value;
-    
+            
                 if (!isset($grouped[$value])) {
+                    // First occurrence, set as lowest
                     $grouped[$value] = $item;
                 } else {
                     $existing = $grouped[$value];
-                    if ($item->price < $existing->price || 
-                        ($item->price == $existing->price && $item->created_at < $existing->created_at)) {
+            
+                    if (
+                        $item->price < $existing->price ||
+                        ($item->price == $existing->price && $item->created_at < $existing->created_at)
+                    ) {
+                        // New item is better; update the grouped item
                         $grouped[$value] = $item;
                     }
                 }
             }
-    
-            $sortedItems = $grouped->sortBy(fn($item) => $item->attributes->first(fn($attr) => $attr->topup == 1)->pivot->value ?? PHP_INT_MAX);
-    
+            
+            // Sort by topup value
+            $sortedItems = $grouped->sortBy(
+                fn($item) => $item->attributes->first(fn($attr) => $attr->topup == 1)->pivot->value ?? PHP_INT_MAX
+            );
+
             // Handle AJAX for category 3
             if ($request->ajax()) {
-                return view('frontend.catalog.topup-items', compact('sortedItems'))->render();
+                $main = view('frontend.catalog.topup-items', compact('sortedItems'))->render();
+
+                return response()->json([
+                    'main' => $main,
+                ]);
             }
     
             return view('frontend.catalog.topupCatalog', compact('categoryGame', 'attributes', 'sortedItems', 'items'));
@@ -89,12 +100,40 @@ class CatalogController extends Controller
     {
         $item = Item::with('categoryGame.game', 'seller', 'attributes')->find($id);
 
+
+        $categoryGameId = $item->category_game_id;
+        $attributes = $item->attributes;
+
+        // If the current item exists and has attributes
+        if ($item && $attributes->count()) {
+            // Get attribute ID => value map from pivot
+            $attributeValues = $attributes->mapWithKeys(fn($attr) => [$attr->id => $attr->pivot->value]);
+
+            // Fetch all items with the same category_game_id, excluding the current item
+            $candidates = Item::with('categoryGame.game', 'seller', 'attributes')
+                ->where('category_game_id', $categoryGameId)
+                ->where('id', '!=', $item->id)
+                ->get();
+
+            // Filter items that match all attribute-value pairs
+            $secondary = $candidates->filter(function ($candidate) use ($attributeValues) {
+                $candidateAttributes = $candidate->attributes->mapWithKeys(fn($attr) => [$attr->id => $attr->pivot->value]);
+
+                return $candidateAttributes->count() === $attributeValues->count()
+                    && $candidateAttributes->diffAssoc($attributeValues)->isEmpty();
+            });
+        } else {
+            // If the item has no attributes or doesn't exist
+            $secondary = collect(); // Empty collection
+        }
+
+        $secondary = view('frontend.catalog.topup-items-secondary', compact('secondary'))->render();
+
         if (!$item) {
             return response()->json(['success' => false]);
         }
-
-        // Find topup attribute value
         $topup = $item->attributes->firstWhere('topup', 1)?->pivot->value ?? 1;
+
         
         return response()->json([
             'success' => true,
@@ -107,8 +146,11 @@ class CatalogController extends Controller
                 'description' => $item->description,
                 'seller' => $item->seller->seller->first_name ?? 'Seller',
                 'attributes' => $item->attributes,
-            ]
+            ],
+            'secondary' => $secondary,
         ]);
+
+
     }   
     public function liveSearch(Request $request)
     {

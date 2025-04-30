@@ -65,7 +65,7 @@
                                 Clear Filters
                             </a>
                         </div>
-                        {{-- @if($categoryGame->category->id !== 1) --}}
+                        @if($categoryGame->category->id !== 1)
                         <div class="search-sort-wrapper">
                             <div class="search-input-wrapper">
                                 <input type="text" name="search" class="dark" placeholder="Search" value="{{ request('search') }}" />
@@ -80,14 +80,11 @@
                                 </select>
                             </div>
                         </div>
-                        {{-- @endif --}}
+                        @endif
                     </form>
                 </div>
                 <!-- END PC FILTER DRAWER -->
-                <div class="col-12 mb-1 p-0 text-white" id="itemCount">
-                    <p class="m-0 text-white-light fs-14">{{ $items->count() }} items found</p>
-                </div>
-                <div id="itemsContainerWrapper">
+                <div id="itemsContainerWrapper" class="br-9">
                     <div id="itemsOverlay">
                         <div class="spinner-border text-light" role="status"></div>
                     </div>
@@ -125,21 +122,25 @@
 
     // AJAX filter function
     function applyAjaxFilters(id) {
-    const f = document.getElementById(id);
-    const url = f.action || location.href;
-    const params = new URLSearchParams(new FormData(f)).toString();
-    const overlay = document.getElementById('itemsOverlay');
-    overlay.style.display = 'flex';
+        const f = document.getElementById(id);
+        const url = f.action || location.href;
+        const params = new URLSearchParams(new FormData(f)).toString();
+        const overlay = document.getElementById('itemsOverlay');
+        // overlay.style.display = 'flex';
 
-    fetch(`${url}?${params}`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-        .then(res => res.text())
-        .then(html => {
-        const doc = new DOMParser().parseFromString(html, 'text/html');
-        ['itemsContainer', 'itemCount'].forEach(id =>
-            document.getElementById(id).innerHTML = doc.getElementById(id).innerHTML
-        );
-        })
-        .finally(() => overlay.style.display = 'none');
+        [...document.querySelectorAll('.animate-class')]
+        .slice(0, 24)
+        .forEach(el => animateDetachedOverlay(el));
+
+        fetch(`${url}?${params}`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(res => res.text())
+            .then(html => {
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                ['itemsContainer', 'itemCount'].forEach(id =>
+                    document.getElementById(id).innerHTML = doc.getElementById(id).innerHTML
+                );
+            })
+            .finally(() => overlay.style.display = 'none');
     }
 
     // Apply to both desktop and phone filters
