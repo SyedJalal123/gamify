@@ -54,6 +54,7 @@ class CategoryGameSeeder extends Seeder
 
             // Items
                 ['category_id' => 5, 'game_id' => 1, 'title' => 'Boosting', 'feature_image' => '', 'currency_type' => '', 'delivery_type' => ''], // World of Warcraft
+                ['category_id' => 5, 'game_id' => 5, 'title' => 'Boosting', 'feature_image' => '', 'currency_type' => '', 'delivery_type' => ''], // World of Warcraft
             // Items
         ];
 

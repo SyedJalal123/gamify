@@ -145,7 +145,7 @@
                 </div>
             </div>
             <div class="col-12 mt-2 pt-5 px-0 secondaryItemsContainer">
-                {{--  --}}
+                {{-- Other Sellers --}}
             </div>
         </div>
     </section>

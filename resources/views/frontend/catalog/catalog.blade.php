@@ -2,6 +2,9 @@
 
 @section('css')
 <link rel="stylesheet" href="{{asset('css/catalog.css')}}">
+<style>
+
+</style>
 @endsection
 
 @section('content')
@@ -46,7 +49,7 @@
                 <div class="d-block d-md-none mb-3">
                     <button type="button" class="btn btn-dark w-100" onclick="toggleFilters()">Filters</button>
                 </div>
-                <div class="d-none d-md-block mb-4">
+                <div class="d-none d-md-block mb-4 fade-in-delay-small">
                     <form method="GET" id="desktopFilterForm">
                         <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
                             @foreach ($attributes as $attribute)
@@ -84,7 +87,7 @@
                     </form>
                 </div>
                 <!-- END PC FILTER DRAWER -->
-                <div id="itemsContainerWrapper" class="br-9">
+                <div id="itemsContainerWrapper" class="br-9 position-realative fade-in-delay">
                     <div id="itemsOverlay">
                         <div class="spinner-border text-light" role="status"></div>
                     </div>
@@ -99,6 +102,8 @@
 @section('js')
 
 <script>
+
+
     $(document).ready(function() {
         // Apply Select2 to all select elements
         $('.select2').select2({
@@ -119,6 +124,12 @@
     function toggleFilters() {
         document.getElementById('filterDrawer').classList.toggle('show');
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            applyAjaxFilters('desktopFilterForm'); // or 'phoneFilterForm' if you're on mobile
+        }, 0.01); // 500ms delay, adjust as needed
+    });
 
     // AJAX filter function
     function applyAjaxFilters(id) {

@@ -43,88 +43,80 @@
                         <!-- One "tab" for each step in the form: -->
                         <div class="tab">
                             <div class="container">
-                                <div class="base-container">
-                                    <eld-select-category>
-                                        <div class="header-container">
-                                            <h4>Choose category</h4>
+                                <div class="header-container">
+                                    <h4>Choose category</h4>
+                                </div>
+                                <div class="category-select-container">
+                                    @foreach($categories as $category)
+                                    <div class="category-select mb-2 category-item fade-in-delay-small-2" data-category-id="{{ $category->id }}" onclick="nextPrev(1),selectCategory({{ $category->id }})">
+                                        <div class="name">
+                                            <eld-image style="height: 32px;">
+                                                <img class="app-image" alt="Currency"
+                                                    height="32" width="32" loading="eager" fetchpriority="auto" ng-img="true"
+                                                    src="https://w9g7dlhw3kaank.www.eldorado.gg/QLHQai4xYtviUZKeCEdT0qT0HcfzgZBozAps6udCgAdCL8M/KkTCHTxNsbE9qPgCZAxNlysMmOJqL06S4V6e5Jor7qr340moVVUvrOblMkGaS0YkobUqDSo07vPYOnmH1OqU5"
+                                                    >
+                                            </eld-image>
+                                            <h6 class="m-0 ml-2">{{ $category->name }}</h6>
                                         </div>
-                                        <eld-sell-page-categories>
-                                            <div class="category-select-container">
-                                                <div class="category-select-row">
-                                                    
-                                                    
-                                                    @foreach($categories as $category)
-                                                    <div class="category-select mb-2 category-item" data-category-id="{{ $category->id }}" onclick="nextPrev(1),selectCategory({{ $category->id }})">
-                                                        <div class="name">
-                                                            <eld-image style="height: 32px;">
-                                                                <img class="app-image" alt="Currency"
-                                                                    height="32" width="32" loading="eager" fetchpriority="auto" ng-img="true"
-                                                                    src="https://w9g7dlhw3kaank.www.eldorado.gg/QLHQai4xYtviUZKeCEdT0qT0HcfzgZBozAps6udCgAdCL8M/KkTCHTxNsbE9qPgCZAxNlysMmOJqL06S4V6e5Jor7qr340moVVUvrOblMkGaS0YkobUqDSo07vPYOnmH1OqU5"
-                                                                    srcset="https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v6/coin.svg?w=32 1x, https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v6/coin.svg?w=64 2x">
-                                                            </eld-image>
-                                                            <h6 class="m-0 ml-2">{{ $category->name }}</h6>
+                                        <eld-icon name="sign-right">
+                                            <span class="icon icon-sign-right" style="font-size: 32px; font-weight: 400; height: 32px; width: 32px;"></span>
+                                            <i class="bi bi-chevron-right"></i>
+                                        </eld-icon>
+                                    </div>
+                                    @endforeach
+                                </div>
+
+                                {{-- <div id="verification-required-section" class="mt-5">
+                                    <eld-sell-verification-required>
+                                        <div class="verification-required-wrapper">
+                                            <eld-image alt="Seller verification required photo"
+                                                style="height: 79px;"><img class="app-image" alt="Seller verification required photo"
+                                                    height="79" width="131" loading="eager" fetchpriority="auto" ng-img="true"
+                                                    src="https://w9g7dlhw3kaank.www.eldorado.gg/j62a2GcumwfUdKP1xFHZYHorCzvyl6LgnkRxKGN3eBJ6hku/3Y6EJNl18m5bq3jzWibuFZOwBu3I0gUaRSPHr88TQM4NPO1GfRCV6RC1ULurrCqvDHzbUslFHip3DfwqRbz6UhhKvrIKcBSpbSqPQ"
+                                                    srcset="https://assetsdelivery.eldorado.gg/v7/_assets_/payments/v9/verification-required.png?w=131 1x, https://assetsdelivery.eldorado.gg/v7/_assets_/payments/v9/verification-required.png?w=262 2x">
+                                            </eld-image>
+                                            <h4><span>Seller verification required</span></h4>
+                                            <div class="verify-messsge">
+                                                <p>To sell accounts, please verify your identity first. <br>Our 24/7 support team will review your ID in up to 15 minutes.</p>
+                                                <div class="verification-card d-flex align-items-center flex-column">
+                                                    <div class="container__top drop-box w-50 d-flex align-items-center flex-column">
+                                                        <img class="app-image" alt="Seller Details review" height="47" width="47" loading="eager" fetchpriority="auto" ng-img="true" src="https://w9g7dlhw3kaank.www.eldorado.gg/WDlx5231QLHO4pNG8aWDLC6fwyjcgZYq1rK6yiNBBlMlTqwI5oZAqBlyRUmA07HH6oAYiZxmF6PrQLDdoG4x7M6i7mNzNoQx80fB84tuP1nmjA0kdWLI5YVxsT5YbpbXPbr" srcset="https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v6/id-verification.svg?w=47 1x, https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v6/id-verification.svg?w=94 2x">
+                                                        <strong>Seller Verification</strong>
+                                                        <div role="status" tabindex="0" aria-label="Documents required">
+                                                            <span class="badge badge-pill badge-danger">Documents required</span>
                                                         </div>
-                                                        <eld-icon name="sign-right">
-                                                            <span class="icon icon-sign-right" style="font-size: 32px; font-weight: 400; height: 32px; width: 32px;"></span>
-                                                            <i class="bi bi-chevron-right"></i>
-                                                        </eld-icon>
+                                                        <button class="mt-2 btn-sm btn-success">Verify</button>
                                                     </div>
-                                                    @endforeach
                                                 </div>
-                                            </div>
-                                        </eld-sell-page-categories>
-
-                                        {{-- <div id="verification-required-section" class="mt-5">
-                                            <eld-sell-verification-required>
-                                                <div class="verification-required-wrapper">
-                                                    <eld-image alt="Seller verification required photo"
-                                                        style="height: 79px;"><img class="app-image" alt="Seller verification required photo"
-                                                            height="79" width="131" loading="eager" fetchpriority="auto" ng-img="true"
-                                                            src="https://w9g7dlhw3kaank.www.eldorado.gg/j62a2GcumwfUdKP1xFHZYHorCzvyl6LgnkRxKGN3eBJ6hku/3Y6EJNl18m5bq3jzWibuFZOwBu3I0gUaRSPHr88TQM4NPO1GfRCV6RC1ULurrCqvDHzbUslFHip3DfwqRbz6UhhKvrIKcBSpbSqPQ"
-                                                            srcset="https://assetsdelivery.eldorado.gg/v7/_assets_/payments/v9/verification-required.png?w=131 1x, https://assetsdelivery.eldorado.gg/v7/_assets_/payments/v9/verification-required.png?w=262 2x">
-                                                    </eld-image>
-                                                    <h4><span>Seller verification required</span></h4>
-                                                    <div class="verify-messsge">
-                                                        <p>To sell accounts, please verify your identity first. <br>Our 24/7 support team will review your ID in up to 15 minutes.</p>
-                                                        <div class="verification-card d-flex align-items-center flex-column">
-                                                            <div class="container__top drop-box w-50 d-flex align-items-center flex-column">
-                                                                <img class="app-image" alt="Seller Details review" height="47" width="47" loading="eager" fetchpriority="auto" ng-img="true" src="https://w9g7dlhw3kaank.www.eldorado.gg/WDlx5231QLHO4pNG8aWDLC6fwyjcgZYq1rK6yiNBBlMlTqwI5oZAqBlyRUmA07HH6oAYiZxmF6PrQLDdoG4x7M6i7mNzNoQx80fB84tuP1nmjA0kdWLI5YVxsT5YbpbXPbr" srcset="https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v6/id-verification.svg?w=47 1x, https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v6/id-verification.svg?w=94 2x">
-                                                                <strong>Seller Verification</strong>
-                                                                <div role="status" tabindex="0" aria-label="Documents required">
-                                                                    <span class="badge badge-pill badge-danger">Documents required</span>
-                                                                </div>
-                                                                <button class="mt-2 btn-sm btn-success">Verify</button>
-                                                            </div>
-                                                        </div>
-                                                    </div><!----><!---->
-                                                </div>
-                                            </eld-sell-verification-required>
-                                        </div> --}}
-                                    </eld-select-category>
+                                            </div><!----><!---->
+                                        </div>
+                                    </eld-sell-verification-required>
+                                </div> --}}
+                            </div>
+                        </div>
+                        
+                        <div class="tab_2 d-none">
+                            <div class="">
+                                <div class="container">
+                                    <div id="games-container" class="select-2-dark" style="display: none;">
+                                        <h4>Select a Game</h4>
+                                        <select id="games-dropdown" name="game_id" required>
+                                            <option value="">Select a Game</option>
+                                        </select>
+                                    </div>
+                                </div>
+    
+                                <div style="overflow:auto;" class="d-flex justify-content-center buttons mt-5">
+                                    <div style="float:right;">
+                                        <button type="button" id="prevBtn" onclick="nextPrev(-1)">Back</button>
+                                        <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="tab tab_2">
-                            <div class="container">
-                                <div id="games-container" class="select-2-dark" style="display: none;">
-                                    <h4>Select a Game</h4>
-                                    <select id="games-dropdown" name="game_id" required>
-                                        <option value="">Select a Game</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div style="overflow:auto;" class="d-flex justify-content-center buttons mt-5">
-                                <div style="float:right;">
-                                    <button type="button" id="prevBtn" onclick="nextPrev(-1)">Back</button>
-                                    <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="tab_3">
-                            <div class="tab">
+                        <div class="tab_3 d-none">
+                            <div class="">
                                 <div class="container">
                                     <div class="attributes-container" style="display: none;">
     
@@ -143,7 +135,7 @@
                             </div>
                         </div>
                         
-                        <div class="tab">
+                        <div class="tab fade-in-delay-small-2">
                             <input type="hidden" name="category_id" id="selectedCategory">
                             <input type="hidden" name="category_game_id" id="category_game_id">
                             <div class="container">
@@ -152,7 +144,7 @@
                                 </div>
                             </div>
                             <div class="custom-container">
-                                <div class="main-card">
+                                <div class="main-card currency_class accounts_class topup_class items_class">
                                 
                                     <!-- Item Section -->
                                     <div class="card-section currency_class topup_class">
@@ -366,6 +358,56 @@
                                     </div>
                               
                                 </div>
+                                <div class="boosting_class">
+                                    <div class="container">
+                                        <p class="text-center text-black-40">
+                                            Select the services you can provide to receive notifications from the buyers
+                                        </p>
+                                        {{-- <p class="text-center"><a href="#" class="text-decoration-none">How it works</a></p> --}}
+                                        <div class="mt-2">
+                                            @foreach ($categories[4]->categoryGames as $key => $item)    
+                                            <div class="card bg-light-dark2 mt-3">
+                                                <div class="card-header d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#serviceOptions_{{$key}}" aria-expanded="false" aria-controls="serviceOptions">
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="{{asset($item->game->image)}}" alt="Apex" width="35" height="35" class="rounded mr-3">
+                                                        <div>
+                                                            <div class="font-weight-bold">{{$item->game->name}}</div>
+                                                            <div class="text-muted small">Not subscribed</div>
+                                                        </div>
+                                                    </div>
+                                                    <i class="arrow-icon bi bi-chevron-down"></i>
+                                                </div>
+    
+                                                <div class="collapse" id="serviceOptions_{{$key}}">
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item service-label">
+                                                            Rank Boost
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" id="rankBoost_{{$key}}">
+                                                                <label class="custom-control-label" for="rankBoost_{{$key}}"></label>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item service-label">
+                                                            Badge Boosting
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" id="badgeBoost_{{$key}}">
+                                                                <label class="custom-control-label" for="badgeBoost_{{$key}}"></label>
+                                                            </div>
+                                                        </li>
+                                                        <li class="list-group-item service-label">
+                                                            Custom Request
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" id="customRequest_{{$key}}">
+                                                                <label class="custom-control-label" for="customRequest_{{$key}}"></label>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div style="overflow:auto;" class="d-flex justify-content-center buttons mt-5">
@@ -389,9 +431,7 @@
             </div>
         </div>
     </section>
-    <!-- end home -->
-
-    
+    <!-- end home --> 
 @endsection
 
 

@@ -36,33 +36,34 @@ function showTab(n) {
 }
 
 function nextPrev(n) {
-    // This function will figure out which tab to display
-    var x = document.getElementsByClassName("tab");
+    setTimeout(() => {
+        var x = document.getElementsByClassName("tab");
 
-    // Exit the function if any field in the current tab is invalid:
-    if ((n == 1 && !validateForm()) || (currentTab + n >= x.length && !validateForm2())) {
-        if((currentTab + n >= x.length && !validateForm2()) || (n == 1 && !validateForm())){
+        // Exit the function if any field in the current tab is invalid:
+        if ((n == 1 && !validateForm()) || (currentTab + n >= x.length && !validateForm2())) {
+            if((currentTab + n >= x.length && !validateForm2()) || (n == 1 && !validateForm())){
+                return false;
+            }
             return false;
         }
-        return false;
-    }
 
-    // if you have reached the end of the form... :
-    if (currentTab + n >= x.length) {
-        //...the form gets submitted:
-        document.getElementById("loadingScreen").style.display = "flex";
-        document.getElementById("regForm").submit();
-        return false; 
-    }else{
-        // Hide the current tab:
-        x[currentTab].style.display = "none";
+        // if you have reached the end of the form... :
+        if (currentTab + n >= x.length) {
+            //...the form gets submitted:
+            document.getElementById("loadingScreen").style.display = "flex";
+            document.getElementById("regForm").submit();
+            return false; 
+        } else {
+            // Hide the current tab:
+            x[currentTab].style.display = "none";
 
-        // Increase or decrease the current tab by 1:
-        currentTab = currentTab + n;
+            // Increase or decrease the current tab by 1:
+            currentTab = currentTab + n;
 
-        // Otherwise, display the correct tab:
-        showTab(currentTab);
-    }
+            // Otherwise, display the correct tab:
+            showTab(currentTab);
+        }
+    }, 1);
 }
 
 function validateForm2() {
@@ -224,6 +225,22 @@ function selectCategory(categoryId) {
     // for hiding and showing the category classes
         let selectedCategoryClass;
         let selectedCategoryRequiredClass;
+        let tab2 = document.querySelector('.tab_2');
+        let tab3 = document.querySelector('.tab_3');
+
+        if(categoryId == 5){
+            tab2.firstElementChild.classList.remove('tab');
+            tab3.firstElementChild.classList.remove('tab');
+
+            tab2.classList.add('d-none');
+            tab3.classList.add('d-none');
+        }else{
+            tab2.firstElementChild.classList.add('tab');
+            tab3.firstElementChild.classList.add('tab');
+
+            tab2.classList.remove('d-none');
+            tab3.classList.remove('d-none');
+        }
 
         switch (categoryId) {
             case 1:
@@ -243,12 +260,12 @@ function selectCategory(categoryId) {
                 selectedCategoryRequiredClass = 'items_r';
                 break;
             default:
-                selectedCategoryClass = '';
+                selectedCategoryClass = 'boosting_class';
                 selectedCategoryRequiredClass = '';
         }
 
         // Get all elements that may contain these categories
-        const allElements = document.querySelectorAll('.currency_class, .accounts_class, .topup_class, .items_class');
+        const allElements = document.querySelectorAll('.currency_class, .accounts_class, .topup_class, .items_class, .boosting_class');
 
         // Hide all elements first
         allElements.forEach(element => {
@@ -618,4 +635,20 @@ $('#addAccountBtn').click(function() {
 
 $(document).on('click', '.btn-remove-account', function() {
     $(this).closest('.account-field').remove();
+});
+
+
+// Toggle button css Boosting
+const collapseEl = document.getElementById('serviceOptions');
+const headerEl = collapseEl.previousElementSibling;
+const icon = headerEl.querySelector('.arrow-icon');
+
+$('#serviceOptions').on('show.bs.collapse', function () {
+    icon.classList.remove('bi-chevron-down');
+    icon.classList.add('bi-chevron-up');
+});
+
+$('#serviceOptions').on('hide.bs.collapse', function () {
+    icon.classList.remove('bi-chevron-up');
+    icon.classList.add('bi-chevron-down');
 });

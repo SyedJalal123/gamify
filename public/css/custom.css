@@ -112,6 +112,12 @@
 .text-black-50 {
     color: rgb(168, 168, 168);
 }
+.text-black-40 {
+    color: rgb(194, 194, 194);
+}
+.text-black-30 {
+    color: rgb(223, 223, 223);
+}
 .circle-li li {
     list-style-type: circle;
     text-align: start;
@@ -127,6 +133,9 @@
 }
 .bg-light-dark {
     background-color: #1f293a;
+}
+.bg-light-dark2 {
+    background-color: #191f2a;
 }
 @media (max-width: 576px) { /* Phones */
     .text-small-phone {
@@ -310,7 +319,7 @@
     }
 }
 
-.price-overlay {
+.price-overlay ,.price-overlay2 {
     position: absolute;
     top: 0;
     left: 0;
@@ -326,7 +335,7 @@
 }
 
 /* Smooth shine effect */
-.price-overlay::after {
+.price-overlay::after, .price-overlay2::after {
     content: '';
     position: absolute;
     top: 0;
@@ -350,3 +359,26 @@
         left: 120%;
     }
 }
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in-delay {
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+    animation-delay: 1s;
+}
+
+.fade-in-delay-small {
+    opacity: 0;
+    animation: fadeIn 0.2s ease-in-out forwards;
+    animation-delay: 0.9s;
+}
+.fade-in-delay-small-2 {
+    opacity: 0;
+    animation: fadeIn 0.2s ease-in-out forwards;
+    animation-delay: 0.2s;
+}
+
