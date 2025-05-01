@@ -365,45 +365,48 @@
                                         </p>
                                         {{-- <p class="text-center"><a href="#" class="text-decoration-none">How it works</a></p> --}}
                                         <div class="mt-2">
-                                            @foreach ($categories[4]->categoryGames as $key => $item)    
-                                            <div class="card bg-light-dark2 mt-3">
-                                                <div class="card-header d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#serviceOptions_{{$key}}" aria-expanded="false" aria-controls="serviceOptions">
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="{{asset($item->game->image)}}" alt="Apex" width="35" height="35" class="rounded mr-3">
-                                                        <div>
-                                                            <div class="font-weight-bold">{{$item->game->name}}</div>
-                                                            <div class="text-muted small">Not subscribed</div>
+                                            @foreach ($categories[4]->categoryGames as $key => $item)
+                                                @php $count = 0; $total = 0; 
+                                                    foreach ($item->services as $service) {
+                                                        if(optional(auth()->user()->services)->contains($service->id)) $count++; $total++;
+                                                    }
+                                                @endphp  
+                                                <div class="card bg-light-dark2 mt-3">
+                                                    <div class="card-header d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#serviceOptions_{{$key}}" aria-expanded="false" aria-controls="serviceOptions">
+                                                        <div class="d-flex align-items-center">
+                                                            <img src="{{asset($item->game->image)}}" alt="Apex" width="35" height="35" class="rounded mr-3">
+                                                            <div>
+                                                                <div class="font-weight-bold">{{$item->game->name}}</div>
+                                                                @if($count > 0)
+                                                                <div class="text-success subscription-data-{{$key}} small">Subscribed {{$count}}/{{$total}}</div>
+                                                                @else
+                                                                <div class="text-muted subscription-data-{{$key}} small">Not Subscribed</div>
+                                                                @endif
+                                                            </div>
                                                         </div>
+                                                        <i class="arrow-icon bi bi-chevron-down"></i>
                                                     </div>
-                                                    <i class="arrow-icon bi bi-chevron-down"></i>
+        
+                                                    <div class="collapse" id="serviceOptions_{{$key}}">
+                                                        <ul class="list-group list-group-flush">
+                                                            @foreach ($item->services as $key2 => $service)
+                                                            <li class="list-group-item service-label">
+                                                                {{$service->name}}
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" onchange="toggleService(this)"
+                                                                        {{ optional(auth()->user()->services)->contains($service->id) ? 'checked' : '' }}
+                                                                        class="custom-control-input service-toggle" 
+                                                                        data-service-id="{{ $service->id }}" 
+                                                                        data-total-avaliable="{{ $total }}" 
+                                                                        data-key="{{ $key }}" 
+                                                                        id="service_{{$key}}_{{$key2}}">
+                                                                    <label class="custom-control-label" for="service_{{$key}}_{{$key2}}"></label>
+                                                                </div>
+                                                            </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
                                                 </div>
-    
-                                                <div class="collapse" id="serviceOptions_{{$key}}">
-                                                    <ul class="list-group list-group-flush">
-                                                        <li class="list-group-item service-label">
-                                                            Rank Boost
-                                                            <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="rankBoost_{{$key}}">
-                                                                <label class="custom-control-label" for="rankBoost_{{$key}}"></label>
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-group-item service-label">
-                                                            Badge Boosting
-                                                            <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="badgeBoost_{{$key}}">
-                                                                <label class="custom-control-label" for="badgeBoost_{{$key}}"></label>
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-group-item service-label">
-                                                            Custom Request
-                                                            <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="customRequest_{{$key}}">
-                                                                <label class="custom-control-label" for="customRequest_{{$key}}"></label>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
                                             @endforeach
                                         </div>
                                     </div>

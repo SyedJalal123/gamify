@@ -9,6 +9,7 @@ use App\Models\Game;
 use App\Models\Attribute;
 use App\Models\ItemAttribute;
 use App\Models\CategoryGame;
+use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,7 @@ class ItemController extends Controller
 {
     public function create()
     {
-        $categories = Category::with('categoryGames.game')->get();
+        $categories = Category::with('categoryGames.game','categoryGames.services')->get();
         return view('frontend.items_create', compact('categories'));
     }
 
@@ -152,7 +153,37 @@ class ItemController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+    public function toggleService(Request $request)
+    {   
+        $serviceId = $request->input('service_id');
+        $totalAvailable = $request->input('total_available');
+        $subscribed = $request->input('subscribed');
+        
+        $seller = auth()->user(); // or auth('seller')->user();
+    
+        if (!$seller) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
+        if ($subscribed == 'true') {
+            $seller->services()->syncWithoutDetaching([$serviceId]);
+        } else {
+            $seller->services()->detach($serviceId);
+        }
+    
+        // Count services for this seller
+        $totalSubscribed = $seller->services()->count();
+    
+        return response()->json([
+            'status' => 'success',
+            'subscribedText' => $totalSubscribed > 0 
+                ? "Subscribed {$totalSubscribed}/{$totalAvailable}" 
+                : "Not Subscribed",
+            'class' => $totalSubscribed > 0 
+                ? "text-success" 
+                : "text-muted"
+        ]);
+    }
     public function show(Item $item)
     {
         return view('frontend.seller.items_show', compact('item'));

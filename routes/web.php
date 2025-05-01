@@ -52,6 +52,7 @@ Route::middleware('verified')->group(function () {
     // Item Routes
     Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
     Route::post('/items/store', [ItemController::class, 'store'])->name('items.store');
+    Route::get('/toggle-service', [ItemController::class, 'toggleService'])->name('service.toggle');
 
     // Catalog Routes
     Route::get('catalog/{category_id}', [CatalogController::class, 'index'])->name('catalog.index');

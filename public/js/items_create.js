@@ -652,3 +652,32 @@ $('#serviceOptions').on('hide.bs.collapse', function () {
     icon.classList.remove('bi-chevron-up');
     icon.classList.add('bi-chevron-down');
 });
+
+
+function toggleService(element) {
+    const serviceId = element.dataset.serviceId;
+    const totalAvailable = element.dataset.totalAvaliable;
+    const key = element.dataset.key;
+    const isChecked = element.checked;
+
+    $.get("/toggle-service", {
+        service_id: serviceId,
+        total_available: totalAvailable,
+        subscribed: isChecked
+    }, function(data) {
+        if (data.status === 'success') {
+            const subscriptionData = document.querySelector(`.subscription-data-${key}`);
+            subscriptionData.textContent = data.subscribedText;
+            subscriptionData.classList.add(data.class);
+            if(data.class == "text-success"){
+                subscriptionData.classList.remove("text-muted");
+            }else{
+                subscriptionData.classList.remove("text-success");
+            }
+        } else {
+            alert('Failed to update subscription.');
+        }
+    }).fail(function() {
+        alert('Something went wrong!');
+    });
+}

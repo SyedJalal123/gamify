@@ -12,37 +12,37 @@ class CatalogController extends Controller
 {
     public function index(Request $request, $category_game_id)
     {
-        $categoryGame = CategoryGame::with('category', 'game')->find($category_game_id);
+        $categoryGame = CategoryGame::with('category', 'game', 'services')->find($category_game_id);
     
         $attributes = Attribute::whereHas('categoryGames', fn($q) => $q->where('category_game_id', $category_game_id))->get();
         $itemsQuery = Item::where('category_game_id', $category_game_id);
     
-        // Apply attribute filters
-        foreach ($request->query() as $key => $value) {
-            if (str_starts_with($key, 'attr_') && !empty($value)) {
-                $attributeId = str_replace('attr_', '', $key);
-                $itemsQuery->whereHas('attributes', fn($q) => 
-                    $q->where('attribute_id', $attributeId)->where('value', $value)
-                );
+        ////// FILTERS ////////////////////////////////////////////////////////////
+            // Apply attribute filters
+            foreach ($request->query() as $key => $value) {
+                if (str_starts_with($key, 'attr_') && !empty($value)) {
+                    $attributeId = str_replace('attr_', '', $key);
+                    $itemsQuery->whereHas('attributes', fn($q) => 
+                        $q->where('attribute_id', $attributeId)->where('value', $value)
+                    );
+                }
             }
-        }
-    
-        // Apply search filter
-        if ($searchTerm = $request->input('search')) {
-            $itemsQuery->where(fn($query) => $query->where('title', 'like', "%$searchTerm%")
-                ->orWhereHas('attributes', fn($q) => $q->where('value', 'like', "%$searchTerm%"))
-                ->orWhere('price', 'like', "%$searchTerm%"));
-        }
-    
-        // Apply sorting
-        if ($request->sort === 'price_asc') {
-            $itemsQuery->orderBy('price', 'asc');
-        } elseif ($request->sort === 'price_desc') {
-            $itemsQuery->orderBy('price', 'desc');
-        } else {
-            $itemsQuery->latest();
-        }
-    
+            // Apply search filter
+            if ($searchTerm = $request->input('search')) {
+                $itemsQuery->where(fn($query) => $query->where('title', 'like', "%$searchTerm%")
+                    ->orWhereHas('attributes', fn($q) => $q->where('value', 'like', "%$searchTerm%"))
+                    ->orWhere('price', 'like', "%$searchTerm%"));
+            }
+            // Apply sorting
+            if ($request->sort === 'price_asc') {
+                $itemsQuery->orderBy('price', 'asc');
+            } elseif ($request->sort === 'price_desc') {
+                $itemsQuery->orderBy('price', 'desc');
+            } else {
+                $itemsQuery->latest();
+            }
+        ///////////////////////////////////////////////////////////////////////////
+
         if ($categoryGame->category->id == 3) {
             $items = $itemsQuery->with('attributes', 'categoryGame.game', 'seller')->get();
             $grouped = collect();  // Holds the lowest price items
@@ -84,8 +84,10 @@ class CatalogController extends Controller
             }
     
             return view('frontend.catalog.topupCatalog', compact('categoryGame', 'attributes', 'sortedItems', 'items'));
+        }else if ($categoryGame->category->id == 5){
+            return view('frontend.catalog.boostingCatalog', compact('categoryGame'));
         }
-    
+
         // Default category view
         $items = $itemsQuery->with('attributes', 'categoryGame.game', 'seller')->paginate(12)->withQueryString();
     

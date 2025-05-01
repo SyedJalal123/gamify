@@ -28,8 +28,8 @@
                 <img src="{{ asset($categoryGame->game->image) }}" style="width: 23px;height: max-content;">
                 <h5 class="mb-4 ml-2 text-white">{{ $categoryGame->game->name }} {{ $categoryGame->title }}</h5>
             </div>
-            <div class="row">
-                <div class="col-md-8">
+            <div class="row fade-in-delay-small">
+                <div class="col-md-8 ">
                     @if(($sortedItems->first() !== null) && count($sortedItems->first()->attributes->where('topup', 0)) > 0)
                         <span class="circle-1">1</span>
                         <form id="attributeFilterForm" class="bg-light-dark br-10 p-3 pt-4 my-3 mb-4 attributes">
@@ -38,7 +38,7 @@
                                     $options = $attribute->options;
                                     $selected = request("attr_{$attribute->id}");
                                 @endphp
-                                <div class="form-group select-2-dark">
+                                <div class="form-group select-2-dark ">
                                     <h6 class="fw-bold text-white mb-3">Select {{ $attribute->name }}</h6>
                                     <select name="attr_{{ $attribute->id }}" id="attr_{{ $attribute->id }}" class="form-control select2 attribute-filter">
                                         <option value="" disabled selected>-- Select {{ $attribute->name }} --</option>
@@ -153,6 +153,7 @@
 
 @section('js')
     <script>
+        // Toggle Description
         function setupClampToggle() {
             const content = document.getElementById('deliveryInstructions');
             const toggleBtn = document.getElementById('toggleInstructions');
@@ -185,6 +186,14 @@
         }
 
         $(document).ready(function () {
+
+            // Animate for first time
+            setTimeout(() => {
+                [...document.querySelectorAll('.animate-class')]
+                    .slice(0, 24)
+                    .forEach(el => animateDetachedOverlay(el));
+            }, 0.01); // 500ms delay, adjust as needed
+
             $('#attributeFilterForm').on('change', '.attribute-filter', function () {
                 
                 [...document.querySelectorAll('.animate-class')]
