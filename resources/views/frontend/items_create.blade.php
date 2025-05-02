@@ -53,7 +53,7 @@
                                             <eld-image style="height: 32px;">
                                                 <img class="app-image" alt="Currency"
                                                     height="32" width="32" loading="eager" fetchpriority="auto" ng-img="true"
-                                                    src="https://w9g7dlhw3kaank.www.eldorado.gg/QLHQai4xYtviUZKeCEdT0qT0HcfzgZBozAps6udCgAdCL8M/KkTCHTxNsbE9qPgCZAxNlysMmOJqL06S4V6e5Jor7qr340moVVUvrOblMkGaS0YkobUqDSo07vPYOnmH1OqU5"
+                                                    src="{{asset('images/categ_logo.svg')}}"
                                                     >
                                             </eld-image>
                                             <h6 class="m-0 ml-2">{{ $category->name }}</h6>
