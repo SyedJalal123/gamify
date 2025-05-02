@@ -70,7 +70,7 @@
 }
 
 .topup_active {
-    border: 2px solid rgb(255, 208, 0);
+    border: 2px solid rgb(255, 208, 0) !important;
     background-color: #feffde !important;
 }
 .price-box-form {

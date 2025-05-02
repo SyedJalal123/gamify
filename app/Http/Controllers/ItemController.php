@@ -153,6 +153,7 @@ class ItemController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
     public function toggleService(Request $request)
     {   
         $serviceId = $request->input('service_id');
@@ -184,6 +185,7 @@ class ItemController extends Controller
                 : "text-muted"
         ]);
     }
+    
     public function show(Item $item)
     {
         return view('frontend.seller.items_show', compact('item'));

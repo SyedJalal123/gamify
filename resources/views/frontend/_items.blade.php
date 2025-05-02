@@ -23,7 +23,15 @@
                         </div>
                     </div>
                     <p class="m-0 text-black ">
-                        <strong class="fs-20">${{ $item->price }}</strong>
+                        @php
+                            $price = floor($item->price * 10000) / 10000;
+                            $num = strlen(substr(strrchr($price, "."), 1));
+                        @endphp
+                        @if($num >= 4)
+                        <strong class="fs-20">${{ number_format($price, 4, '.', '') }}</strong>
+                        @else
+                        <strong class="fs-20">${{ number_format($price, 2, '.', '') }}</strong>
+                        @endif
                     </p>
                 </div>
             </a>

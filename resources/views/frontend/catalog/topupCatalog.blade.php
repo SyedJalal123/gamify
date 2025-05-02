@@ -67,6 +67,7 @@
                 <div class="col-md-4">
                     <form class="price-box-form d-none" method="GET" action="{{ route('checkout') }}">
                         <input type="hidden" id="item_id" name="item_id" value="">
+                        <input type="hidden" id="item_value" name="item_value" value="">
                         <input type="hidden" id="item_price" name="price" value="">
 
                         <div class="price-box text-black bg-white br-9 mt-4 mt-md-0">
@@ -196,9 +197,7 @@
 
             $('#attributeFilterForm').on('change', '.attribute-filter', function () {
                 
-                [...document.querySelectorAll('.animate-class')]
-                .slice(0, 24)
-                .forEach(el => animateDetachedOverlay(el));
+                [...document.querySelectorAll('.animate-class')].slice(0, 24).forEach(el => animateDetachedOverlay(el));
 
                 let url = new URL(window.location.href);
 
@@ -217,7 +216,27 @@
                     url: url.toString(),
                     method: 'GET',
                     success: function (response) {
+                        let item_id = $('#item_id').val();
+                        let item_value = $('#item_value').val();
+                        
                         $('#itemsContainer').html(response.main); // Replace item list
+
+                        // Toggle topup_active
+                        document.querySelectorAll('.item-select').forEach(function (i) {
+                            i.classList.remove('topup_active');
+                        });
+                        
+                        // Change .topup_active according to the latest clicked one
+                        if($('.item-select').hasClass('topup_box_' + item_value)){
+                            $('.topup_box_'+item_value).addClass('topup_active');
+                        }else{
+                            $('.price-box-2').removeClass('d-none');
+                            $('.delivery_time_section').addClass('d-none');
+                            $('.price_section').addClass('d-none');
+                            $('#buyNowPrice').addClass('d-none');
+                            $('.price-box-2').addClass('d-none');
+                            $('.secondaryItemsContainer').text('');
+                        }
 
                         if ($('.no-data').length > 0) {
                             $('.price-box-2').removeClass('d-none');
@@ -250,6 +269,18 @@
                 }else {
                     $('#'+s[i].id).next('.select2-container').find('.select2-selection').css('border', '1px solid #aaaaaa');
                 }
+
+                let hasActive = false;
+                $('.item-select').each(function (i) {
+                    if ($(this).hasClass('topup_active') || $(this).find('.topup_active').length > 0) {
+                        hasActive = true;
+                        return false;
+                    }
+                });
+
+                if (hasActive == false) {
+                    $('.item-select').css('border', '2px solid red');
+                }
             }
             if($('.price_section').hasClass('d-none')){
                 valid = false
@@ -264,6 +295,12 @@
         function change_price_box_values() {
             document.querySelectorAll('.item-select').forEach(function (item) {
                 item.addEventListener('click', function () {
+                    
+                    // Remove Red Borders
+                    $('.item-select').each(function (i) {
+                        $('.item-select').css('border', '0px solid red');
+                    });
+                    
                     const id = this.dataset.id;
 
                     // Toggle topup_active
@@ -272,57 +309,57 @@
                     });
                     this.classList.add('topup_active');
 
-                    // Animate the price box
-                    const priceBoxForm = document.querySelector('.price-box-form');
-                    const overlay = document.createElement('div');
-                    overlay.classList.add('price-overlay');
-                    priceBoxForm.appendChild(overlay);
-                    overlay.style.opacity = '1';
-                    setTimeout(function () {
-                        overlay.style.opacity = '0';
+                    // Animate the main price box
+                        const priceBoxForm = document.querySelector('.price-box-form');
+                        const overlay = document.createElement('div');
+                        overlay.classList.add('price-overlay');
+                        priceBoxForm.appendChild(overlay);
+                        overlay.style.opacity = '1';
                         setTimeout(function () {
-                            overlay.remove();
-                        }, 300);
-                    }, 1000);
+                            overlay.style.opacity = '0';
+                            setTimeout(function () {
+                                overlay.remove();
+                            }, 300);
+                        }, 1000);
+                    ////////////////////////////
 
                     // AJAX fetch by item ID
                     fetch(`/get-item-details/${id}`)
-                        .then(function (res) {
-                            return res.json();
-                        })
-                        .then(function (data) {
-                            if (data.success) {
-                                const item = data.item;
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        if (data.success) {
+                            const item = data.item;
 
-                                document.querySelector('#itemTitle').textContent = item.title;
-                                document.querySelector('#itemImage').src = item.image;
-                                document.querySelector('#deliveryTime').textContent = item.delivery_time;
-                                document.querySelector('#totalPrice').textContent = item.price;
-                                document.querySelector('#buyNowPrice').textContent = item.price;
-                                document.querySelector('#deliveryInstructions').textContent = item.description;
-                                document.querySelector('#sellerName').textContent = item.seller;
-                                setupClampToggle();
-                                
-                                if ($('.attributes').children().length === 0 || ($('.attributes').children().length !== 0 && ($('.select2').first().val() !== null))) {
-                                    $('.secondaryItemsContainer').fadeOut(200, function() {
-                                        $(this).html(data.secondary).fadeIn(300);
-                                    });
-                                    $('.price-box-2').removeClass('d-none');
-                                    $('.delivery_time_section').removeClass('d-none');
-                                    $('.price_section').removeClass('d-none');
-                                    $('#buyNowPrice').removeClass('d-none');
-                                } else {
-                                    $('.price-box-2').addClass('d-none');
-                                    $('.delivery_time_section').addClass('d-none');
-                                    $('.price_section').addClass('d-none');
-                                    $('#buyNowPrice').addClass('d-none');
-                                }
-                                
-                                $('.price-box-form').removeClass('d-none');
-                                $('#item_id').val(item.id);
-                                $('#item_price').val(item.price);
+                            document.querySelector('#itemTitle').textContent = item.title;
+                            document.querySelector('#itemImage').src = item.image;
+                            document.querySelector('#deliveryTime').textContent = item.delivery_time;
+                            document.querySelector('#totalPrice').textContent = item.price;
+                            document.querySelector('#buyNowPrice').textContent = item.price;
+                            document.querySelector('#deliveryInstructions').textContent = item.description;
+                            document.querySelector('#sellerName').textContent = item.seller;
+                            setupClampToggle();
+                            
+                            if ($('.attributes').children().length === 0 || ($('.attributes').children().length !== 0 && ($('.select2').first().val() !== null))) {
+                                $('.secondaryItemsContainer').fadeOut(200, function() {
+                                    $(this).html(data.secondary).fadeIn(300);
+                                });
+                                $('.price-box-2').removeClass('d-none');
+                                $('.delivery_time_section').removeClass('d-none');
+                                $('.price_section').removeClass('d-none');
+                                $('#buyNowPrice').removeClass('d-none');
+                            } else {
+                                $('.price-box-2').addClass('d-none');
+                                $('.delivery_time_section').addClass('d-none');
+                                $('.price_section').addClass('d-none');
+                                $('#buyNowPrice').addClass('d-none');
                             }
-                        });
+                            
+                            $('.price-box-form').removeClass('d-none');
+                            $('#item_id').val(item.id);
+                            $('#item_price').val(item.price);
+                            $('#item_value').val(item.topup);
+                        }
+                    });
                 });
             });
         }

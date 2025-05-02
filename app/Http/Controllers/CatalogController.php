@@ -148,6 +148,7 @@ class CatalogController extends Controller
                 'description' => $item->description,
                 'seller' => $item->seller->seller->first_name ?? 'Seller',
                 'attributes' => $item->attributes,
+                'topup' => $topup,
             ],
             'secondary' => $secondary,
         ]);
