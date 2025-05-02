@@ -530,7 +530,7 @@
                 overlay.style.height = `${rect.height}px`;
                 overlay.style.pointerEvents = 'none';
                 overlay.style.transition = 'opacity 0.3s ease';
-                overlay.style.zIndex = 9999;
+                overlay.style.zIndex = 99;
                 overlay.style.opacity = '1';
 
                 document.body.appendChild(overlay);
