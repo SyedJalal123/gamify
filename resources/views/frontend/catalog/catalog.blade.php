@@ -155,7 +155,7 @@
     }
 
     // Apply to both desktop and phone filters
-    ['desktopFilterForm', 'phoneFilterForm'].forEach(id => {
+    ['desktopFilterForm', 'mobileFilterForm'].forEach(id => {
         // Search input
         document.querySelector(`#${id} input[name="search"]`)?.addEventListener('keyup', () => applyAjaxFilters(id));
         // Select2-compatible select change
