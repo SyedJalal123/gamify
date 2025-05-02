@@ -20,4 +20,8 @@ class Service extends Model
     {
         return $this->belongsToMany(User::class, 'seller_service');
     }
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'service_attributes')->withTimestamps();
+    }
 }

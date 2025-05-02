@@ -541,6 +541,19 @@
                     setTimeout(() => overlay.remove(), 300);
                 }, 1000);
             }
+
+            $('select').on('select2:open', function() {
+                const searchBox = $('.select2-container--open .select2-search__field');
+                
+                // Simple mobile device check
+                const isMobile = /iPhone|Android|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+                if (!isMobile && searchBox.length) {
+                    if (!searchBox.is(':focus')) {
+                        searchBox[0].focus(); // Access the raw DOM element
+                    }
+                }
+            });
         </script>
         
             

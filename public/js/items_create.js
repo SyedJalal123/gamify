@@ -314,16 +314,6 @@ $(document).ready(function () {
                 $('select').select2({
                     dropdownPosition: 'below',
                 });
-                // Focus on the search input inside the Select2 dropdown
-                $('select').on('select2:open', function() {
-                    const searchBox = $('.select2-container--open .select2-search__field');
-                    if (searchBox.length) {
-                        // Check if the search box is visible and interactable
-                        if (!searchBox.is(':focus')) {
-                            searchBox[0].focus(); // Use [0] to directly access the DOM element
-                        }
-                    }
-                });
             //
         });
 
@@ -398,16 +388,6 @@ function renderAttributes(attributes, targetId) {
         $('select').select2({
             dropdownPosition: 'below',
         });
-        // Focus on the search input inside the Select2 dropdown
-        $('select').on('select2:open', function() {
-            const searchBox = $('.select2-container--open .select2-search__field');
-            if (searchBox.length) {
-                // Check if the search box is visible and interactable
-                if (!searchBox.is(':focus')) {
-                    searchBox[0].focus(); // Use [0] to directly access the DOM element
-                }
-            }
-        });
     ////
 }
 // Function to append the select box value to the text box
@@ -436,16 +416,6 @@ $(document).ready(function() {
     // Apply Select2 to all select elements
     $('select').select2({
         dropdownPosition: 'below',
-    });
-    // Focus on the search input inside the Select2 dropdown
-    $('select').on('select2:open', function() {
-        const searchBox = $('.select2-container--open .select2-search__field');
-        if (searchBox.length) {
-            // Check if the search box is visible and interactable
-            if (!searchBox.is(':focus')) {
-                searchBox[0].focus(); // Use [0] to directly access the DOM element
-            }
-        }
     });
 });
 

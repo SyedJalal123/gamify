@@ -29,7 +29,12 @@
             </div>
             <div class="row fade-in-delay-small">
                 <div class="col-md-8">
-                    
+                    <div class="d-flex flex-column">
+                        <div>Best boosting deals in under 2 minutes</div>
+                        <div>
+                            
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4">
 

@@ -46,4 +46,8 @@ class Attribute extends Model
                     ->withPivot('value')
                     ->withTimestamps();
     }
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'service_attributes')->withTimestamps();
+    }
 }
