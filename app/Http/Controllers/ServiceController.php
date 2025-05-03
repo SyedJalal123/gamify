@@ -138,10 +138,10 @@ class ServiceController extends Controller
     public function boosingRequest(Request $request, $id){
         $buyerRequest = BuyerRequest::where('id',$id)->with('service.categoryGame.game','attributes', 'requestOffers.user')->first();
 
+        dd('2');
         if ($request->ajax()) {
             return view('frontend.offers-live-feed', compact('buyerRequest'))->render();
         }
-        dd('2');
         return view('frontend.boosting-request', compact('buyerRequest'));
     }
 
