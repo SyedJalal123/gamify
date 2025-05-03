@@ -321,9 +321,7 @@ $(document).ready(function () {
         $('#games-dropdown').off('change').on('change', function () {
             let categoryGameId = $(this).val();
             $('#category_game_id').val(categoryGameId);
-            $.get('/get-attributes', {
-                categoryGameId: categoryGameId,
-            }, function (data) {
+            $.get('/get-attributes', { categoryGameId: categoryGameId }, function (data) {
                 $('#game-attributes-list').empty();
                 $('#category-attributes-list').empty();
 
@@ -373,7 +371,7 @@ function renderAttributes(attributes, targetId) {
             
             let options = `<option value="" disabled selected>Select `+attr.name+`</option>` + // Add the default "Select" option
             attr.options.map(option => `<option value="${option}">${option}${attr.topup === 1 ? ' ' + attr.name : ''}</option>`).join('');
-            inputField = `<select name="attribute_${attr.id}" id="attribute_${attr.id}" class="form-control ${selectClass}" onchange="${onchangeFunction}" required>${options}</select>`;
+            inputField = `<select name="attribute_${attr.id}" id="attribute_${attr.id}" class="form-control ${selectClass} select2" onchange="${onchangeFunction}" required>${options}</select>`;
         }
 
         $(`#${targetId}`).append(`
@@ -387,6 +385,18 @@ function renderAttributes(attributes, targetId) {
     // Selet2 Initialization
         $('select').select2({
             dropdownPosition: 'below',
+        });
+        $('select').on('select2:open', function() {
+            const searchBox = $('.select2-container--open .select2-search__field');
+            
+            // Simple mobile device check
+            const isMobile = /iPhone|Android|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+            if (!isMobile && searchBox.length) {
+                if (!searchBox.is(':focus')) {
+                    searchBox[0].focus(); // Access the raw DOM element
+                }
+            }
         });
     ////
 }
@@ -558,18 +568,18 @@ document.getElementById('addRow').addEventListener('click', function() {
     row.innerHTML = `
         <div class="col-md-5">
             <div class="input-group">
-                <button class="btn btn-minus" type="button">-</button>
+                <button class="btn btn-minus mr-1" type="button">-</button>
                 <input type="number" class="form-control text-center input-group-text-input" id="discount_amont_${lastNumber}" name="discount_amont[]" value="0" min="0">
                 <span class="input-group-text">${currency_type}</span>
-                <button class="btn btn-plus" type="button">+</button>
+                <button class="btn btn-plus ml-1" type="button">+</button>
             </div>
         </div>
         <div class="col-md-5">
             <div class="input-group">
-                <button class="btn btn-minus" type="button">-</button>
+                <button class="btn btn-minus mr-1" type="button">-</button>
                 <input type="number" class="form-control text-center input-group-text-input" id="discount_applied_${lastNumber}" name="discount_applied[]" value="0" min="0" max="100">
                 <span class="input-group-text">%</span>
-                <button class="btn btn-plus" type="button">+</button>
+                <button class="btn btn-plus ml-1" type="button">+</button>
             </div>
         </div>
         <div class="col-md-2 text-center">

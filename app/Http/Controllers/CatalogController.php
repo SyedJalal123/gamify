@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\Attribute;
+use App\Models\Service;
 use App\Models\CategoryGame;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -93,7 +94,7 @@ class CatalogController extends Controller
     
         if ($request->ajax()) {
             // Optional: render differently if needed
-            return view('frontend._items', compact('items'))->render();
+            return view('frontend.catalog._items', compact('items'))->render();
         }
     
         return view('frontend.catalog.catalog', compact('categoryGame', 'items', 'attributes'));
@@ -206,7 +207,6 @@ class CatalogController extends Controller
         
         return response()->json($mapped);
     }
-
     public function itemDetail(Item $item)
     {
         $item->load(['attributes','categoryGame.game']);

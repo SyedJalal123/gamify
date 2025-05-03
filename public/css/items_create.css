@@ -159,8 +159,8 @@ input.invalid {
   .input-group-text {
     /* min-width: 50px; */
     justify-content: center;
-    background-color: #ffffff;
-    border-left: 0px;
+    background-color: #efeff1;
+    border: 0px;
     font-weight: 600;
     border-radius: 0px;
   }
@@ -211,10 +211,6 @@ input.invalid {
     }
   }
 
-
-.invalid {
-  border: 1px solid red;
-}
 
 /* Toggle button css */
 .list-group-item {

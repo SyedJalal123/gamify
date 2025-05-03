@@ -38,9 +38,11 @@
         <style lang="en" type="text/css" id="dark-mode-native-style"></style>
         <style lang="en" type="text/css" id="dark-mode-native-sheet"></style>
 
+        @vite(['resources/js/app.js'])
         @yield('css')
     </head>
     <body>
+        
         <!-- header -->
         <header class="header">
             <div class="header__wrap">
@@ -155,7 +157,7 @@
                                     </li> --}}
                                 </ul>
         
-                                <div class="header__actions d-flex  justify-content-end">
+                                <div class="header__actions d-flex right-header justify-content-end">
                                     {{-- Language settings --}}
                                     {{-- <div class="header__lang">
                                         <a class="header__lang-btn" href="https://gogame.volkovdesign.com/#" role="button" id="dropdownMenuLang" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -180,11 +182,69 @@
                                                 account
                                             </span>
                                         </a> --}}
+                                        <li class="header__nav-item mr-2 mr-md-3">
+                                            <a  href="#" role="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="header__nav-link header__nav-link--more seller-avatar mr-2 d-flex align-items-center justify-content-center rounded-circle text-white">
+                                                <i class="bi bi-chat-left-text fs-21"></i>
+                                            </a>
+                                            
+                                        </li>
+                                        <li class="header__nav-item mr-2 mr-md-3">
+                                            <a  href="#" role="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="header__nav-link header__nav-link--more seller-avatar mr-2 d-flex align-items-center justify-content-center rounded-circle text-white">
+                                                <i class="bi bi-bell fs-21"></i>
+                                                <span class="top-tag bg-yellow text-black count-notifications">{{count(auth()->user()->unreadnotifications)}}</span>
+                                            </a>
+                                            <ul class="dropdown-menu header__nav-menu p-0 mCustomScrollbar _mCS_1" aria-labelledby="dropdownMenu4" style="overflow: visible;min-width: 369px;">
+                                                <li class="p-2" style="border-bottom:1px solid grey;">
+                                                    <div class="d-flex align-items-center justify-content-between color-white">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="pl-1 d-flex flex-column">
+                                                                <span class="fs-14 fw-bold">Notifications</span>
+                                                                <div class="d-flex">
+                                                                    <div class="signal-ping-wrapper">
+                                                                        <span class="signal-ping-dot"></span>
+                                                                    </div>
+                                                                    <span class="fs-13 text-black-40">Connected</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="text-center p-0"><a href="#" class="pb-2 p-0 justify-content-center">Mark all as read</a></li>
+                                                <li class="notification-main-box">
+                                                    @foreach (auth()->user()->unreadNotifications->take(6) as $notification)
+                                                        <a href="{{$notification->data['link']}}" class="notification-box mb-1">
+                                                            <div class="d-flex">
+                                                                <img src="{{asset('uploads/games/5.webp')}}" class="mt-1" width="30" height="30" alt="">
+                                                                <div class="d-flex flex-column ml-3">
+                                                                    <div class="title d-flex flex-row align-items-center">
+                                                                        <div class="fs-13">{{$notification->data['title']}}</div>
+                                                                        <div class="opacity-50 small ml-3">{{shortTimeAgo($notification->created_at)}}</div>
+                                                                    </div>
+                                                                    <div class="d-flex flex-column">
+                                                                        <div class="opacity-50">{{$notification->data['data1']}}</div>
+                                                                        <div>
+                                                                            <span class="opacity-50">{{$notification->data['data2']}}</span>
+                                                                            {{-- <span class="opacity-50">Price: </span><strong>${{$notification->data['data2']}}</strong> --}}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    @endforeach
+                                                </li>
+                                                
+                                                <li class="mt-4">
+                                                    <a href="#" class="pb-2 p-0 justify-content-center">
+                                                        <button class="btn btn-dark fs-14">View all (<span class="count-notifications">{{count(auth()->user()->unreadnotifications)}}</span>)</button>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
                                         <li class="header__nav-item">
-                                            {{-- <a class="header__nav-link header__nav-link--more" style="background: brown; padding: 19px 15px; border-radius: 71px;" href="#" role="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <span>{{substr(auth()->user()->name,0,1)}}</span>
-                                            </a> --}}
-                                            <a  href="#" role="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="header__nav-link header__nav-link--more seller-avatar mr-2 d-flex align-items-center justify-content-center rounded-circle text-white" style="width: 37px; height: 37px; background-color: #c0392b;">
+                                            <a  href="#" role="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="header__nav-link header__nav-link--more seller-avatar mr-2 d-flex align-items-center justify-content-center rounded-circle text-white">
                                                 {{ strtoupper(substr(auth()->user()->name,0,1)) }}
                                             </a>
                                             <ul class="dropdown-menu header__nav-menu  mCustomScrollbar _mCS_1" aria-labelledby="dropdownMenu3" style="overflow: visible;min-width: 279px;">
@@ -415,7 +475,14 @@
         <script src="{{asset('GoGame – Digital marketplace HTML Template Preview - ThemeForest_files/main.js.download')}}"></script>        
         <!-- Select2 JS -->
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script><script> var publicPath = "{{ asset('/') }}"; </script>
+        <script>
+            window.Laravel = {
+                user: @json(auth()->user())
+            };
+        </script>
+
         @yield('js')
+
         <script>
             $('#myModal').on('shown.bs.modal', function () {
                 $('#myInput').trigger('focus');
@@ -554,36 +621,119 @@
                     }
                 }
             });
+
+            // Define the shortTimeAgo function
+            function shortTimeAgo(date) {
+                const now = new Date();
+                const diffInSeconds = Math.floor((now - new Date(date)) / 1000);
+
+                const times = [
+                    { label: "sec", seconds: 1 },
+                    { label: "min", seconds: 60 },
+                    { label: "h", seconds: 3600 },
+                    { label: "d", seconds: 86400 },
+                    { label: "w", seconds: 604800 },
+                    { label: "m", seconds: 2592000 },
+                    { label: "y", seconds: 31536000 },
+                ];
+
+                for (let i = times.length - 1; i >= 0; i--) {
+                    const timeUnit = times[i];
+                    const timeValue = Math.floor(diffInSeconds / timeUnit.seconds);
+
+                    if (timeValue >= 1) {
+                        return `${timeValue} ${timeUnit.label}${timeValue > 1 ? "s" : ""} ago`;
+                    }
+                }
+
+                return "now";
+            }
         </script>
+
+        {{-- Notification Sound --}}
+        @auth
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const userId = window.Laravel.user.id; // Pass user ID from Laravel to JS
+                let unreadCount = parseInt(document.querySelector('.count-notifications').textContent) || 0;
         
+                // Initialize Echo private channel listener for user notifications
+                Echo.private(`App.Models.User.${userId}`)
+                    .notification((notification) => {  
+                        console.log(notification.title);                      
+                        if(notification.title != null){
+                            // Play sound (handle autoplay restrictions)
+                            const audio = new Audio('/sounds/notification.mp3');
+                            audio.play().catch(err => console.warn('Audio blocked:', err));
+            
+                            // Create the notification HTML dynamically
+                            const notificationHTML = `
+                                <li class="mb-1">
+                                    <a href="${notification.link}" class="notification-box">
+                                        <div class="d-flex">
+                                            <img src="{{asset('uploads/games/5.webp')}}" class="mt-1" width="30" height="30" alt="">
+                                            <div class="d-flex flex-column ml-3">
+                                                <div class="title d-flex flex-row align-items-center">
+                                                    <div class="fs-13">${notification.title}</div>
+                                                    <div class="opacity-50 small ml-3">${shortTimeAgo(notification.created_at)}</div>
+                                                </div>
+                                                <div class="d-flex flex-column">
+                                                    <div class="opacity-50">${notification.data1}</div>
+                                                    <div>
+                                                        <span class="opacity-50">${notification.data2}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            `;
+                            
+                            // Insert the new notification at the top of the notification list
+                            const notificationMainBox = document.querySelector('.notification-main-box');
+                            if (notificationMainBox) {
+                                notificationMainBox.insertAdjacentHTML('afterbegin', notificationHTML);
+                            }
+                            
+                            // Increment the unread notification count
+                            unreadCount++;
+                            const countElements = document.querySelectorAll('.count-notifications');
+                            countElements.forEach(countElement => {
+                                countElement.textContent = unreadCount; // Update the unread count
+                            });
+                        }
+                    });
+            });
+        </script>
+        @endauth
             
             
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Seller verification required</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <div class="container__top d-flex align-items-center flex-column">
-                            <img class="app-image" alt="Seller Details review" height="47" width="47" loading="eager" fetchpriority="auto" ng-img="true" src="https://w9g7dlhw3kaank.www.eldorado.gg/WDlx5231QLHO4pNG8aWDLC6fwyjcgZYq1rK6yiNBBlMlTqwI5oZAqBlyRUmA07HH6oAYiZxmF6PrQLDdoG4x7M6i7mNzNoQx80fB84tuP1nmjA0kdWLI5YVxsT5YbpbXPbr" srcset="https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v6/id-verification.svg?w=47 1x, https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v6/id-verification.svg?w=94 2x">
-                            <strong>Seller Verification</strong>
-                            <div role="status" tabindex="0" aria-label="Documents required">
-                                <span class="badge badge-pill badge-danger">Documents required</span>
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Seller verification required</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="container__top d-flex align-items-center flex-column">
+                                <img class="app-image" alt="Seller Details review" height="47" width="47" loading="eager" fetchpriority="auto" ng-img="true" src="https://w9g7dlhw3kaank.www.eldorado.gg/WDlx5231QLHO4pNG8aWDLC6fwyjcgZYq1rK6yiNBBlMlTqwI5oZAqBlyRUmA07HH6oAYiZxmF6PrQLDdoG4x7M6i7mNzNoQx80fB84tuP1nmjA0kdWLI5YVxsT5YbpbXPbr" srcset="https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v6/id-verification.svg?w=47 1x, https://assetsdelivery.eldorado.gg/v7/_assets_/miscellaneous/v6/id-verification.svg?w=94 2x">
+                                <strong>Seller Verification</strong>
+                                <div role="status" tabindex="0" aria-label="Documents required">
+                                    <span class="badge badge-pill badge-danger">Documents required</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="{{url('seller-verification')}}" class="btn btn-primary">Verify</a>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a href="{{url('seller-verification')}}" class="btn btn-primary">Verify</a>
-                </div>
-            </div>
             </div>
         </div>
     </body>

@@ -21,8 +21,8 @@ class SellerController extends Controller
             'city'           => 'required|string|max:255',
             'country'        => 'required|string|max:255',
             'postal_code'    => 'required|string|max:20',
-            'main_photo_1'   => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'main_photo_2'   => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'main_photo_1'   => 'required|image|mimes:jpeg,png,jpg',
+            'main_photo_2'   => 'required|image|mimes:jpeg,png,jpg',
         ]);
     
         // Store files

@@ -6,15 +6,19 @@ use App\Http\Controllers\SellerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\FacebookController;
 use App\Models\Item;
 use App\Models\Category;
+use App\Models\BuyerRequest;
 use App\Models\Game;
+use App\Models\Seller;
 use App\Http\Controllers\NowPaymentController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\StripeController;
-
+use App\Notifications\BoostingOfferNotification;
+use Illuminate\Support\Facades\Notification;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +31,12 @@ use App\Http\Controllers\StripeController;
 |
 */
 
+Route::get('noti', function() {
+    $boostingOffer = BuyerRequest::where('id', 1)->with('service.categoryGame.game','user','attributes')->first();
+    $sellers = Seller::with('user')->get();
+    $users = $sellers->pluck('user')->filter();
+    Notification::send($users, new BoostingOfferNotification($boostingOffer));
+});
 
 Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
@@ -59,6 +69,13 @@ Route::middleware('verified')->group(function () {
     Route::get('/get-item-details/{id}', [CatalogController::class, 'getItemDetails'])->name('get.item.details');
     Route::get('/live-search', [CatalogController::class, 'liveSearch'])->name('live.search');
     Route::get('/item/{item}', [CatalogController::class, 'itemDetail'])->name('item.detail');
+    
+    //Boosting Services Routes
+    Route::get('/save-service', [ServiceController::class, 'store']);
+    Route::get('/get-service-attributes', [ServiceController::class, 'getServiceAttributes']);
+    Route::get('/boosting-request/{id}', [ServiceController::class, 'boosingRequest']);
+    Route::post('/create-offer', [ServiceController::class, 'create_offer'])->name('offer.create');
+
 
     // Checkout Routes
     Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');

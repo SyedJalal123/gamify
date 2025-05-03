@@ -159,22 +159,29 @@ class ItemController extends Controller
         $serviceId = $request->input('service_id');
         $totalAvailable = $request->input('total_available');
         $subscribed = $request->input('subscribed');
-        
+
         $seller = auth()->user(); // or auth('seller')->user();
-    
+
         if (!$seller) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        if ($subscribed == 'true') {
+        // Find the service and get its category_game_id
+        $service = \App\Models\Service::find($serviceId);
+
+        $categoryGameId = $service->category_game_id;
+
+        if ($subscribed === 'true') {
             $seller->services()->syncWithoutDetaching([$serviceId]);
         } else {
             $seller->services()->detach($serviceId);
         }
-    
-        // Count services for this seller
-        $totalSubscribed = $seller->services()->count();
-    
+
+        // Count only services with the same category_game_id
+        $totalSubscribed = $seller->services()
+            ->where('category_game_id', $categoryGameId)
+            ->count();
+
         return response()->json([
             'status' => 'success',
             'subscribedText' => $totalSubscribed > 0 
@@ -184,6 +191,7 @@ class ItemController extends Controller
                 ? "text-success" 
                 : "text-muted"
         ]);
+
     }
     
     public function show(Item $item)

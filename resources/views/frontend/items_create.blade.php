@@ -267,19 +267,19 @@
                                             <div class="col-md-6">
                                                 <span class="small">Total Quantity Available</span>
                                                 <div class="input-group">
-                                                    <button class="btn btn-minus" type="button">-</button>
+                                                    <button class="btn btn-minus mr-1" type="button">-</button>
                                                     <input type="number" class="form-control text-center input-group-text-input currency_r topup_r items_r" id="quantity_available" required name="quantity_available" value="0" min="0">
                                                     <span class="input-group-text feature_currency_type">M</span>
-                                                    <button class="btn btn-plus" type="button">+</button>
+                                                    <button class="btn btn-plus ml-1" type="button">+</button>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 currency_class items_class">
                                                 <span class="small">Minimum Offer Quantity</span>
                                                 <div class="input-group">
-                                                    <button class="btn btn-minus" type="button">-</button>
+                                                    <button class="btn btn-minus mr-1" type="button">-</button>
                                                     <input type="number" class="form-control text-center input-group-text-input currency_r topup_r items_r" id="minimum_quantity" required name="minimum_quantity" value="1" min="1">
                                                     <span class="input-group-text feature_currency_type">M</span>
-                                                    <button class="btn btn-plus" type="button">+</button>
+                                                    <button class="btn btn-plus ml-1" type="button">+</button>
                                                 </div>
                                             </div>
                                             <div class="small text-danger d-none quanity_must_error">Quantity must be above or equal to Minimum Offer quantity</div>
@@ -303,19 +303,19 @@
                                                 <div class="col-md-5">
                                                     <span class="small">If user buys X or more</span>
                                                     <div class="input-group">
-                                                        <button class="btn btn-minus" type="button">-</button>
+                                                        <button class="btn btn-minus mr-1" type="button">-</button>
                                                         <input type="number" class="form-control input-group-text-input text-center" id="discount_amont_0" name="discount_amont[]" value="0" min="0">
                                                         <span class="input-group-text feature_currency_type">M</span>
-                                                        <button class="btn btn-plus" type="button">+</button>
+                                                        <button class="btn btn-plus ml-1" type="button">+</button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-5">
                                                     <span class="small">Discount applied</span>
                                                     <div class="input-group">
-                                                        <button class="btn btn-minus" type="button">-</button>
+                                                        <button class="btn btn-minus mr-1" type="button">-</button>
                                                         <input type="number" class="form-control input-group-text-input text-center" id="discount_applied_0" name="discount_applied[]" value="0" min="0" max="100">
                                                         <span class="input-group-text">%</span>
-                                                        <button class="btn btn-plus" type="button">+</button>
+                                                        <button class="btn btn-plus ml-1" type="button">+</button>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2 text-center">

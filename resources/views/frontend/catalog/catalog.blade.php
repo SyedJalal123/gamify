@@ -91,7 +91,7 @@
                     <div id="itemsOverlay">
                         <div class="spinner-border text-light" role="status"></div>
                     </div>
-                    @include('frontend._items', ['items' => $items])
+                    @include('frontend.catalog._items', ['items' => $items])
                 </div>
             </div>
         </div>

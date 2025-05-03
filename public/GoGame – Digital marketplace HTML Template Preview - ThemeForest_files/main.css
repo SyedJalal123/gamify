@@ -284,9 +284,9 @@ body::-webkit-scrollbar-thumb {
   margin-bottom: 20px;
   position: relative;
 }
-.header__nav-item:last-child {
+/* .header__nav-item:last-child {
   margin-bottom: 0;
-}
+} */
 .header__nav-menu {
   display: block;
   position: absolute;
@@ -5460,3 +5460,9 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   width: 24px; height: 24px;
   border-radius: 4px;
 }
+
+
+
+
+
+
