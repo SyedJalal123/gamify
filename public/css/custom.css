@@ -787,6 +787,10 @@
     right: 0px;
 }
 
+.notification-dropdown {
+    min-width: 400px !important;
+}
+
 @media (min-width: 768px) {
     .right-header .header__nav-menu {
         left: auto !important;
@@ -800,9 +804,7 @@
         min-width: 330px !important;
     }
 }
-.notification-dropdown {
-    min-width: 400px !important;
-}
+
 .opacity-50 {
     opacity: 0.5;
 }
