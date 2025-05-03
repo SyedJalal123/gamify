@@ -30,7 +30,6 @@
                     <div class="text-black-40">Created: {{ $buyerRequest->created_at->format('F j, Y, g:i:s A') }}</div>
                     <div class="text-black-40">Expires: {{ $buyerRequest->expires_at->format('F j, Y, g:i:s A') }}</div>
                 </div>
-                {{dd('yes')}}
             </div>
             <div class="alerts col-12 w-100">
                 @if(session('success'))
