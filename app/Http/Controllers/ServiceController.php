@@ -139,7 +139,6 @@ class ServiceController extends Controller
         $buyerRequest = BuyerRequest::where('id',$id)->with('service.categoryGame.game','attributes', 'requestOffers.user')->first();
 
         if ($request->ajax()) {
-            // Optional: render differently if needed
             return view('frontend.offers-live-feed', compact('buyerRequest'))->render();
         }
         return view('frontend.boosting-request', compact('buyerRequest'));
