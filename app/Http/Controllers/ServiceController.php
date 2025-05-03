@@ -136,7 +136,6 @@ class ServiceController extends Controller
     }
 
     public function boostingRequest(Request $request, $id){
-        dd($id);
         $buyerRequest = BuyerRequest::where('id',$id)->with('service.categoryGame.game','attributes', 'requestOffers.user')->first();
 
         if ($request->ajax()) {
