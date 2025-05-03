@@ -797,11 +797,11 @@
         display: flex !important;
     }
     .notification-dropdown {
-        min-width: 400px !important;
+        min-width: 330px !important;
     }
 }
 .notification-dropdown {
-    min-width: 330px !important;
+    min-width: 400px !important;
 }
 .opacity-50 {
     opacity: 0.5;
