@@ -796,8 +796,13 @@
     .row-md-none {
         display: flex !important;
     }
+    .notification-dropdown {
+        min-width: 400px;
+    }
 }
-
+.notification-dropdown {
+    min-width: 330px;
+}
 .opacity-50 {
     opacity: 0.5;
 }

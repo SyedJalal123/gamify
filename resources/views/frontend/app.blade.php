@@ -193,7 +193,7 @@
                                                 <i class="bi bi-bell fs-21"></i>
                                                 <span class="top-tag bg-yellow text-black count-notifications">{{count(auth()->user()->unreadnotifications)}}</span>
                                             </a>
-                                            <ul class="dropdown-menu header__nav-menu p-0 mCustomScrollbar _mCS_1" aria-labelledby="dropdownMenu4" style="overflow: visible;min-width: 369px;">
+                                            <ul class="dropdown-menu notification-dropdown header__nav-menu p-0 mCustomScrollbar _mCS_1" aria-labelledby="dropdownMenu4" style="overflow: visible;">
                                                 <li class="p-2" style="border-bottom:1px solid grey;">
                                                     <div class="d-flex align-items-center justify-content-between color-white">
                                                         <div class="d-flex align-items-center">
