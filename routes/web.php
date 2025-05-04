@@ -32,10 +32,7 @@ use Illuminate\Support\Facades\Notification;
 */
 
 Route::get('noti', function() {
-    $boostingOffer = BuyerRequest::where('id', 1)->with('service.categoryGame.game','user','attributes')->first();
-    $sellers = Seller::with('user')->get();
-    $users = $sellers->pluck('user')->filter();
-    Notification::send($users, new BoostingOfferNotification($boostingOffer));
+    
 });
 
 Route::get('/clear-cache', function () {
@@ -60,9 +57,9 @@ Route::middleware('verified')->group(function () {
     Route::get('/get-attributes', [ItemController::class, 'getAttributes']);
 
     // Item Routes
-    Route::get('/items/create', [ItemController::class, 'create'])->name('items.create');
-    Route::post('/items/store', [ItemController::class, 'store'])->name('items.store');
-    Route::get('/toggle-service', [ItemController::class, 'toggleService'])->name('service.toggle');
+    Route::get('/items/create', [ItemController::class, 'create'])->name('items.create')->middleware(['auth']);
+    Route::post('/items/store', [ItemController::class, 'store'])->name('items.store')->middleware(['auth']);
+    Route::get('/toggle-service', [ItemController::class, 'toggleService'])->name('service.toggle')->middleware(['auth']);
 
     // Catalog Routes
     Route::get('catalog/{category_id}', [CatalogController::class, 'index'])->name('catalog.index');
@@ -71,10 +68,11 @@ Route::middleware('verified')->group(function () {
     Route::get('/item/{item}', [CatalogController::class, 'itemDetail'])->name('item.detail');
     
     //Boosting Services Routes
-    Route::get('/save-service', [ServiceController::class, 'store']);
+    Route::get('/save-service', [ServiceController::class, 'store'])->middleware(['auth']);
     Route::get('/get-service-attributes', [ServiceController::class, 'getServiceAttributes']);
     Route::get('/boosting-request/{id}', [ServiceController::class, 'boostingRequest']);
-    Route::post('/create-offer', [ServiceController::class, 'create_offer'])->name('offer.create');
+    Route::post('/create-offer', [ServiceController::class, 'create_offer'])->name('offer.create')->middleware(['auth']);
+    Route::get('/create-conversation', [ServiceController::class, 'create_conversation'])->middleware(['auth']);
 
 
     // Checkout Routes

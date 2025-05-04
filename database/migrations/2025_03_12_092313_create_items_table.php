@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('title')->nullable();
             $table->json('images')->nullable();
             $table->string('feature_image')->nullable();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('delivery_time')->nullable();;
             $table->enum('delivery_method', ['automatic', 'manual'])->nullable();
             $table->json('account_info')->nullable();

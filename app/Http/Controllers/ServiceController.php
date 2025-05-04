@@ -150,4 +150,12 @@ class ServiceController extends Controller
 
         return $service;
     }
+    public function create_conversation(Request $request) {
+        // dd($request->all());
+        $otherUser = User::where('id',$request->buyer_id)->first();
+        $auth = auth()->user();
+        $conversation = $auth->createConversationWith($otherUser, 'Hello');
+
+        return $conversation;
+    }
 }

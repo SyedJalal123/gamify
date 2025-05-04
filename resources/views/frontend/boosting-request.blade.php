@@ -144,7 +144,7 @@
                                 </div>
                                 @if($buyerRequest->user_id !== auth()->user()->id)
                                 <div class="d-flex px-4 py-3">
-                                    <button class="btn btn-secondary fs-14 p-2 px-3 mr-2">Chat</button>
+                                    <button class="btn btn-secondary fs-14 p-2 px-3 mr-2" onclick="createConversation({{$buyerRequest->user_id}})">Chat</button>
                                     @php
                                         $isRelated = $buyerRequest->requestOffers->contains(function ($offer) {
                                             return $offer->user_id === auth()->id();
@@ -190,13 +190,13 @@
                             <input type="hidden" name="buyer_request_id" value="{{$buyerRequest->id}}">
                             <div class="mb-3 d-flex flex-column flex-md-row align-items-start align-items-md-center">
                                 <label for="nameInput" class="form-label mr-2 fs-13">Price&nbsp;$:</label>
-                                <input type="number" class="form-control" name="price" id="nameInput" placeholder="Enter price" style="min-width: 272px; max-width: 272px; width: 100%;">
+                                <input type="number" class="form-control" name="price" id="nameInput" placeholder="Enter price" style="min-width: 272px; max-width: 272px; width: 100%;" required>
                             </div>
 
                             <div class="mb-3 d-flex flex-column flex-md-row align-items-start align-items-md-center">
                                 <label for="roleSelect" class="form-label mr-2 fs-13">Delivery time:</label>
                                 <div style="min-width: 272px; max-width: 272px; width: 100%;">
-                                    <select class="form-select" name="delivery_time" id="roleSelect">
+                                    <select class="form-select" name="delivery_time" id="roleSelect" required>
                                         <option selected disabled>Select Delivery time</option>
                                         <option value="20 min">20 min</option>
                                         <option value="1 h">1 h</option>
@@ -291,7 +291,11 @@
                 }
             });
         }
-        
+        function createConversation(buyer_id){
+            $.get('/create-conversation', { buyer_id: buyer_id }, function (data) {
+                console.log(data);
+            });
+        }
     </script>
     @auth
     <script>

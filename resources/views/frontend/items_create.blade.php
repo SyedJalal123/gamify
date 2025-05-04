@@ -268,7 +268,7 @@
                                                 <span class="small">Total Quantity Available</span>
                                                 <div class="input-group">
                                                     <button class="btn btn-minus mr-1" type="button">-</button>
-                                                    <input type="number" class="form-control text-center input-group-text-input currency_r topup_r items_r" id="quantity_available" required name="quantity_available" value="0" min="0">
+                                                    <input type="number" class="form-control text-center input-group-text-input currency_r topup_r items_r" id="quantity_available" required name="quantity_available" value="0" min="0" step="1">
                                                     <span class="input-group-text feature_currency_type">M</span>
                                                     <button class="btn btn-plus ml-1" type="button">+</button>
                                                 </div>
@@ -277,7 +277,7 @@
                                                 <span class="small">Minimum Offer Quantity</span>
                                                 <div class="input-group">
                                                     <button class="btn btn-minus mr-1" type="button">-</button>
-                                                    <input type="number" class="form-control text-center input-group-text-input currency_r topup_r items_r" id="minimum_quantity" required name="minimum_quantity" value="1" min="1">
+                                                    <input type="number" class="form-control text-center input-group-text-input currency_r topup_r items_r" id="minimum_quantity" required name="minimum_quantity" value="1" min="1" step="1">
                                                     <span class="input-group-text feature_currency_type">M</span>
                                                     <button class="btn btn-plus ml-1" type="button">+</button>
                                                 </div>

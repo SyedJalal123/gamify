@@ -121,18 +121,20 @@ function validateForm() {
     var x, y, i, valid = true;
     x = document.getElementsByClassName("tab");
     y = x[currentTab].getElementsByTagName("input");
+    var checkboxes = Array.from(y).filter(input => input.type === 'checkbox');
+    var y = Array.from(y).filter(input => input.type !== 'checkbox');
     z = x[currentTab].getElementsByTagName("select");
     t = x[currentTab].getElementsByTagName("textarea");
 
     // checkboxes
-    for (i = 0; i < y.length; i++) {
+    for (i = 0; i < checkboxes.length; i++) {
         // If a field is empty...
-        
-        if ($(y[i]).attr('required') && $(y[i]).attr('type') == 'checkbox' && !$(y[i]).is(':checked')) {
-            if(y[i].name == 'termsService' || y[i].name == 'sellerRules')
-            $('.rules_error').removeClass("d-none");
+        if ($(checkboxes[i]).attr('required') && $(checkboxes[i]).attr('type') == 'checkbox' && !$(checkboxes[i]).is(':checked')) {
+            if(checkboxes[i].name == 'termsService' || checkboxes[i].name == 'sellerRules'){
+                $('.rules_error').removeClass("d-none");
+            }
             valid = false;
-        }else {
+        }else if($(checkboxes[i]).attr('required')){
             $('.rules_error').addClass("d-none");
         }
     }
