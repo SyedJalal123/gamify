@@ -50,6 +50,7 @@ class BoostingOfferUpdate extends Notification
     {
         return [
             'success' => '1',
+            'category' => 'offersUpdate',
         ];
     }
 }

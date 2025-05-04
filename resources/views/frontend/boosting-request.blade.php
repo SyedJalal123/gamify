@@ -301,8 +301,10 @@
     
             // Initialize Echo private channel listener for user notifications
             Echo.private(`App.Models.User.${userId}`)
-                .notification((notification) => {                        
-                    get_live_feeds()
+                .notification((notification) => {  
+                    if (notification.category == 'notification' || notification.category == 'offersUpdate') {
+                        get_live_feeds()
+                    }                 
                 });
         });
     </script>

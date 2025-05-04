@@ -56,6 +56,7 @@ class BoostingOfferNotification extends Notification
             'data1' => $this->boostingOffer['data1'],
             'data2' => $this->boostingOffer['data2'],
             'link' => $this->boostingOffer['link'],
+            'category' => 'notification',
         ];
     }
 
