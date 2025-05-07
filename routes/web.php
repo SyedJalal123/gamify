@@ -38,6 +38,8 @@ Route::get('noti', function() {
 Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
+    Artisan::call('optimize:clear');
+    Artisan::call('view:clear');
     Artisan::call('config:cache');
     return "Config and cache cleared!";
 });
