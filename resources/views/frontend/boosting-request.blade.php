@@ -142,7 +142,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 m-0 p-0 chat">
-                                    @livewire('OpenChat', ['buyerRequestConversation' => $conversations->first(), 'identity' => $identity, 'buyerRequest' => $buyerRequest])
+                                    {{-- @livewire('OpenChat', ['buyerRequestConversation' => $conversations->first(), 'identity' => $identity, 'buyerRequest' => $buyerRequest]) --}}
                                 </div>
                             </div>
                         </div>

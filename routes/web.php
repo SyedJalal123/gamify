@@ -31,10 +31,6 @@ use Illuminate\Support\Facades\Notification;
 |
 */
 
-Route::get('noti', function() {
-    
-});
-
 Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
