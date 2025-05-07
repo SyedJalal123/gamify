@@ -144,6 +144,14 @@ class ServiceController extends Controller
                 $query->with(['buyer', 'seller', 'messages.sender','messages.reciever']);
             },
         ])->find($id);
+
+        // Now sort the conversations manually
+        $buyerRequest->buyerRequestConversation = $buyerRequest->buyerRequestConversation->sortByDesc(function ($conversation) {
+            $latestMessage = $conversation->messages->sortByDesc('created_at')->first();
+            return $latestMessage ? $latestMessage->created_at : $conversation->created_at;
+        })->values(); // Reset keys
+
+        // dd($buyerRequest->buyerRequestConversation);
         
         if($buyerRequest->user_id !== auth()->user()->id){
             $identity = 'seller';

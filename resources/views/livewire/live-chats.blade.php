@@ -29,6 +29,7 @@
         </div>
     </div>
     <div class="card-body fade-in-delay-small msg_card_body pb-0 mb-0" style="height: 351px;">
+        <input type="hidden" name="" id="conversationId" value="{{$buyerRequestConversation->id}}">
         @foreach ($buyerRequestConversation->messages as $message)
             @if($message->sender_id == auth()->id())
                 <div class="d-flex justify-content-end mb-4">

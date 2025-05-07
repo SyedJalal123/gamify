@@ -25,7 +25,6 @@ class Openchat extends Component
                             : $this->buyerRequestConversation->seller;
         
 
-                
             $this->messages = $this->getMessages();
         }
 
@@ -42,8 +41,8 @@ class Openchat extends Component
         $this->reciever = $this->identity == 'seller'
                         ? $this->buyerRequestConversation->buyer
                         : $this->buyerRequestConversation->seller;
-
-        $this->dispatch('messages-updated');
+                        
+        $this->dispatch('message-sidebar-updated');
     }
 
     public function render()
@@ -59,10 +58,8 @@ class Openchat extends Component
             $this->message = null;
 
             broadcast(new MessageSentEvent($sentMessage));
-    
-            // $this->messages[] = $sentMessage;
-    
-            $this->dispatch('messages-updated');
+        
+            $this->dispatch('message-updated');
         }
     }
 
@@ -70,9 +67,7 @@ class Openchat extends Component
     #[On('message-received')]
     public function listenMessage($event)
     {
-        $this->dispatch('messages-updated');
-        // $newMessage = Message::find($event['id']);
-        // $this->messages[] = $newMessage;
+        $this->dispatch('message-updated');
     }
 
     public function saveMessage()

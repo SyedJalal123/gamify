@@ -1,12 +1,12 @@
 <ui class="contacts">
-    @foreach ($conversations as $conversation)
+    @foreach ($conversations as $key => $conversation)
         @php
             $reciever = auth()->id() === $conversation->buyer_id
                 ? $conversation->seller
                 : $conversation->buyer;
         @endphp
         <li wire:click="$dispatch('open-chat', { conversationId: {{ $conversation->id }}, recieverId: {{ $reciever->id }} })"
-            class="active cursor-pointer">
+            class="cursor-pointer conversations" id="conversation_{{$conversation->id}}">
             <div class="d-flex bd-highlight py-2">
                 <div class="img_cont">
                     <div class="user_img seller-avatar mr-2 d-flex align-items-center justify-content-center rounded-circle text-white" style="width: 40px; height: 40px; background-color: #c0392b;">

@@ -22,14 +22,28 @@
 @endsection
 
 @section('content')
+    @php
+        $conversations = $identity === 'buyer'
+            ? $buyerRequest->buyerRequestConversation
+            : $buyerRequest->buyerRequestConversation->where('seller_id', auth()->id());
+    @endphp
     <section class="section section--bg section--first">
         <div class="container mb-5 p-0" style="max-width: 1118px;">
-            <div class="d-flex flex-row align-items-center mb-5 px-3">
-                <img onclick="get_live_feeds()" src="{{ asset($buyerRequest->service->categoryGame->game->image) }}" style="width: 40px;height: max-content;">
-                <div class="d-flex flex-column ml-3">
-                    <h5 class="text-white fs-18 mb-0">{{ $buyerRequest->service->categoryGame->game->name }} - {{ $buyerRequest->service->name }}</h5>
-                    <div class="text-black-40">Created: {{ $buyerRequest->created_at->format('F j, Y, g:i:s A') }}</div>
-                    <div class="text-black-40">Expires: {{ $buyerRequest->expires_at->format('F j, Y, g:i:s A') }}</div>
+            <div class="row d-flex flex-row justify-content-between align-items-center mb-5 px-3">
+                <div class="d-flex flex-row align-items-center col-md-8">
+                    <img onclick="get_live_feeds()" src="{{ asset($buyerRequest->service->categoryGame->game->image) }}" style="width: 40px;height: max-content;">
+                    <div class="d-flex flex-column ml-3">
+                        <h5 class="text-white fs-18 mb-0">{{ $buyerRequest->service->categoryGame->game->name }} - {{ $buyerRequest->service->name }}</h5>
+                        <div class="text-black-40">Created: {{ $buyerRequest->created_at->format('F j, Y, g:i:s A') }}</div>
+                        <div class="text-black-40">Expires: {{ $buyerRequest->expires_at->format('F j, Y, g:i:s A') }}</div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column align-items-start align-items-md-end col-md-4 mt-4 mt-md-0">
+                    @if(count($conversations) !== 0 && ($identity == 'seller'))
+                        <button onclick="scrollToClass('live-chat')" class="btn btn-secondary w-max">Chat with Buyer</button>
+                    @elseif($identity == 'buyer')
+                        <button class="btn btn-secondary w-max">Cancel Request</button>
+                    @endif
                 </div>
             </div>
             <div class="alerts col-12 w-100">
@@ -54,19 +68,13 @@
                 @endif
             </div>
             {{-- 
-                - active class on only selected one, 
-                - latest message show on sidebar under name and also a little dot for showing message is unread, 
+                - latest message show on sidebar under name and also a little dot for showing message is unread,
                 - when new message comes show on top and when new chat open show on top, 
                 - also double tick (in eldorado its only double tick not blue tick) 
                 - 
             --}}
             <!-- Main Box -->
             <div class="fade-in-delay-small d-flex flex-column main-box px-2">
-                @php
-                    $conversations = $identity === 'buyer'
-                        ? $buyerRequest->buyerRequestConversation
-                        : $buyerRequest->buyerRequestConversation->where('seller_id', auth()->id());
-                @endphp
                 <div class="Offers-live-feed d-flex flex-column pb-4">
                     <div class="d-flex justify-content-md-between flex-column flex-md-row">
                         <div class="offer-live-feed-title d-flex align-items-center mt-1 mb-3 px-3">
@@ -194,7 +202,7 @@
                                     @endphp
 
                                     @if(count($conversations) == 0)
-                                    <button onclick="Livewire.dispatch('start-chat', { buyerId: {{ $buyerRequest->user_id }}, sellerId: {{ auth()->id() }} }), HideById('seller-chat-btn')" id="seller-chat-btn" class="btn btn-secondary fs-14 p-2 px-3 mr-2">
+                                    <button onclick="Livewire.dispatch('start-chat', { buyerId: {{ $buyerRequest->user_id }}, sellerId: {{ auth()->id() }} }); HideById('seller-chat-btn');scrollToClass('live-chat');" id="seller-chat-btn" class="btn btn-secondary fs-14 p-2 px-3 mr-2">
                                         Start Chat
                                     </button>
                                     @endif
@@ -352,18 +360,22 @@
             scroll_bottom('.msg_card_body');
         });
 
-        function HideById(id){
-            $('#'+id).hide();
-        }
+        Livewire.on('message-sidebar-updated', () => {
+            setTimeout(() => {
+                scroll_bottom('.msg_card_body');
 
-        function scroll_bottom(id) {
-            const $chatBody = $(id);
-            if ($chatBody.length) {
-                $chatBody.scrollTop($chatBody[0].scrollHeight);
-            }
-        }
+                var conId = $('#conversationId').val();
 
-        Livewire.on('messages-updated', () => {
+                $('.conversations').each(function() {
+                    $(this).removeClass('active');
+                });
+                
+                $(`#conversation_${conId}`).addClass('active');
+                
+            }, 0.1);
+        });
+
+        Livewire.on('message-updated', () => {
             setTimeout(() => {
                 scroll_bottom('.msg_card_body');
             }, 0.1);

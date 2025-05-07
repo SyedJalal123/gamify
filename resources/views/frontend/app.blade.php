@@ -483,7 +483,9 @@
         </script>
 
         @livewireScripts
+
         @yield('js')
+
         <script>
             $('#myModal').on('shown.bs.modal', function () {
                 $('#myInput').trigger('focus');
@@ -657,8 +659,35 @@
 
                 return "now";
             }
+
+
+            function scroll_bottom(id) {
+                const $chatBody = $(id);
+                if ($chatBody.length) {
+                    $chatBody.scrollTop($chatBody[0].scrollHeight);
+                }
+            }
+
+            function HideById(id){
+                $('#'+id).hide();
+            }
+
+            function scrollToClass(className, index = 0, delay = 1000) { 
+                setTimeout(() => {
+                    const elements = document.querySelectorAll(`.${className}`);
+                    if (elements.length > index) {
+                        elements[index].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
+                            inline: 'nearest'
+                        });
+                    } else {
+                        console.warn(`No element found with class "${className}" at index ${index}`);
+                    }
+                }, delay);
+            }
         </script>
-        
+
         {{-- Notification Sound --}}
         @auth
         <script>

@@ -25,7 +25,7 @@
             @if($buyerRequest->user_id == auth()->user()->id)
             <div class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end border-bottom-0_5 border-md-none mt-1 p-2 pb-3 p-md-0">
                 @if(count($buyerRequest->buyerRequestConversation->where('seller_id', $offer->user_id)) == 0)
-                <button onclick="Livewire.dispatch('start-chat', { buyerId: {{ $buyerRequest->user_id }}, sellerId: {{ $offer->user->id }} })" onclick="HideById('chat-btn-{{$key}}')" id="chat-btn-{{$offer->user->id}}" class="btn btn-secondary fs-14 p-2 px-3 mr-2">Chat</button>
+                <button onclick="Livewire.dispatch('start-chat', { buyerId: {{ $buyerRequest->user_id }}, sellerId: {{ $offer->user->id }} });HideById('chat-btn-{{ $key }}');scrollToClass('live-chat');" id="chat-btn-{{$offer->user->id}}" class="btn btn-secondary fs-14 p-2 px-3 mr-2">Chat</button>
                 @endif
                 <button class="btn btn-dark fs-14 p-2 px-3">Checkout</button>
             </div>

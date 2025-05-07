@@ -379,6 +379,10 @@
     height: 50%;
 }
 
+.w-max {
+    width: max-content;
+}
+
 .drop-box {
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
     /* X, Y, Blur, Spread, Color */

@@ -14,12 +14,13 @@ class LiveUser extends Component
     public $identity;
     public $conversations;
 
-    
-    public function mount() {
 
-        
+    #[On('message-updated')]
+    public function mount() {
+        $this->dispatch('message-sidebar-updated');
     }
 
+    
     #[On('start-chat')]
     public function startChat($buyerId, $sellerId)
     {
@@ -55,16 +56,12 @@ class LiveUser extends Component
             $this->dispatch('show-chat', conversationId: $conversation->id);
         }
 
-        // $this->dispatch('conversation-created', sellerId: $conversation->seller_id);
+        $this->dispatch('conversation-created', sellerId: $conversation->seller_id);
     }
 
     public function render()
     {
         return view('livewire.live-users');
     }
-
-    public function getBuyerRequestConversation($buyerRequestConId){
-        $buyerRequestConversation = BuyerRequestConversation::find($buyerRequestConId);
-        return $buyerRequestConversation;
-    }
+    
 }
