@@ -38,8 +38,9 @@
         <style lang="en" type="text/css" id="dark-mode-native-style"></style>
         <style lang="en" type="text/css" id="dark-mode-native-sheet"></style>
 
-        @vite(['resources/js/app.js'])
         @yield('css')
+        @vite(['resources/js/app.js'])
+        @livewireStyles
     </head>
     <body>
         
@@ -481,8 +482,8 @@
             };
         </script>
 
+        @livewireScripts
         @yield('js')
-
         <script>
             $('#myModal').on('shown.bs.modal', function () {
                 $('#myInput').trigger('focus');
@@ -624,32 +625,40 @@
 
             // Define the shortTimeAgo function
             function shortTimeAgo(date) {
+                const time = new Date(date);
                 const now = new Date();
-                const diffInSeconds = Math.floor((now - new Date(date)) / 1000);
+                const diffInSeconds = Math.floor((now - time) / 1000);
+                const diffInMonths = (now.getFullYear() - time.getFullYear()) * 12 + (now.getMonth() - time.getMonth());
+                const diffInYears = now.getFullYear() - time.getFullYear();
+
+                if (diffInYears >= 1) {
+                    return time.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); // Mar 12, 2023
+                }
+
+                if (diffInMonths >= 1) {
+                    return time.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); // Mar 12
+                }
 
                 const times = [
-                    { label: "sec", seconds: 1 },
-                    { label: "min", seconds: 60 },
-                    { label: "h", seconds: 3600 },
                     { label: "d", seconds: 86400 },
-                    { label: "w", seconds: 604800 },
-                    { label: "m", seconds: 2592000 },
-                    { label: "y", seconds: 31536000 },
+                    { label: "h", seconds: 3600 },
+                    { label: "m", seconds: 60 },
+                    { label: "s", seconds: 1 },
                 ];
 
-                for (let i = times.length - 1; i >= 0; i--) {
+                for (let i = 0; i < times.length; i++) {
                     const timeUnit = times[i];
                     const timeValue = Math.floor(diffInSeconds / timeUnit.seconds);
 
                     if (timeValue >= 1) {
-                        return `${timeValue} ${timeUnit.label}${timeValue > 1 ? "s" : ""} ago`;
+                        return `${timeValue}${timeUnit.label} ago`;
                     }
                 }
 
                 return "now";
             }
         </script>
-
+        
         {{-- Notification Sound --}}
         @auth
         <script>

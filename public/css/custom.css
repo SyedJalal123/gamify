@@ -526,8 +526,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-
+.one-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.one-line-ellipsis-2 {
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .row-3-2-1 {
     width: 100%;
     display: grid;

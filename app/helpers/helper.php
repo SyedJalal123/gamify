@@ -15,12 +15,14 @@ function get_seller(){
 
 
 function shortTimeAgo($datetime) {
-    $diff = Carbon::parse($datetime)->diff(Carbon::now());
+    $time = Carbon::parse($datetime);
+    $now = Carbon::now();
+    $diff = $time->diff($now);
 
-    if ($diff->y > 0) return $diff->y . 'y';
-    if ($diff->m > 0) return $diff->m . 'mo';
+    if ($diff->y >= 1) return $time->format('M d, Y');    // e.g., Mar 12, 2023
+    if ($diff->m >= 1) return $time->format('M d');       // e.g., Mar 12
     if ($diff->d > 0) return $diff->d . 'd';
     if ($diff->h > 0) return $diff->h . 'h';
-    if ($diff->i > 0) return $diff->i . 'min';
+    if ($diff->i > 0) return $diff->i . 'm';
     return 'now';
 }

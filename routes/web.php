@@ -70,9 +70,8 @@ Route::middleware('verified')->group(function () {
     //Boosting Services Routes
     Route::get('/save-service', [ServiceController::class, 'store'])->middleware(['auth']);
     Route::get('/get-service-attributes', [ServiceController::class, 'getServiceAttributes']);
-    Route::get('/boosting-request/{id}', [ServiceController::class, 'boostingRequest']);
+    Route::get('/boosting-request/{id}', [ServiceController::class, 'boostingRequest'])->middleware(['auth']);
     Route::post('/create-offer', [ServiceController::class, 'create_offer'])->name('offer.create')->middleware(['auth']);
-    Route::get('/create-conversation', [ServiceController::class, 'create_conversation'])->middleware(['auth']);
 
 
     // Checkout Routes

@@ -38,4 +38,8 @@ class BuyerRequest extends Model
     {
         return $this->hasMany(RequestOffer::class);
     }
+    
+    public function buyerRequestConversation() {
+        return $this->hasMany(BuyerRequestConversation::class);
+    }
 }

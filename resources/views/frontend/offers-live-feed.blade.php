@@ -1,9 +1,9 @@
 @if (count($buyerRequest->requestOffers) !== 0)
-    @foreach ($buyerRequest->requestOffers as $offer)    
+    @foreach ($buyerRequest->requestOffers as $key => $offer)    
         <div class="row w-100 p-0 px-md-3 py-md-3 align-items-center border-bottom-thick">
             <div class="seller_details d-flex col-12 col-md-3 text-left border-m-bottom p-2 pt-3 p-md-0">
                 <div class="seller-avatar mr-2 d-flex align-items-center justify-content-center rounded-circle text-white" style="width: 40px; height: 40px; background-color: #c0392b;">
-                    S
+                    {{ strtoupper(substr($offer->user->name,0,1)) }}
                 </div>
                 <div class="d-flex flex-column">
                     <div id="sellerName" class="fs-15 fw-bold">{{$offer->user->name}}</div>
@@ -24,7 +24,9 @@
             </div>
             @if($buyerRequest->user_id == auth()->user()->id)
             <div class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end border-bottom-0_5 border-md-none mt-1 p-2 pb-3 p-md-0">
-                <button class="btn btn-secondary fs-14 p-2 px-3 mr-2">Chat</button>
+                @if(count($buyerRequest->buyerRequestConversation->where('seller_id', $offer->user_id)) == 0)
+                <button onclick="Livewire.dispatch('start-chat', { buyerId: {{ $buyerRequest->user_id }}, sellerId: {{ $offer->user->id }} })" onclick="HideById('chat-btn-{{$key}}')" id="chat-btn-{{$offer->user->id}}" class="btn btn-secondary fs-14 p-2 px-3 mr-2">Chat</button>
+                @endif
                 <button class="btn btn-dark fs-14 p-2 px-3">Checkout</button>
             </div>
             @endif

@@ -136,12 +136,27 @@ class ServiceController extends Controller
     }
 
     public function boostingRequest(Request $request, $id){
-        $buyerRequest = BuyerRequest::where('id',$id)->with('service.categoryGame.game','attributes', 'requestOffers.user')->first();
+        $buyerRequest = BuyerRequest::with([
+            'service.categoryGame.game',
+            'attributes',
+            'requestOffers.user',
+            'buyerRequestConversation' => function ($query) {
+                $query->with(['buyer', 'seller', 'messages.sender','messages.reciever']);
+            },
+        ])->find($id);
+        
+        if($buyerRequest->user_id !== auth()->user()->id){
+            $identity = 'seller';
+        }else {
+            $identity = 'buyer';
+        }
+        
+        
 
         if ($request->ajax()) {
             return view('frontend.offers-live-feed', compact('buyerRequest'))->render();
         }
-        return view('frontend.boosting-request', compact('buyerRequest'));
+        return view('frontend.boosting-request', compact('buyerRequest','identity'));
     }
 
     public function getServiceAttributes(Request $request){
@@ -149,13 +164,5 @@ class ServiceController extends Controller
         $service = Service::where('id',$serviceId)->with('attributes')->first();
 
         return $service;
-    }
-    public function create_conversation(Request $request) {
-        // dd($request->all());
-        $otherUser = User::where('id',$request->buyer_id)->first();
-        $auth = auth()->user();
-        $conversation = $auth->createConversationWith($otherUser, 'Hello');
-
-        return $conversation;
     }
 }

@@ -8,7 +8,7 @@
        /* .select2-container--default .select2-selection--single {
             height: 39px !important;
             font-size: 14px;
-        }
+        } */
         .d-none {
             display: none !important;
         }
@@ -16,8 +16,9 @@
             .d-md-block {
                 display: block !important;
             }
-        } */
+        }
     </style>
+    <link rel="stylesheet" href="{{asset('css/live-chat.css')}}">
 @endsection
 
 @section('content')
@@ -52,7 +53,20 @@
                     </div>
                 @endif
             </div>
+            {{-- 
+                - active class on only selected one, 
+                - latest message show on sidebar under name and also a little dot for showing message is unread, 
+                - when new message comes show on top and when new chat open show on top, 
+                - also double tick (in eldorado its only double tick not blue tick) 
+                - 
+            --}}
+            <!-- Main Box -->
             <div class="fade-in-delay-small d-flex flex-column main-box px-2">
+                @php
+                    $conversations = $identity === 'buyer'
+                        ? $buyerRequest->buyerRequestConversation
+                        : $buyerRequest->buyerRequestConversation->where('seller_id', auth()->id());
+                @endphp
                 <div class="Offers-live-feed d-flex flex-column pb-4">
                     <div class="d-flex justify-content-md-between flex-column flex-md-row">
                         <div class="offer-live-feed-title d-flex align-items-center mt-1 mb-3 px-3">
@@ -85,8 +99,8 @@
                         @include('frontend.offers-live-feed', ['buyerRequest' => $buyerRequest])
                     </div>
                 </div>
-                <div class="live-chat d-flex flex-column mb-4 pb-4">
-                    <div class="live-chat-title d-flex align-items-center mt-1 mb-3 px-3">
+                <div class="live-chat @if(count($conversations) == 0) d-none @endif d-flex flex-column mb-4 pb-4">
+                    <div class="live-chat-title d-flex align-items-center mt-1 mb-3">
                         <div class="signal-ping-wrapper">
                             <span class="red-ping-dot"></span>
                         </div>
@@ -94,8 +108,37 @@
                             <div class="fw-bold">LIVE CHAT WITH SELLERS</div>
                         </div>
                     </div>
-                    <div class="d-flex live-chat-data py-5 bg-white">
-                        .
+                    <div class="d-flex live-chat-data py-2 px-0">
+                        <div class="container-fluid h-100 px-0">
+                            <div class="row m-0 justify-content-center w-100">
+                                <div class="col-md-4 m-0 p-0 pl-md-0 pr-md-2 chat">
+                                    <div class="card mb-sm-3 m-md-0 contacts_card">
+                                        <div class="card-header p-0">
+                                            <div class="input-group px-4 pt-3 py-1 d-flex justify-content-between">
+                                                <div class="text-white fw-bold fs-15">Browser notifications</div>
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" id="chat_notifications" class="custom-control-input service-toggle">
+                                                    <label class="custom-control-label text-white" for="chat_notifications"></label>
+                                                </div>
+                                            </div>
+                                            <div class="input-group px-3 py-1">
+                                                <input type="text" placeholder="Search..." name="" class="form-control search">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text search_btn"><i class="bi-search"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body contacts_body" style="height: 437px;">
+                                            @livewire('liveUser', ['buyerRequest' => $buyerRequest, 'identity' => $identity, 'conversations' => $conversations])
+                                        </div>
+                                        <div class="card-footer"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 m-0 p-0 chat">
+                                    @livewire('OpenChat', ['buyerRequestConversation' => $conversations->first(), 'identity' => $identity, 'buyerRequest' => $buyerRequest])
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="request-details row d-flex pb-4 pb-md-2 mb-4 m-md-0 mx-0">
@@ -105,7 +148,7 @@
                                 Request Detials
                             </div>
                             <div>
-                                @if($buyerRequest->user_id !== auth()->user()->id)
+                                @if($identity == 'seller')
                                 <div class="d-flex justify-content-between px-4 py-2 border-bottom">
                                     <div class="seller_details d-flex text-left">
                                         <div class="seller-avatar mr-2 d-flex align-items-center justify-content-center rounded-circle text-white" style="width: 40px; height: 40px; background-color: #c0392b;">
@@ -142,14 +185,19 @@
                                         <div class="fw-bold">{{$buyerRequest->description}}</div>
                                     @endif
                                 </div>
-                                @if($buyerRequest->user_id !== auth()->user()->id)
+                                @if($identity == 'seller')
                                 <div class="d-flex px-4 py-3">
-                                    <button class="btn btn-secondary fs-14 p-2 px-3 mr-2" onclick="createConversation({{$buyerRequest->user_id}})">Chat</button>
                                     @php
                                         $isRelated = $buyerRequest->requestOffers->contains(function ($offer) {
                                             return $offer->user_id === auth()->id();
                                         });
                                     @endphp
+
+                                    @if(count($conversations) == 0)
+                                    <button onclick="Livewire.dispatch('start-chat', { buyerId: {{ $buyerRequest->user_id }}, sellerId: {{ auth()->id() }} }), HideById('seller-chat-btn')" id="seller-chat-btn" class="btn btn-secondary fs-14 p-2 px-3 mr-2">
+                                        Start Chat
+                                    </button>
+                                    @endif
 
                                     @if(!$isRelated)
                                         <button class="btn btn-dark fs-14 p-2 px-3" data-toggle="modal" data-target="#createOfferModal">Create Offer</button>
@@ -238,13 +286,14 @@
                 dropdownPosition: 'below',
                 dropdownParent: $('#createOfferModal'),
             });
+            $('#action_menu_btn').click(function() {
+                $('.action_menu').toggle();
+            });
         });
+        
         document.addEventListener("DOMContentLoaded", function() {
             let userId = @json(auth()->user()->id);  // Get user ID dynamically from Laravel
             let buyerRequestId = @json($buyerRequest->user_id);
-
-            console.log("User ID: ", userId); // Debug log for user ID
-            console.log("Buyer Request User ID: ", buyerRequestId); // Debug log for buyer request ID
 
             // Get the div elements by class
             let div1 = document.getElementsByClassName('Offers-live-feed')[0];  // Get the first element with class 'Offers-live-feed'
@@ -291,26 +340,69 @@
                 }
             });
         }
-        function createConversation(buyer_id){
-            $.get('/create-conversation', { buyer_id: buyer_id }, function (data) {
-                console.log(data);
-            });
-        }
-    </script>
-    @auth
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const userId = window.Laravel.user.id; // Pass user ID from Laravel to JS
-            let unreadCount = parseInt(document.querySelector('.count-notifications').textContent) || 0;
-    
-            // Initialize Echo private channel listener for user notifications
-            Echo.private(`App.Models.User.${userId}`)
-                .notification((notification) => {  
-                    if (notification.category == 'notification' || notification.category == 'offersUpdate') {
-                        get_live_feeds()
-                    }                 
-                });
+
+        window.addEventListener('load', function () {
+            const chatBody = document.querySelector('.card-body');
+            if (chatBody) {
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
         });
+
+        $(document).ready(function() {
+            scroll_bottom('.msg_card_body');
+        });
+
+        function HideById(id){
+            $('#'+id).hide();
+        }
+
+        function scroll_bottom(id) {
+            const $chatBody = $(id);
+            if ($chatBody.length) {
+                $chatBody.scrollTop($chatBody[0].scrollHeight);
+            }
+        }
+
+        Livewire.on('messages-updated', () => {
+            setTimeout(() => {
+                scroll_bottom('.msg_card_body');
+            }, 0.1);
+        });
+
+        Livewire.on('conversation-created', (conversation) => {
+            HideById('chat-btn-'+conversation['sellerId']);
+            HideById('seller-chat-btn');
+            $('.live-chat').removeClass('d-none');
+        });
+
     </script>
+
+
+    <!-- Initialize Echo private channel listener for user notifications -->
+    @auth
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const userId = window.Laravel.user.id; // Pass user ID from Laravel to JS
+                let unreadCount = parseInt(document.querySelector('.count-notifications').textContent) || 0;
+        
+                Echo.private(`App.Models.User.${userId}`)
+                    .notification((notification) => {  
+                        if (notification.category == 'notification' || notification.category == 'offersUpdate') {
+                            get_live_feeds()
+                        }                 
+                    });
+
+                Echo.private(`chat-channel.${userId}`)
+                    .listen('MessageSentEvent', (e) => {
+                        Livewire.dispatch('message-received', [e.message]);
+                    });
+
+                Echo.private(`chat-creation-channel.${userId}`)
+                    .listen('ChatCreatedEvent', (e) => {
+                        Livewire.dispatch('chat-created', [e.conversation]);
+                    });
+            });
+        </script>
     @endauth
+
 @endsection
