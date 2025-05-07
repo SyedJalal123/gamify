@@ -8,7 +8,7 @@ use App\Models\Message;
 use App\Events\MessageSentEvent;
 use Livewire\Attributes\On;
 
-class Openchat extends Component
+class OpenChat extends Component
 {
     public $reciever;
     public $buyerRequestConversation;
