@@ -68,8 +68,7 @@
                 @endif
             </div>
             {{-- 
-                - latest message show on sidebar under name and also a little dot for showing message is unread,
-                - when new message comes show on top and when new chat open show on top, 
+                -  a little dot for showing message is unread,
                 - also double tick (in eldorado its only double tick not blue tick) 
                 - 
             --}}

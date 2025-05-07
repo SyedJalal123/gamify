@@ -150,8 +150,6 @@ class ServiceController extends Controller
             $latestMessage = $conversation->messages->sortByDesc('created_at')->first();
             return $latestMessage ? $latestMessage->created_at : $conversation->created_at;
         })->values(); // Reset keys
-
-        // dd($buyerRequest->buyerRequestConversation);
         
         if($buyerRequest->user_id !== auth()->user()->id){
             $identity = 'seller';
