@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Livewire\Component;
 use App\Models\BuyerRequest;
 use App\Models\Message;
 use App\Events\MessageSentEvent;
@@ -40,7 +41,7 @@ class Openchat extends Component
         $this->reciever = $this->identity == 'seller'
                         ? $this->buyerRequestConversation->buyer
                         : $this->buyerRequestConversation->seller;
-
+                        
         $this->dispatch('message-sidebar-updated');
     }
 

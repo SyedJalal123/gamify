@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
-use Livewire\Attributes\On;
+use Livewire\Component;
 use App\Models\BuyerRequestConversation;
 use App\Events\ChatCreatedEvent;
-use Livewire\Component;
+use Livewire\Attributes\On;
 
 class LiveUser extends Component
 {
