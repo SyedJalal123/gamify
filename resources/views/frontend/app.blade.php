@@ -671,7 +671,7 @@
                 $('#'+id).hide();
             }
 
-            function scrollToClass(className, index = 0, delay = 1500) { 
+            function scrollToClass(className, index = 0, delay = 1200) { 
                 setTimeout(() => {
                     const elements = document.querySelectorAll(`.${className}`);
                     if (elements.length > index) {
