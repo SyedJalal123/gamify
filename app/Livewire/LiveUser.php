@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use Livewire\Attributes\On;
 use App\Models\BuyerRequestConversation;
 use App\Events\ChatCreatedEvent;
