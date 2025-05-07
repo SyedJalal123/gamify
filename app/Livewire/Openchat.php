@@ -47,7 +47,7 @@ class Openchat extends Component
 
     public function render()
     {
-        return view('livewire.open-chats');
+        return view('livewire.live-chats');
     }
 
     public function sendMessage() 
