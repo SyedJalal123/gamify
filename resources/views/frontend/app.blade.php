@@ -39,7 +39,7 @@
 
         @yield('css')
         @vite(['resources/js/app.js'])
-        {{-- @livewireStyles --}}
+        @livewireStyles
     </head>
     <body>
         
