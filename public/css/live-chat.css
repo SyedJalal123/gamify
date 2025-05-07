@@ -10,6 +10,12 @@
         background-color: #394252 !important;
     }
 
+    @media (max-width: 768px) {
+        .card {
+            height: 542px;
+        }
+    }
+
     .contacts_body {
         padding: 0.75rem 0 !important;
         overflow-y: auto;
@@ -105,6 +111,12 @@
 
     .active {
         background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .active {
+            background-color: rgba(0, 0, 0, 0) !important;
+        }
     }
 
     .user_img {

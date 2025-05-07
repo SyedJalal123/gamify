@@ -118,8 +118,8 @@
                     <div class="d-flex live-chat-data py-2 px-0">
                         <div class="container-fluid h-100 px-0">
                             <div class="row m-0 justify-content-center w-100">
-                                <div class="col-md-4 m-0 p-0 pl-md-0 pr-md-2 chat">
-                                    <div class="card mb-sm-3 m-md-0 contacts_card">
+                                <div class="live-users col-md-4 m-0 p-0 pl-md-0 pr-md-2 chat">
+                                    <div class="card mb-sm-3 m-md-0 contacts_card mt-0">
                                         <div class="card-header p-0">
                                             <div class="input-group px-4 pt-3 py-1 d-flex justify-content-between">
                                                 <div class="text-white fw-bold fs-15">Browser notifications</div>
@@ -141,7 +141,7 @@
                                         <div class="card-footer"></div>
                                     </div>
                                 </div>
-                                <div class="col-md-8 m-0 p-0 chat">
+                                <div class="live-chats col-md-8 m-0 p-0 chat">
                                     @livewire('Openchat', ['buyerRequestConversation' => $conversations->first(), 'identity' => $identity, 'buyerRequest' => $buyerRequest])
                                 </div>
                             </div>
@@ -349,7 +349,7 @@
         }
 
         window.addEventListener('load', function () {
-            const chatBody = document.querySelector('.card-body');
+            const chatBody = document.querySelector('.msg_card_body');
             if (chatBody) {
                 chatBody.scrollTop = chatBody.scrollHeight;
             }
@@ -368,7 +368,7 @@
                 $('.conversations').each(function() {
                     $(this).removeClass('active');
                 });
-                
+
                 $(`#conversation_${conId}`).addClass('active');
                 
             }, 0.1);
@@ -386,6 +386,24 @@
             $('.live-chat').removeClass('d-none');
         });
 
+        $(document).ready(function () {
+            if (window.innerWidth <= 768) {
+
+                $('.live-chats').hide();
+
+                // Show chat, hide users
+                $('.conversations').on('click', function () {
+                    $('.live-users').hide();
+                    $('.live-chats').show();
+                });
+
+                // Back to users
+                $('.back').on('click', function () {
+                    $('.live-chats').hide();
+                    $('.live-users').show();
+                });
+            }
+        });
     </script>
 
 

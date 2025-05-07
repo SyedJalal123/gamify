@@ -34,7 +34,7 @@ class LiveUser extends Component
         $this->buyerId = $buyerId;
         $this->sellerId = $sellerId;
 
-        $this->conversations[] = $conversation;
+        $this->conversations = $this->conversations->prepend($conversation);
 
         $reciever = $this->identity == 'seller'
                         ? $conversation->buyer
@@ -45,19 +45,21 @@ class LiveUser extends Component
 
         $this->dispatch('conversation-created', sellerId: $conversation->seller_id);
         $this->dispatch('show-chat', conversationId: $conversation->id);
+        
     }
 
     #[On('chat-created')]
     public function updateConversations($conversation)
     {
         $conversation = BuyerRequestConversation::find($conversation['id']);
-        $this->conversations[] = $conversation;
+        $this->conversations = $this->conversations->prepend($conversation);
 
         if(count($this->conversations) == 1) {
             $this->dispatch('show-chat', conversationId: $conversation->id);
         }
 
         $this->dispatch('conversation-created', sellerId: $conversation->seller_id);
+        $this->dispatch('message-sidebar-updated');
     }
 
     public function render()
