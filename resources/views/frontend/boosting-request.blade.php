@@ -27,6 +27,7 @@
             ? $buyerRequest->buyerRequestConversation
             : $buyerRequest->buyerRequestConversation->where('seller_id', auth()->id());
     @endphp
+    {{-- add file part and watch full video and Test live chat if anything remaining --}}
     <section class="section section--bg section--first">
         <div class="container mb-5 p-0" style="max-width: 1118px;">
             <div class="row d-flex flex-row justify-content-between align-items-center mb-5 px-3">
@@ -67,13 +68,8 @@
                     </div>
                 @endif
             </div>
-            {{-- 
-                -  a little dot for showing message is unread,
-                - also double tick (in eldorado its only double tick not blue tick) 
-                - 
-            --}}
             <!-- Main Box -->
-            <div class="fade-in-delay-small d-flex flex-column main-box px-2">
+            <div class="d-flex flex-column main-box px-2">
                 <div class="Offers-live-feed d-flex flex-column pb-4">
                     <div class="d-flex justify-content-md-between flex-column flex-md-row">
                         <div class="offer-live-feed-title d-flex align-items-center mt-1 mb-3 px-3">
@@ -355,11 +351,7 @@
             }
         });
 
-        $(document).ready(function() {
-            scroll_bottom('.msg_card_body');
-        });
-
-        Livewire.on('message-sidebar-updated', () => {
+        Livewire.on('sidebar-updated', () => {
             setTimeout(() => {
                 scroll_bottom('.msg_card_body');
 
@@ -370,13 +362,22 @@
                 });
 
                 $(`#conversation_${conId}`).addClass('active');
+                $(`#redDot_${conId}`).addClass('d-none');
                 
             }, 0.1);
         });
 
         Livewire.on('message-updated', () => {
             setTimeout(() => {
-                scroll_bottom('.msg_card_body');
+                let buffer = 80; // pixels from bottom
+                let $el = $('.msg_card_body');
+                let isNearBottom = $el.scrollTop() + $el.innerHeight() >= $el[0].scrollHeight - buffer;
+
+                if(isNearBottom){
+                    scroll_bottom('.msg_card_body');
+                    Livewire.dispatch('sidebar-update');
+                }
+
             }, 0.1);
         });
 
@@ -402,6 +403,27 @@
                     $('.live-chats').hide();
                     $('.live-users').show();
                 });
+            }
+
+            $('#chatInput').on('keypress', function (e) {
+                if (e.which === 13 && !e.shiftKey) {
+                    e.preventDefault();
+                    messageFormSubmission(); // call the same function
+                }
+            });
+
+            $('#chatSendBtn').on('click', function () {
+                messageFormSubmission();
+            });
+
+            function messageFormSubmission() {
+                let input = $('#chatInput');
+                let message = input.val().trim();
+
+                if (message) {
+                    Livewire.dispatch('sendMessage', { message: message });
+                    input.val(''); // Clear input immediately
+                }
             }
         });
     </script>
@@ -429,6 +451,11 @@
                 Echo.private(`chat-creation-channel.${userId}`)
                     .listen('ChatCreatedEvent', (e) => {
                         Livewire.dispatch('chat-created', [e.conversation]);
+                    });
+
+                Echo.private(`message-seen.${userId}`)
+                    .listen('MessageSeenEvent', (e) => {
+                        Livewire.dispatch('chat-seen', [e]);
                     });
             });
         </script>

@@ -30,4 +30,8 @@ class BuyerRequestConversation extends Model
     {
         return $this->hasMany(Message::class);
     }
+    public function unreadMessages()
+    {
+        return $this->hasMany(Message::class)->where('read_at', null);
+    }
 }

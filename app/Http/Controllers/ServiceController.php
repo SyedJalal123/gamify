@@ -145,7 +145,7 @@ class ServiceController extends Controller
             },
         ])->find($id);
 
-        // Now sort the conversations manually
+        // Sort the conversations manually
         $buyerRequest->buyerRequestConversation = $buyerRequest->buyerRequestConversation->sortByDesc(function ($conversation) {
             $latestMessage = $conversation->messages->sortByDesc('created_at')->first();
             return $latestMessage ? $latestMessage->created_at : $conversation->created_at;

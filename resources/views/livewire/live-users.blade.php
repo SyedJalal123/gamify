@@ -16,7 +16,16 @@
                     <span class="online_icon"></span>
                 </div>
                 <div class="user_info">
-                    <span class="fs-15">{{$reciever->name}}</span>
+                    <div class="d-flex align-items-center">
+                        <span class="fs-15">{{$reciever->name}}</span>
+                        @if(
+                            $conversation->messages->last() &&
+                            $conversation->messages->last()->sender_id != auth()->id() &&
+                            $conversation->messages->last()->read_at === null
+                        )
+                        <span class="ml-2 mt-1 red-ping-dot" id="redDot_{{$conversation->id}}"></span>
+                        @endif
+                    </div>
 
                     <p class="one-line-ellipsis-2 small-message m-0">{{$conversation->messages->last()?->message ?? 'No messages yet'}}</p>
                 </div>

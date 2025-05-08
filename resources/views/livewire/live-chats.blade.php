@@ -34,11 +34,11 @@
     </div>
     <div class="card-body fade-in-delay-small msg_card_body pb-0 mb-0" style="height: 351px;">
         <input type="hidden" name="" id="conversationId" value="{{$buyerRequestConversation->id}}">
-        @foreach ($buyerRequestConversation->messages as $message)
+        @foreach ($messages as $message)
             @if($message->sender_id == auth()->id())
                 <div class="d-flex justify-content-end mb-4">
                     <div class="msg_cotainer_send">
-                        {{$message->message}}
+                        {{$message->message}} <i class="fs-10 fw-bold px-1 text-black-50" style="letter-spacing: -2.5px;">✓@if($message->read_at !== null)✓@endif</i>
                         <span class="msg_time_send">{{shortTimeAgo($message->created_at)}}</span>
                     </div>
                     <div class="img_cont_msg">
@@ -65,16 +65,16 @@
         @endforeach
     </div>
     <div class="card-footer">
-        <form wire:submit="sendMessage">
+        <form >
             <div class="input-group">
                 <div class="input-group-append">
                     <span class="input-group-text attach_btn"><i class="bi-paperclip"></i></span>
                 </div>
                 <input type="hidden" value="{{$reciever->id}}">
                 <input type="hidden" value="{{$buyerRequestConversation->id}}">
-                <input wire:model="message" type="text" name="" class="form-control type_msg" placeholder="Type your message...">
+                <input type="text" name="" class="form-control type_msg" id="chatInput" placeholder="Type your message...">
                 <div class="input-group-append">
-                    <button type="submit" class="input-group-text send_btn"><i class="bi-send-fill"></i></button>
+                    <button type="button" id="chatSendBtn" class="input-group-text send_btn"><i class="bi-send-fill"></i></button>
                 </div>
             </div>
         </form>

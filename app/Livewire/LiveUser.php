@@ -16,9 +16,17 @@ class LiveUser extends Component
     public $conversations;
 
 
-    #[On('message-updated')]
+    #[On('sidebar-update')]
     public function mount() {
-        $this->dispatch('message-sidebar-updated');
+        $this->dispatch('sidebar-updated');
+        
+        // Sort the conversations manually
+        $this->conversations = $this->conversations->sortByDesc(function ($conversation) {
+            $latestMessage = $conversation->messages->sortByDesc('created_at')->first();
+            return $latestMessage ? $latestMessage->created_at : $conversation->created_at;
+        })->values(); // Reset keys
+        
+        
     }
 
     
@@ -59,7 +67,7 @@ class LiveUser extends Component
         }
 
         $this->dispatch('conversation-created', sellerId: $conversation->seller_id);
-        $this->dispatch('message-sidebar-updated');
+        $this->dispatch('sidebar-updated');
     }
 
     public function render()

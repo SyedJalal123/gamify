@@ -11,7 +11,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.18",
         "laravel/tinker": "^2.8",
-        "namu/wirechat": "^0.2.7",
+        "livewire/livewire": "^3.6",
         "pusher/pusher-php-server": "^7.2",
         "srmklive/paypal": "^3.0",
         "stripe/stripe-php": "^17.1"

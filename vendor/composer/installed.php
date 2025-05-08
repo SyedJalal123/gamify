@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'b3f03b315472b95fb7c13285ee81be80000f8f1e',
+        'reference' => '4db2353c53d68d815e4cb61e141d59fb9fbb77f5',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -400,7 +400,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'b3f03b315472b95fb7c13285ee81be80000f8f1e',
+            'reference' => '4db2353c53d68d815e4cb61e141d59fb9fbb77f5',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -564,15 +564,6 @@
             'install_path' => __DIR__ . '/../myclabs/deep-copy',
             'aliases' => array(),
             'dev_requirement' => true,
-        ),
-        'namu/wirechat' => array(
-            'pretty_version' => 'v0.2.7',
-            'version' => '0.2.7.0',
-            'reference' => 'd0b250e428d36ee2f3f37d6a88c7b3dcc155a0a4',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../namu/wirechat',
-            'aliases' => array(),
-            'dev_requirement' => false,
         ),
         'nesbot/carbon' => array(
             'pretty_version' => '2.73.0',

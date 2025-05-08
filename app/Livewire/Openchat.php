@@ -5,8 +5,11 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\BuyerRequest;
 use App\Models\Message;
+use App\Events\MessageSeenEvent;
 use App\Events\MessageSentEvent;
 use Livewire\Attributes\On;
+use Carbon\Carbon;
+
 
 class Openchat extends Component
 {
@@ -16,6 +19,7 @@ class Openchat extends Component
     public $identity;
     public $messages;
     public $buyerRequest;
+    public $senderId;
 
     public function mount() 
     {
@@ -25,7 +29,9 @@ class Openchat extends Component
                             : $this->buyerRequestConversation->seller;
         
 
-            $this->messages = $this->getMessages();
+            $this->readAllMessages();
+            $this->getMessages();
+            $this->senderId = auth()->id();
         }
 
     }
@@ -38,11 +44,15 @@ class Openchat extends Component
         
         $this->buyerRequestConversation = $conversation;
 
+        $this->getMessages();
+
         $this->reciever = $this->identity == 'seller'
                         ? $this->buyerRequestConversation->buyer
                         : $this->buyerRequestConversation->seller;
                         
-        $this->dispatch('message-sidebar-updated');
+        $this->dispatch('sidebar-updated');
+
+        $this->readAllMessages();
     }
 
     public function render()
@@ -50,15 +60,16 @@ class Openchat extends Component
         return view('livewire.live-chats');
     }
 
-    public function sendMessage() 
+    #[On('sendMessage')]
+    public function sendMessage($message) 
     {
-        if($this->message != null){
+        if($message != null){
+            $this->message = $message;
             $sentMessage = $this->saveMessage();
 
-            $this->message = null;
+            $this->messages[] = $sentMessage;
 
             broadcast(new MessageSentEvent($sentMessage));
-        
             $this->dispatch('message-updated');
         }
     }
@@ -67,7 +78,15 @@ class Openchat extends Component
     #[On('message-received')]
     public function listenMessage($event)
     {
+        $newMessage = Message::find($event['id']);
+
+        if($this->buyerRequestConversation->id == $event['buyer_request_conversation_id']){
+            $this->messages[] = $newMessage;
+        }
+
         $this->dispatch('message-updated');
+
+        $this->readAllMessages();
     }
 
     public function saveMessage()
@@ -87,5 +106,23 @@ class Openchat extends Component
     public function getMessages() 
     {
         $this->messages = $this->buyerRequestConversation->messages;
+    }
+
+    #[On('readAllMessages')]
+    public function readAllMessages()
+    {
+        // dd('fds');
+        $this->buyerRequestConversation->messages()
+        ->where('reciever_id', auth()->user()->id)
+        ->whereNull('read_at')
+        ->update(['read_at' => now()]);
+
+        broadcast(new MessageSeenEvent($this->reciever->id, $this->buyerRequestConversation->id));
+    }
+
+    #[On('chat-seen')]
+    public function chatSeen($event){
+        if($event['conversationId'] == $this->buyerRequestConversation->id)
+        $this->getMessages();
     }
 }

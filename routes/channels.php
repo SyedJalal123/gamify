@@ -26,3 +26,8 @@ Broadcast::channel('chat-creation-channel.{recieverId}', function ($user, $recie
     return (int) $user->id === (int) $recieverId;
     // echi is sending from main id but not receiving from other ids
 });
+
+Broadcast::channel('message-seen.{recieverId}', function ($user, $recieverId) {
+    return (int) $user->id === (int) $recieverId;
+    // echi is sending from main id but not receiving from other ids
+});

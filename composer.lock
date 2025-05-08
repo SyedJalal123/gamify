@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c204f1a36f663f4c010bbb4bff04d5e",
+    "content-hash": "b70f600cbcfad982b119bbb6a5328642",
     "packages": [
         {
             "name": "brick/math",
@@ -2278,68 +2278,6 @@
                 }
             ],
             "time": "2024-12-05T17:15:07+00:00"
-        },
-        {
-            "name": "namu/wirechat",
-            "version": "v0.2.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/namumakwembo/wirechat.git",
-                "reference": "d0b250e428d36ee2f3f37d6a88c7b3dcc155a0a4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/namumakwembo/wirechat/zipball/d0b250e428d36ee2f3f37d6a88c7b3dcc155a0a4",
-                "reference": "d0b250e428d36ee2f3f37d6a88c7b3dcc155a0a4",
-                "shasum": ""
-            },
-            "require": {
-                "laravel/framework": "^10.0|^11.0|^12.0",
-                "livewire/livewire": "^3.2.3",
-                "php": "^8.1|^8.2|^8.3|^8.4"
-            },
-            "require-dev": {
-                "christophrumpel/missing-livewire-assertions": "^2.8",
-                "larastan/larastan": "^2.0|^3.0",
-                "laravel/pint": "^1.18",
-                "orchestra/testbench": "^8.24|^9.0|^10.0",
-                "pestphp/pest": "^2.34|^3.0.0",
-                "pestphp/pest-plugin-laravel": "^2.4|^3.0.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Namu\\WireChat\\WireChatServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Namu\\WireChat\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Namu Makwembo"
-                }
-            ],
-            "description": "A Laravel Livewire messaging app for teams with private chats and group conversations.",
-            "support": {
-                "issues": "https://github.com/namumakwembo/wirechat/issues",
-                "source": "https://github.com/namumakwembo/wirechat/tree/v0.2.7"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/namumakwembo",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-04-25T09:09:00+00:00"
         },
         {
             "name": "nesbot/carbon",
